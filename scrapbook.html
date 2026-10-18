@@ -317,8 +317,8 @@
     }
 
     /* ═══════════════════════════════════════════════════════════
-       THE DUSTY-PINK ACTION BUTTONS
-       Shared design system for "Open the book ✧" and "Blow the candles ✿"
+       THE DUSTY-PINK ACTION BUTTONS (SLOW RADIATING GLOW)
+       Shared design system for "Open the book ✧", "Blow the candles ✿", "Next page ✿ →"
        ═══════════════════════════════════════════════════════════ */
     .book-action-btn {
       position: relative;
@@ -334,48 +334,146 @@
       background: linear-gradient(145deg, #DE8795 0%, #D47987 50%, #C46776 100%);
       border: 1px solid var(--btn-border);
       border-radius: 9999px;
-      padding: clamp(6px, 0.85cqw, 14px) clamp(16px, 2.2cqw, 36px);
+      padding: clamp(6px, 0.85cqw, 14px) clamp(18px, 2.4cqw, 38px);
       cursor: pointer;
       pointer-events: auto;
-      box-shadow: 
-        0 4px 18px var(--btn-glow),
-        0 1px 3px rgba(120, 50, 60, 0.2),
-        inset 0 1px 1px rgba(255, 255, 255, 0.5);
       text-shadow: 0 1px 2px rgba(90, 30, 40, 0.35);
       transition: all 0.35s cubic-bezier(0.2, 0.8, 0.3, 1);
-      animation: buttonPulse 3.4s ease-in-out infinite;
+      isolation: isolate;
+      box-shadow:
+        0 0 24px rgba(226, 105, 126, 0.68),
+        0 0 48px rgba(220, 92, 115, 0.45),
+        0 0 75px rgba(215, 80, 105, 0.22),
+        0 4px 16px rgba(120, 45, 55, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.6);
+      animation: buttonBreathe 4s ease-in-out infinite;
+    }
+
+    /* Soft Diffused Ambient Rose Halo */
+    .book-action-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 104%;
+      height: 108%;
+      border-radius: 9999px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse at center, rgba(230, 110, 132, 0.82) 0%, rgba(222, 95, 118, 0.58) 48%, rgba(215, 85, 110, 0.28) 72%, transparent 100%);
+      filter: blur(14px);
+      z-index: -1;
+      pointer-events: none;
+      animation: buttonHaloBreathe 4s ease-in-out infinite;
+    }
+
+    /* Outward Radiating Wave Pulse */
+    .book-action-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      border-radius: 9999px;
+      transform: translate(-50%, -50%) scale(1);
+      background: radial-gradient(ellipse at center, rgba(238, 122, 144, 0.65) 0%, rgba(225, 95, 118, 0.35) 45%, transparent 75%);
+      filter: blur(18px);
+      z-index: -2;
+      pointer-events: none;
+      opacity: 0;
+      animation: buttonRadiatePulse 4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
     }
 
     .book-action-btn:hover {
       transform: translateY(-2px) scale(1.035);
       background: linear-gradient(145deg, #E58F9D 0%, #D87F8D 50%, #C96D7C 100%);
-      border-color: rgba(255, 255, 255, 0.9);
-      box-shadow: 
-        0 6px 24px rgba(226, 130, 145, 0.65),
-        0 2px 6px rgba(120, 50, 60, 0.25),
-        inset 0 1px 2px rgba(255, 255, 255, 0.7);
+      border-color: rgba(255, 255, 255, 0.95);
+      box-shadow:
+        0 0 35px rgba(235, 115, 138, 0.9),
+        0 0 65px rgba(226, 98, 122, 0.65),
+        0 0 95px rgba(218, 85, 112, 0.38),
+        0 6px 22px rgba(120, 45, 55, 0.25),
+        inset 0 1px 2px rgba(255, 255, 255, 0.75);
     }
 
     .book-action-btn:active, .book-action-btn.btn-pressed {
       transform: translateY(1px) scale(0.965);
-      box-shadow: 
-        0 2px 10px rgba(216, 130, 143, 0.4),
+      box-shadow:
+        0 0 16px rgba(216, 100, 120, 0.5),
         inset 0 1px 3px rgba(0, 0, 0, 0.15);
       transition-duration: 0.1s;
     }
 
-    @keyframes buttonPulse {
+    .book-action-btn .btn-sparkle {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 1.12em;
+      margin-left: 2px;
+      animation: sparkleSlowTwinkle 3.2s ease-in-out infinite;
+    }
+
+    @keyframes buttonBreathe {
       0%, 100% {
-        box-shadow: 
-          0 4px 18px var(--btn-glow),
-          0 1px 3px rgba(120, 50, 60, 0.2),
-          inset 0 1px 1px rgba(255, 255, 255, 0.5);
+        box-shadow:
+          0 0 22px rgba(226, 105, 126, 0.6),
+          0 0 45px rgba(220, 92, 115, 0.38),
+          0 0 70px rgba(215, 80, 105, 0.18),
+          0 4px 16px rgba(120, 45, 55, 0.18),
+          inset 0 1px 1px rgba(255, 255, 255, 0.55);
       }
       50% {
-        box-shadow: 
-          0 5px 26px rgba(226, 130, 145, 0.75),
-          0 0 12px rgba(255, 220, 230, 0.5),
-          inset 0 1px 2px rgba(255, 255, 255, 0.7);
+        box-shadow:
+          0 0 36px rgba(238, 118, 140, 0.85),
+          0 0 68px rgba(228, 100, 125, 0.6),
+          0 0 105px rgba(220, 85, 112, 0.32),
+          0 5px 22px rgba(120, 45, 55, 0.24),
+          inset 0 1px 2px rgba(255, 255, 255, 0.75);
+      }
+    }
+
+    @keyframes buttonHaloBreathe {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1.05);
+        opacity: 0.65;
+        filter: blur(12px);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.32);
+        opacity: 0.96;
+        filter: blur(20px);
+      }
+    }
+
+    @keyframes buttonRadiatePulse {
+      0% {
+        transform: translate(-50%, -50%) scale(0.96);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.78;
+      }
+      75% {
+        transform: translate(-50%, -50%) scale(1.58);
+        opacity: 0.18;
+        filter: blur(24px);
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1.82);
+        opacity: 0;
+        filter: blur(30px);
+      }
+    }
+
+    @keyframes sparkleSlowTwinkle {
+      0%, 100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 0.85;
+        filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.6));
+      }
+      50% {
+        transform: scale(1.25) rotate(16deg);
+        opacity: 1;
+        filter: drop-shadow(0 0 6px rgba(255, 230, 240, 1));
       }
     }
 
@@ -403,7 +501,7 @@
       width: 100%;
       height: 100%;
       border-radius: clamp(4px, 1cqw, 12px);
-      box-shadow: 
+      box-shadow:
         0 14px 40px rgba(70, 45, 40, 0.22),
         0 2px 10px rgba(70, 45, 40, 0.1);
       overflow: visible;
@@ -667,7 +765,7 @@
       transform: translateX(-50%);
       border-radius: 50% 50% 35% 35% / 70% 70% 30% 30%;
       background: linear-gradient(to top, #FF6600 0%, #FFA812 40%, #FFF3B0 80%, #FFFFFF 100%);
-      box-shadow: 
+      box-shadow:
         0 0 8px rgba(255, 170, 50, 0.9),
         0 0 16px rgba(255, 120, 20, 0.6);
       filter: drop-shadow(0 -1px 2px rgba(255, 240, 180, 0.8));
@@ -746,6 +844,16 @@
       white-space: nowrap;
     }
 
+    /* Keep the absolute-positioning anchor intact during button feedback. */
+    .blow-candles-btn:hover {
+      transform: translateX(-50%) translateY(-2px) scale(1.035);
+    }
+
+    .blow-candles-btn:active,
+    .blow-candles-btn.btn-pressed {
+      transform: translateX(-50%) translateY(1px) scale(0.965);
+    }
+
     /* Subtle Return / Flip Back Button */
     .turn-back-btn {
       position: absolute;
@@ -789,47 +897,120 @@
       height: 100%;
       pointer-events: none;
       z-index: 24;
-      opacity: 0;
-      transform: translateY(6px);
+      opacity: 1;
+      transform: none;
       transition: opacity 0.9s cubic-bezier(0.2, 0.8, 0.25, 1), transform 0.9s cubic-bezier(0.2, 0.8, 0.25, 1);
     }
 
     .wish-note-container.is-revealed {
       opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
+      transform: none;
     }
 
     .wish-card-pink {
       position: absolute;
-      top: 21.5%;
-      left: 51.1%;
-      width: 19.9%;
-      height: 29.5%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: clamp(3px, 0.5cqw, 8px);
-      box-sizing: border-box;
+      top: 19%;
+      left: 50.5%;
+      width: 24%;
+      height: 25%;
       pointer-events: none;
+      perspective: 900px;
     }
 
     .wish-card-cream {
       position: absolute;
-      top: 55.5%;
-      left: 72.1%;
-      width: 19.2%;
-      height: 25.2%;
+      top: 46%;
+      left: 70.5%;
+      width: 24%;
+      height: 25%;
+      pointer-events: none;
+      perspective: 900px;
+    }
+
+    .wish-card-inner {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      transition: transform 1.05s cubic-bezier(0.2, 0.75, 0.25, 1);
+    }
+
+    .wish-card-cream .wish-card-inner {
+      transition-delay: 180ms;
+    }
+
+    .wish-note-container.is-revealed .wish-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .wish-card-face {
+      position: absolute;
+      inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      padding: clamp(3px, 0.5cqw, 8px);
+      gap: clamp(1px, 0.35cqw, 5px);
       box-sizing: border-box;
-      pointer-events: none;
+      padding: clamp(4px, 0.65cqw, 10px);
+      border: 1px solid rgba(215, 165, 164, 0.72);
+      border-radius: clamp(5px, 0.8cqw, 12px);
+      text-align: center;
+      overflow: hidden;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      box-shadow: 0 5px 15px rgba(101, 56, 48, 0.16);
+    }
+
+    .wish-card-art {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,.86) 0 2px, transparent 3px),
+        radial-gradient(circle at 82% 78%, rgba(255,255,255,.7) 0 2px, transparent 3px),
+        linear-gradient(145deg, #fff2f1, #f8dfe0 58%, #f6e9d9);
+      color: #9b6065;
+    }
+
+    .wish-card-cream .wish-card-art {
+      background:
+        radial-gradient(circle at 16% 76%, rgba(255,255,255,.82) 0 2px, transparent 3px),
+        radial-gradient(circle at 84% 20%, rgba(255,255,255,.8) 0 2px, transparent 3px),
+        linear-gradient(145deg, #fffaf0, #f7e8d7 58%, #f6e5e7);
+    }
+
+    .wish-card-art svg {
+      display: block;
+      width: clamp(35px, 6.3cqw, 88px);
+      height: auto;
+      max-height: 67%;
+      filter: drop-shadow(0 2px 2px rgba(113, 70, 61, 0.12));
+    }
+
+    .wish-card-art-label {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(7px, 1.05cqw, 15px);
+      font-style: italic;
+      letter-spacing: 0.06em;
+      line-height: 1;
+    }
+
+    .wish-card-message {
+      transform: rotateY(180deg);
+      background: linear-gradient(145deg, rgba(255, 249, 245, 0.98), rgba(255, 236, 237, 0.97));
+      border-color: rgba(220, 174, 170, 0.82);
+    }
+
+    .wish-card-cream .wish-card-message {
+      background: linear-gradient(145deg, rgba(255, 253, 246, 0.98), rgba(250, 239, 223, 0.98));
+    }
+
+    .wish-card-message .wish-card-text {
+      font-family: 'Caveat', 'Alex Brush', cursive, Georgia, serif;
+      font-size: clamp(8px, 1.15cqw, 17px);
+      font-weight: 500;
+      color: #523730;
+      line-height: 1.16;
+      letter-spacing: 0.01em;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+      margin: 0;
     }
 
     .wish-card-text {
@@ -1106,6 +1287,9 @@
       .scene-stage.opening .book-spread-stage {
         opacity: 1 !important;
       }
+      .wish-note-container.is-revealed .wish-card-inner {
+        transform: rotateY(180deg) !important;
+      }
     }
   
     /* ═══════════════════════════════════════════════════════════
@@ -1164,49 +1348,32 @@
       animation: sparkleTwinkle 2.5s ease-in-out infinite;
     }
 
-    /* Left Page Keepsake Letter Stationery Card */
-    .spread2-letter-card {
+    /* Left page letter sits directly on the printed paper. */
+    .spread2-letter {
       position: absolute;
-      top: 27%;
-      left: 14%;
-      width: 72%;
-      height: 57%;
-      background: rgba(255, 252, 247, 0.94);
-      border: 1px solid rgba(220, 195, 180, 0.65);
-      border-radius: 8px;
-      box-shadow: 0 4px 16px rgba(90, 45, 45, 0.08);
+      top: 51%;
+      left: 39%;
+      width: 56%;
+      height: 36%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      gap: clamp(2px, 0.5cqw, 8px);
-      padding: clamp(4px, 0.8cqw, 12px) clamp(8px, 1.4cqw, 20px);
+      gap: clamp(5px, 0.9cqw, 13px);
+      padding: 0 clamp(5px, 0.9cqw, 13px);
       box-sizing: border-box;
-      overflow: hidden;
-    }
-
-    .letter-washi {
-      position: absolute;
-      top: -5px;
-      left: 50%;
-      transform: translateX(-50%) rotate(-1deg);
-      width: clamp(26px, 3.8cqw, 50px);
-      height: clamp(6px, 0.9cqw, 12px);
-      background: rgba(226, 175, 185, 0.85);
-      border: 1px dashed rgba(180, 120, 130, 0.3);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-      z-index: 2;
+      pointer-events: none;
     }
 
     .spread2-letter-p {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: clamp(6.8px, 1.05cqw, 15px);
-      font-weight: 500;
-      color: #523730;
-      line-height: 1.22;
+      font-size: clamp(9px, 1.25cqw, 18px);
+      font-weight: 600;
+      color: #3f2b27;
+      line-height: 1.38;
       margin: 0;
-      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+      text-shadow: 0 1px 2px rgba(255, 250, 240, 0.96);
     }
 
     .spread2-letter-signature {
@@ -1253,73 +1420,56 @@
       pointer-events: auto;
     }
 
-    .spread2-cards-container {
+    .spread2-wishes {
       position: absolute;
-      top: 27%;
-      left: 14%;
-      width: 72%;
-      height: 52%;
+      top: 45.8%;
+      left: 10%;
+      width: 80%;
+      height: 38%;
       display: flex;
       flex-direction: column;
-      gap: clamp(3px, 0.6cqw, 9px);
+      justify-content: space-between;
       box-sizing: border-box;
     }
 
-    .spread2-wish-card {
+    .spread2-wish {
       position: relative;
       width: 100%;
-      border-radius: 8px;
       box-sizing: border-box;
-      padding: clamp(3px, 0.6cqw, 9px) clamp(6px, 1.1cqw, 14px);
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      box-shadow: 0 4px 14px rgba(90, 45, 45, 0.08);
+      padding: 0 clamp(4px, 0.8cqw, 12px);
     }
 
-    .spread2-card-pink {
-      background: rgba(255, 238, 241, 0.92);
-      border: 1px solid rgba(228, 180, 188, 0.65);
-      min-height: 44%;
+    .spread2-wish-primary {
+      padding-bottom: clamp(4px, 0.7cqw, 10px);
+      border-bottom: 1px solid rgba(180, 130, 120, 0.35);
     }
 
-    .spread2-card-cream {
-      background: rgba(255, 252, 246, 0.95);
-      border: 1px solid rgba(220, 200, 180, 0.65);
-      min-height: 44%;
-    }
-
-    .card-washi {
+    .spread2-wish-primary::after {
+      content: "✿";
       position: absolute;
-      width: clamp(22px, 3.2cqw, 42px);
-      height: clamp(6px, 0.9cqw, 11px);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-      z-index: 2;
+      bottom: -0.55em;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #bd8581;
+      font-size: clamp(8px, 1.1cqw, 15px);
     }
 
-    .washi-pink {
-      top: -5px;
-      left: 12%;
-      background: rgba(226, 175, 185, 0.85);
-      transform: rotate(-3deg);
+    .spread2-wish-secondary {
+      padding-top: clamp(4px, 0.7cqw, 10px);
     }
 
-    .washi-mint {
-      top: -5px;
-      right: 12%;
-      background: rgba(200, 222, 215, 0.85);
-      transform: rotate(2deg);
-    }
-
-    .spread2-card-text {
-      font-family: 'Caveat', 'Alex Brush', cursive, Georgia, serif;
-      font-size: clamp(7px, 1.05cqw, 15px);
-      font-weight: 500;
-      color: #523730;
-      line-height: 1.2;
+    .spread2-wish-text {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(8.5px, 1.12cqw, 15.5px);
+      font-weight: 600;
+      color: #3f2b27;
+      line-height: 1.32;
       margin: 0;
-      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+      text-shadow: 0 1px 2px rgba(255, 250, 240, 0.96);
     }
 
     /* Cute Panda Peeking on Right Page */
@@ -1356,9 +1506,18 @@
       font-size: clamp(9px, 1.25cqw, 18px);
       padding: clamp(4px, 0.65cqw, 10px) clamp(16px, 2.2cqw, 30px);
       background: rgba(242, 208, 214, 0.94);
-      box-shadow: 
+      box-shadow:
         0 4px 16px rgba(180, 110, 120, 0.25),
         0 0 12px rgba(235, 185, 195, 0.35);
+    }
+
+    .spread2-next-btn:hover {
+      transform: translateX(-50%) translateY(-2px) scale(1.035);
+    }
+
+    .spread2-next-btn:active,
+    .spread2-next-btn.btn-pressed {
+      transform: translateX(-50%) translateY(1px) scale(0.965);
     }
 
     /* ═══════════════════════════════════════════════════════════
@@ -1386,6 +1545,63 @@
     body.page-leaving {
       opacity: 0;
       transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       SPREAD 2: MOBILE VIEW ADJUSTMENTS
+       ═══════════════════════════════════════════════════════════ */
+    @media (max-width: 768px), (max-aspect-ratio: 1/1) {
+      .spread2-letter {
+        top: 47%;
+        height: 46%;
+        gap: 3px;
+      }
+
+      .spread2-letter-p {
+        font-size: 8px;
+        line-height: 1.24;
+      }
+
+      .spread2-highlight {
+        font-size: 8.5px;
+      }
+
+      .spread2-seal {
+        font-size: 7px;
+      }
+
+      .spread2-wishes {
+        top: 41.5%;
+        left: 8%;
+        width: 84%;
+        height: 38%;
+      }
+
+      .spread2-wish-text {
+        font-size: 7px;
+        line-height: 1.18;
+      }
+
+      .spread2-wish-primary {
+        padding-bottom: 2px;
+      }
+
+      .spread2-wish-secondary {
+        padding-top: 2px;
+      }
+
+      .spread2-next-btn {
+        bottom: 1.2%;
+        min-height: 22px;
+        padding: 2px 8px;
+        font-size: 8px;
+      }
+
+      .spread2-panda-accent {
+        width: 32px;
+        bottom: 0.5%;
+        right: 0.5%;
+      }
     }
 
 </style>
@@ -1456,7 +1672,8 @@
 
           <!-- "Open the book ✧" Button -->
           <button class="book-action-btn" id="openBookBtn" aria-label="Open the book">
-            Open the book ✧
+            <span>Open the book</span>
+            <span class="btn-sparkle" aria-hidden="true">✧</span>
           </button>
         </div>
       </section>
@@ -1498,56 +1715,86 @@
 
               <!-- 5 Candle Flames & Wispy Smoke -->
               <div class="candles-container" id="candlesContainer">
-                <div class="candle-flame" id="flame-1" style="left: 20.0%; top: 21.5%;">
+                <div class="candle-flame" id="flame-1" style="left: 22.8%; top: 22.7%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
-                <div class="candle-flame" id="flame-2" style="left: 23.9%; top: 22.2%;">
+                <div class="candle-flame" id="flame-2" style="left: 26.5%; top: 23.0%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
-                <div class="candle-flame" id="flame-3" style="left: 28.1%; top: 21.2%;">
+                <div class="candle-flame" id="flame-3" style="left: 29.5%; top: 23.2%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
-                <div class="candle-flame" id="flame-4" style="left: 31.9%; top: 21.5%;">
+                <div class="candle-flame" id="flame-4" style="left: 33.2%; top: 23.0%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
-                <div class="candle-flame" id="flame-5" style="left: 35.6%; top: 20.9%;">
+                <div class="candle-flame" id="flame-5" style="left: 37.0%; top: 22.7%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
 
                 <!-- 5 Wispy Rising Smoke Trails -->
-                <div class="candle-smoke" id="smoke-1" style="left: 20.0%; top: 21.5%; --smoke-drift: -5px;">
+                <div class="candle-smoke" id="smoke-1" style="left: 22.8%; top: 22.7%; --smoke-drift: -5px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q6,42 12,28 T8,10 T10,0" class="smoke-trail"/></svg>
                 </div>
-                <div class="candle-smoke" id="smoke-2" style="left: 23.9%; top: 22.2%; --smoke-drift: 6px;">
+                <div class="candle-smoke" id="smoke-2" style="left: 26.5%; top: 23.0%; --smoke-drift: 6px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q14,40 8,26 T12,12 T9,0" class="smoke-trail"/></svg>
                 </div>
-                <div class="candle-smoke" id="smoke-3" style="left: 28.1%; top: 21.2%; --smoke-drift: -3px;">
+                <div class="candle-smoke" id="smoke-3" style="left: 29.5%; top: 23.2%; --smoke-drift: -3px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q7,38 13,24 T8,8 T11,0" class="smoke-trail"/></svg>
                 </div>
-                <div class="candle-smoke" id="smoke-4" style="left: 31.9%; top: 21.5%; --smoke-drift: 7px;">
+                <div class="candle-smoke" id="smoke-4" style="left: 33.2%; top: 23.0%; --smoke-drift: 7px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q13,42 7,28 T12,10 T8,0" class="smoke-trail"/></svg>
                 </div>
-                <div class="candle-smoke" id="smoke-5" style="left: 35.6%; top: 20.9%; --smoke-drift: -4px;">
+                <div class="candle-smoke" id="smoke-5" style="left: 37.0%; top: 22.7%; --smoke-drift: -4px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q6,39 12,25 T9,10 T11,0" class="smoke-trail"/></svg>
                 </div>
               </div>
 
               <!-- Revealed Wish Note Cards -->
-              <div id="wishNoteContainer" class="wish-note-container" aria-live="polite">
+              <div id="wishNoteContainer" class="wish-note-container" aria-live="polite" aria-hidden="true">
                 <div class="wish-card-pink">
-                  <p class="wish-card-text">
-                    May your days be brighter, your smiles a little wider, and this new year of your life be filled with beautiful surprises.
-                  </p>
+                  <div class="wish-card-inner">
+                    <div class="wish-card-face wish-card-art" aria-hidden="true">
+                      <svg viewBox="0 0 100 92" role="img">
+                        <path d="M19 45c0-18 13-31 31-31s31 13 31 31v20c0 12-9 18-19 18H38c-11 0-19-7-19-18z" fill="#fffaf2" stroke="#76544e" stroke-width="3"/>
+                        <circle cx="27" cy="24" r="13" fill="#342a2b"/><circle cx="73" cy="24" r="13" fill="#342a2b"/>
+                        <ellipse cx="38" cy="48" rx="7" ry="9" fill="#342a2b"/><ellipse cx="62" cy="48" rx="7" ry="9" fill="#342a2b"/>
+                        <circle cx="40" cy="45" r="2.5" fill="#fff"/><circle cx="64" cy="45" r="2.5" fill="#fff"/>
+                        <ellipse cx="50" cy="60" rx="8" ry="6" fill="#342a2b"/><path d="M50 66c-6 8-14 1-11-4m11 4c6 8 14 1 11-4" fill="none" stroke="#342a2b" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle cx="31" cy="60" r="5" fill="#f4a7ae" opacity=".7"/><circle cx="69" cy="60" r="5" fill="#f4a7ae" opacity=".7"/>
+                        <path d="M16 8v12m-6-6h12m56-7v10m-5-5h10" stroke="#d88d9a" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                      <span class="wish-card-art-label">a little birthday love</span>
+                    </div>
+                    <div class="wish-card-face wish-card-message">
+                      <p class="wish-card-text">May your days be brighter, your smiles a little wider, and this new year of your life be filled with beautiful surprises.</p>
+                    </div>
+                  </div>
                 </div>
                 <div class="wish-card-cream">
-                  <p class="wish-card-text">
-                    Here's to more laughter, more adventures, and countless happy memories. ♡
-                  </p>
+                  <div class="wish-card-inner">
+                    <div class="wish-card-face wish-card-art" aria-hidden="true">
+                      <svg viewBox="0 0 100 92" role="img">
+                        <path d="M51 80c-1-23 0-39 2-53" fill="none" stroke="#64896c" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M51 67c-14-12-21-7-21-4 8 10 14 11 21 9m3-19c13-13 20-8 20-5-7 10-13 12-20 10" fill="#8fb58e" stroke="#64896c" stroke-width="2"/>
+                        <g fill="#f4a7b5" stroke="#d78092" stroke-width="1.5">
+                          <circle cx="31" cy="26" r="8"/><circle cx="31" cy="14" r="7"/><circle cx="42" cy="22" r="7"/><circle cx="38" cy="35" r="7"/><circle cx="24" cy="36" r="7"/><circle cx="20" cy="23" r="7"/>
+                        </g><circle cx="31" cy="26" r="5" fill="#f8d77b"/>
+                        <g fill="#f2c77a" stroke="#d9a553" stroke-width="1.5">
+                          <circle cx="70" cy="39" r="7"/><circle cx="70" cy="29" r="6"/><circle cx="79" cy="36" r="6"/><circle cx="76" cy="47" r="6"/><circle cx="65" cy="48" r="6"/><circle cx="61" cy="37" r="6"/>
+                        </g><circle cx="70" cy="39" r="4" fill="#fff0bd"/>
+                        <path d="M22 82c15 6 40 6 56 0" fill="none" stroke="#d88d9a" stroke-width="3" stroke-linecap="round"/>
+                      </svg>
+                      <span class="wish-card-art-label">flowers for you</span>
+                    </div>
+                    <div class="wish-card-face wish-card-message">
+                      <p class="wish-card-text">Here's to more laughter, more adventures, and countless happy memories. ♡</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -1578,8 +1825,7 @@
                   <h3 class="spread2-calligraphy">Dearest Muskan <span class="spread-heading-heart">♡</span></h3>
                 </div>
 
-                <div class="spread2-letter-card">
-                  <div class="letter-washi"></div>
+                <div class="spread2-letter">
                   <p class="spread2-letter-p">
                     You are the person who brings so much warmth, laughter, and ease into ordinary days.
                   </p>
@@ -1607,19 +1853,15 @@
               <h3 class="spread2-calligraphy">For your brightest year <span class="spread2-sparkle">✧</span></h3>
             </div>
 
-            <div class="spread2-cards-container">
-              <!-- Pink Wish Card -->
-              <div class="spread2-wish-card spread2-card-pink">
-                <div class="card-washi washi-pink"></div>
-                <p class="spread2-card-text">
+            <div class="spread2-wishes">
+              <div class="spread2-wish spread2-wish-primary">
+                <p class="spread2-wish-text">
                   May the year ahead be as gentle, bright, and beautiful as your soul. May your dreams quietly turn into reality, and may you always find reasons to smile.
                 </p>
               </div>
 
-              <!-- Cream Wish Card -->
-              <div class="spread2-wish-card spread2-card-cream">
-                <div class="card-washi washi-mint"></div>
-                <p class="spread2-card-text">
+              <div class="spread2-wish spread2-wish-secondary">
+                <p class="spread2-wish-text">
                   Never forget how cherished and valued you are — not just on your birthday, but every single day. Keep shining, keep being your wonderful self, and remember I’m always cheering for you! ♡
                 </p>
               </div>
@@ -1839,6 +2081,7 @@
           // 5. Reveal wish note cards
           setTimeout(() => {
             wishNoteContainer.classList.add('is-revealed');
+            wishNoteContainer.removeAttribute('aria-hidden');
           }, 300);
 
           // 6. Update button to "turn page"
@@ -1915,6 +2158,7 @@
       flames.forEach(f => f.classList.add('is-extinguished'));
       smokes.forEach(s => s.classList.add('active'));
       wishNoteContainer.classList.add('is-revealed');
+      wishNoteContainer.removeAttribute('aria-hidden');
       blowBtnLabel.textContent = 'next page ✿ →';
       blowCandlesBtn.setAttribute('aria-label', 'next page');
       isCandlesBlown = true;
@@ -1926,6 +2170,7 @@
       flames.forEach(f => f.classList.add('is-extinguished'));
       smokes.forEach(s => s.classList.add('active'));
       wishNoteContainer.classList.add('is-revealed');
+      wishNoteContainer.removeAttribute('aria-hidden');
       blowBtnLabel.textContent = 'next page ✿ →';
       isCandlesBlown = true;
       pageLeaf.classList.add('flipped');
