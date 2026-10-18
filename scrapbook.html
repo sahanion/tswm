@@ -1107,7 +1107,288 @@
         opacity: 1 !important;
       }
     }
-  </style>
+  
+    /* ═══════════════════════════════════════════════════════════
+       SPREAD 2: FINAL KEEPSAKE SPREAD STYLING
+       ═══════════════════════════════════════════════════════════ */
+    .spread2-left-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+      box-sizing: border-box;
+    }
+
+    .spread2-header {
+      position: absolute;
+      top: 6.2%;
+      left: 14%;
+      width: 72%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 12;
+    }
+
+    .spread2-subhead {
+      font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+      font-size: clamp(8px, 1.3cqw, 19px);
+      font-weight: 600;
+      color: var(--text-brown);
+      letter-spacing: 0.04em;
+      margin: 0;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
+      line-height: 1.1;
+    }
+
+    .spread2-calligraphy {
+      font-family: 'Alex Brush', cursive, Georgia, serif;
+      font-size: clamp(14px, 3.0cqw, 44px);
+      font-weight: 400;
+      color: var(--text-rose);
+      line-height: 1.05;
+      margin: 2px 0 0 0;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.95);
+    }
+
+    .spread2-sparkle {
+      color: #E28E97;
+      font-size: 0.8em;
+      display: inline-block;
+      vertical-align: middle;
+      animation: sparkleTwinkle 2.5s ease-in-out infinite;
+    }
+
+    /* Left Page Keepsake Letter Stationery Card */
+    .spread2-letter-card {
+      position: absolute;
+      top: 27%;
+      left: 14%;
+      width: 72%;
+      height: 57%;
+      background: rgba(255, 252, 247, 0.94);
+      border: 1px solid rgba(220, 195, 180, 0.65);
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(90, 45, 45, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: clamp(2px, 0.5cqw, 8px);
+      padding: clamp(4px, 0.8cqw, 12px) clamp(8px, 1.4cqw, 20px);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .letter-washi {
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-1deg);
+      width: clamp(26px, 3.8cqw, 50px);
+      height: clamp(6px, 0.9cqw, 12px);
+      background: rgba(226, 175, 185, 0.85);
+      border: 1px dashed rgba(180, 120, 130, 0.3);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      z-index: 2;
+    }
+
+    .spread2-letter-p {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(6.8px, 1.05cqw, 15px);
+      font-weight: 500;
+      color: #523730;
+      line-height: 1.22;
+      margin: 0;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+    }
+
+    .spread2-letter-signature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      margin-top: clamp(2px, 0.35cqw, 5px);
+    }
+
+    .spread2-highlight {
+      font-family: 'Caveat', 'Alex Brush', cursive;
+      font-size: clamp(8px, 1.25cqw, 18px);
+      font-weight: 600;
+      color: #A34856;
+      line-height: 1.15;
+    }
+
+    .spread2-seal {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(7.5px, 1.05cqw, 14px);
+      color: #946058;
+      letter-spacing: 0.03em;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       SPREAD 2: RIGHT PAGE
+       ═══════════════════════════════════════════════════════════ */
+    .spread2-right-page {
+      position: absolute;
+      top: 2.72%;
+      left: 44.58%;
+      width: 44.29%;
+      height: 93.35%;
+      z-index: 20;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.25, 1);
+      box-sizing: border-box;
+    }
+
+    .spread-container.is-page-turned .spread2-right-page {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .spread2-cards-container {
+      position: absolute;
+      top: 27%;
+      left: 14%;
+      width: 72%;
+      height: 52%;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(3px, 0.6cqw, 9px);
+      box-sizing: border-box;
+    }
+
+    .spread2-wish-card {
+      position: relative;
+      width: 100%;
+      border-radius: 8px;
+      box-sizing: border-box;
+      padding: clamp(3px, 0.6cqw, 9px) clamp(6px, 1.1cqw, 14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: 0 4px 14px rgba(90, 45, 45, 0.08);
+    }
+
+    .spread2-card-pink {
+      background: rgba(255, 238, 241, 0.92);
+      border: 1px solid rgba(228, 180, 188, 0.65);
+      min-height: 44%;
+    }
+
+    .spread2-card-cream {
+      background: rgba(255, 252, 246, 0.95);
+      border: 1px solid rgba(220, 200, 180, 0.65);
+      min-height: 44%;
+    }
+
+    .card-washi {
+      position: absolute;
+      width: clamp(22px, 3.2cqw, 42px);
+      height: clamp(6px, 0.9cqw, 11px);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      z-index: 2;
+    }
+
+    .washi-pink {
+      top: -5px;
+      left: 12%;
+      background: rgba(226, 175, 185, 0.85);
+      transform: rotate(-3deg);
+    }
+
+    .washi-mint {
+      top: -5px;
+      right: 12%;
+      background: rgba(200, 222, 215, 0.85);
+      transform: rotate(2deg);
+    }
+
+    .spread2-card-text {
+      font-family: 'Caveat', 'Alex Brush', cursive, Georgia, serif;
+      font-size: clamp(7px, 1.05cqw, 15px);
+      font-weight: 500;
+      color: #523730;
+      line-height: 1.2;
+      margin: 0;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+    }
+
+    /* Cute Panda Peeking on Right Page */
+    .spread2-panda-accent {
+      position: absolute;
+      bottom: 2%;
+      right: 3%;
+      width: clamp(44px, 7.2cqw, 98px);
+      pointer-events: none;
+      z-index: 22;
+      filter: drop-shadow(0 3px 8px rgba(90, 45, 45, 0.15));
+      animation: pandaSway 4s ease-in-out infinite alternate;
+    }
+
+    .spread2-panda-accent img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    @keyframes pandaSway {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(3deg) translateY(-2px); }
+    }
+
+    /* Spread 2 "Next page ✿ →" Button */
+    .spread2-next-btn {
+      position: absolute;
+      bottom: 4.2%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      white-space: nowrap;
+      font-size: clamp(9px, 1.25cqw, 18px);
+      padding: clamp(4px, 0.65cqw, 10px) clamp(16px, 2.2cqw, 30px);
+      background: rgba(242, 208, 214, 0.94);
+      box-shadow: 
+        0 4px 16px rgba(180, 110, 120, 0.25),
+        0 0 12px rgba(235, 185, 195, 0.35);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       STAGE CLOSING & TRANSITION TO VIRTUAL HUG
+       ═══════════════════════════════════════════════════════════ */
+    .scene-stage.closing .book-cover-stage {
+      display: block !important;
+      opacity: 1 !important;
+      transform: rotateY(0deg) !important;
+      transition: transform 1.25s cubic-bezier(0.25, 1, 0.32, 1), opacity 0.4s ease;
+      pointer-events: none;
+      z-index: 60;
+    }
+
+    .scene-stage.closing .book-cover-stage .book-action-btn {
+      display: none !important;
+    }
+
+    .scene-stage.closing .book-spread-stage {
+      transition: opacity 0.6s ease 0.4s;
+      opacity: 0 !important;
+    }
+
+
+    body.page-leaving {
+      opacity: 0;
+      transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+</style>
 </head>
 <body>
   <div class="scrapbook-viewport" id="viewport">
@@ -1282,26 +1563,81 @@
               <div class="leaf-lighting" aria-hidden="true"></div>
             </div>
 
-            <!-- BACK FACE: CLEAN BLANK LEFT PAGE OF SPREAD 2 -->
+            <!-- BACK FACE: SPREAD 2 LEFT PAGE (LETTER & DEDICATION) -->
             <div class="page-leaf-face page-leaf-back" aria-hidden="true">
               <img 
                 src="page_leaf_back.jpg" 
                 alt="" 
                 class="page-leaf-img" 
               />
+
+              <!-- SPREAD 2: LEFT PAGE KEEPSAKE LETTER -->
+              <div class="spread2-left-content" id="spread2LeftContent">
+                <div class="spread2-header">
+                  <p class="spread2-subhead">A letter for you,</p>
+                  <h3 class="spread2-calligraphy">Dearest Muskan <span class="spread-heading-heart">♡</span></h3>
+                </div>
+
+                <div class="spread2-letter-card">
+                  <div class="letter-washi"></div>
+                  <p class="spread2-letter-p">
+                    You are the person who brings so much warmth, laughter, and ease into ordinary days.
+                  </p>
+                  <p class="spread2-letter-p">
+                    Thank you for being a friend who listens, who cares so deeply, and whose presence makes every moment brighter.
+                  </p>
+                  <div class="spread2-letter-signature">
+                    <span class="spread2-highlight">Having you as my bestest friend is the sweetest blessing. ♡</span>
+                    <span class="spread2-seal">always & forever ✿</span>
+                  </div>
+                </div>
+              </div>
               <!-- Dynamic Lighting / Shadow overlay -->
               <div class="leaf-lighting" aria-hidden="true"></div>
             </div>
 
           </div>
 
+          <!-- ═══════════════════════════════════════════════════════════
+               SPREAD 2: RIGHT PAGE (WISH CARDS, PANDA, NEXT PAGE BUTTON)
+               ═══════════════════════════════════════════════════════════ -->
+          <div class="spread2-right-page" id="spread2RightPage">
+            <div class="spread2-header">
+              <p class="spread2-subhead">One last wish,</p>
+              <h3 class="spread2-calligraphy">For your brightest year <span class="spread2-sparkle">✧</span></h3>
+            </div>
+
+            <div class="spread2-cards-container">
+              <!-- Pink Wish Card -->
+              <div class="spread2-wish-card spread2-card-pink">
+                <div class="card-washi washi-pink"></div>
+                <p class="spread2-card-text">
+                  May the year ahead be as gentle, bright, and beautiful as your soul. May your dreams quietly turn into reality, and may you always find reasons to smile.
+                </p>
+              </div>
+
+              <!-- Cream Wish Card -->
+              <div class="spread2-wish-card spread2-card-cream">
+                <div class="card-washi washi-mint"></div>
+                <p class="spread2-card-text">
+                  Never forget how cherished and valued you are — not just on your birthday, but every single day. Keep shining, keep being your wonderful self, and remember I’m always cheering for you! ♡
+                </p>
+              </div>
+            </div>
+
+            <!-- Cute Panda Character Accent -->
+            <div class="spread2-panda-accent" aria-hidden="true">
+              <img src="images/pandas_transparent.png" alt="" />
+            </div>
+
+            <!-- Action Button: "Next page ✿ →" (Closes book and goes to hug.html) -->
+            <button id="nextPageBtn" class="book-action-btn spread2-next-btn" aria-label="Next page">
+              <span>Next page ✿ →</span>
+            </button>
+          </div>
+
           <!-- Dynamic Soft Drop Shadow Cast Underneath onto Underlying Right Page -->
           <div class="under-page-shadow" id="underPageShadow" aria-hidden="true"></div>
-
-          <!-- Subtle "← Previous page" Button on Blank Spread -->
-          <button id="turnBackBtn" class="book-action-btn turn-back-btn" aria-label="Previous page">
-            ← Previous page
-          </button>
         </div>
       </section>
 
@@ -1392,7 +1728,7 @@
     const poemContent = document.getElementById('poemContent');
     const blowCandlesBtn = document.getElementById('blowCandlesBtn');
     const blowBtnLabel = document.getElementById('blowBtnLabel');
-    const turnBackBtn = document.getElementById('turnBackBtn');
+    
     const wishNoteContainer = document.getElementById('wishNoteContainer');
     const celebrationBurst = document.getElementById('celebrationBurst');
     const flames = [1, 2, 3, 4, 5].map(i => document.getElementById(`flame-${i}`));
@@ -1458,14 +1794,7 @@
     }
 
     // ── Function: Turn Back to Birthday Cake Spread ──
-    function turnBackToCake() {
-      if (!isPageTurned) return;
-      leftPageTypo.style.opacity = '1';
-      if (poemContent) poemContent.style.opacity = '1';
-      spreadContainer.classList.remove('is-page-turned');
-      pageLeaf.classList.remove('flipped');
-      isPageTurned = false;
-    }
+    
 
     blowCandlesBtn.addEventListener('click', () => {
       if (isTransitioning) return;
@@ -1513,16 +1842,60 @@
           }, 300);
 
           // 6. Update button to "turn page"
-          blowBtnLabel.textContent = 'turn page ✿ →';
-          blowCandlesBtn.setAttribute('aria-label', 'turn page');
+          blowBtnLabel.textContent = 'next page ✿ →';
+          blowCandlesBtn.setAttribute('aria-label', 'next page');
           isCandlesBlown = true;
           isTransitioning = false;
         }, 280);
       }, 150);
     });
 
-    if (turnBackBtn) {
-      turnBackBtn.addEventListener('click', turnBackToCake);
+        // ═══════════════════════════════════════════════════════════
+    // SPREAD 2: "Next page ✿ →" -> CLOSE BOOK -> VIRTUAL HUG PAGE
+    // ═══════════════════════════════════════════════════════════
+    const nextPageBtn = document.getElementById('nextPageBtn');
+    if (nextPageBtn) {
+      nextPageBtn.addEventListener('click', () => {
+        nextPageBtn.classList.add('btn-pressed');
+        setTimeout(() => nextPageBtn.classList.remove('btn-pressed'), 180);
+
+        // 1. Prepare cover for closing
+        bookCoverStage.style.display = 'block';
+        bookCoverStage.setAttribute('aria-hidden', 'false');
+        bookSpreadStage.setAttribute('aria-hidden', 'true');
+        
+        // Hide the "Open the book" button on the cover so it rests cleanly closed
+        if (openBookBtn) openBookBtn.style.display = 'none';
+
+        // Set cover initial closing rotation at -180deg
+        bookCoverStage.style.transition = 'none';
+        bookCoverStage.style.transform = 'rotateY(-180deg)';
+        bookCoverStage.style.opacity = '1';
+        bookCoverStage.style.zIndex = '60';
+        void bookCoverStage.offsetWidth; // force reflow
+
+        // 2. Trigger closing animation
+        sceneStage.classList.remove('opened');
+        sceneStage.classList.add('closing');
+        ambientBackdrop.classList.remove('open-mode');
+
+        bookCoverStage.style.transition = 'transform 1.25s cubic-bezier(0.25, 1, 0.32, 1), opacity 0.4s ease';
+        bookCoverStage.style.transform = 'rotateY(0deg)';
+
+        // 3. Fade spread beneath as cover closes
+        setTimeout(() => {
+          bookSpreadStage.style.transition = 'opacity 0.6s ease';
+          bookSpreadStage.style.opacity = '0';
+        }, 400);
+
+        // 4. Once closed, gentle fade out and navigate to hug.html
+        setTimeout(() => {
+          document.body.classList.add('page-leaving');
+          setTimeout(() => {
+            window.location.href = 'hug.html';
+          }, 550);
+        }, 1350);
+      });
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -1542,8 +1915,8 @@
       flames.forEach(f => f.classList.add('is-extinguished'));
       smokes.forEach(s => s.classList.add('active'));
       wishNoteContainer.classList.add('is-revealed');
-      blowBtnLabel.textContent = 'turn page ✿ →';
-      blowCandlesBtn.setAttribute('aria-label', 'turn page');
+      blowBtnLabel.textContent = 'next page ✿ →';
+      blowCandlesBtn.setAttribute('aria-label', 'next page');
       isCandlesBlown = true;
     } else if (urlParams.get('state') === 'flipped') {
       sceneStage.classList.add('opened');
@@ -1553,7 +1926,7 @@
       flames.forEach(f => f.classList.add('is-extinguished'));
       smokes.forEach(s => s.classList.add('active'));
       wishNoteContainer.classList.add('is-revealed');
-      blowBtnLabel.textContent = 'turn page ✿ →';
+      blowBtnLabel.textContent = 'next page ✿ →';
       isCandlesBlown = true;
       pageLeaf.classList.add('flipped');
       spreadContainer.classList.add('is-page-turned');
