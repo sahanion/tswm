@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+  <title>Virtual Hug for Ya! ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #FFF2EB;
+      --text-coral: #DE4343;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      min-height: 100svh;
+      background: radial-gradient(circle at center, #FFF5EE 0%, #FEECE3 100%);
+      overflow: hidden;
+      font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: env(safe-area-inset-top, 20px) env(safe-area-inset-right, 20px) env(safe-area-inset-bottom, 20px) env(safe-area-inset-left, 20px);
+      box-sizing: border-box;
+    }
+
+    /* Ambient Bubble Layer */
+    .bubble-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      text-align: center;
+      max-width: 600px;
+      width: 100%;
+      z-index: 2;
+    }
+
+    /* Top text - Pops up from behind the GIF after 2s */
+    .top-text-wrapper {
+      position: relative;
+      z-index: 1; /* Behind the GIF */
+      width: clamp(300px, 86vw, 490px);
+      margin-bottom: -38px; /* Hugs down close to pandas */
+      opacity: 0;
+      transform: translateY(65px) scale(0.65);
+      animation: popBehindGif 1.0s cubic-bezier(0.175, 0.885, 0.32, 1.275) 2s forwards;
+    }
+
+    /* Cute subtle wiggle animation after popup */
+    .top-text-wiggle {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      transform-origin: 50% 85%;
+      animation: gentleWiggle 3.2s ease-in-out infinite 3.0s;
+    }
+
+    .curved-svg-top {
+      width: 100%;
+      height: auto;
+      overflow: visible;
+      display: block;
+    }
+
+    .top-curved-text {
+      font-family: 'Fredoka', cursive, sans-serif;
+      font-size: 44px;
+      font-weight: 700;
+      fill: var(--text-coral);
+      stroke: #FFFFFF;
+      stroke-width: 6.5px;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      paint-order: stroke fill;
+      filter: drop-shadow(0 2px 4px rgba(222, 67, 67, 0.14));
+    }
+
+    .burst-line {
+      stroke: var(--text-coral);
+      stroke-width: 5.5px;
+      stroke-linecap: round;
+    }
+
+    .burst-outline {
+      stroke: #FFFFFF;
+      stroke-width: 11px;
+      stroke-linecap: round;
+    }
+
+    /* Seamless GIF Frame - In front of the top text */
+    .gif-frame {
+      position: relative;
+      z-index: 3;
+      width: clamp(260px, 56vw, 420px);
+      max-height: 52vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 40px;
+      overflow: hidden;
+      -webkit-mask-image: 
+        radial-gradient(ellipse 90% 90% at 50% 50%, black 40%, rgba(0,0,0,0.85) 60%, rgba(0,0,0,0.4) 78%, transparent 95%),
+        linear-gradient(to right, transparent, black 16%, black 84%, transparent),
+        linear-gradient(to bottom, transparent, black 16%, black 84%, transparent);
+      -webkit-mask-composite: source-in;
+      mask-image: 
+        radial-gradient(ellipse 90% 90% at 50% 50%, black 40%, rgba(0,0,0,0.85) 60%, rgba(0,0,0,0.4) 78%, transparent 95%),
+        linear-gradient(to right, transparent, black 16%, black 84%, transparent),
+        linear-gradient(to bottom, transparent, black 16%, black 84%, transparent);
+      mask-composite: intersect;
+    }
+
+    .gif-frame img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Bottom text - Comes up after Virtual Hug */
+    .bottom-text-wrapper {
+      position: relative;
+      z-index: 2;
+      width: clamp(270px, 80vw, 450px);
+      margin-top: -24px; /* Hugs up close to pandas */
+      opacity: 0;
+      transform: translateY(28px) scale(0.85);
+      animation: popBottomText 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) 2.9s forwards;
+    }
+
+    .curved-svg-bot {
+      width: 100%;
+      height: auto;
+      overflow: visible;
+      display: block;
+    }
+
+    .bot-curved-text {
+      font-family: 'Fredoka', cursive, sans-serif;
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      fill: var(--text-coral);
+      stroke: #FFFFFF;
+      stroke-width: 7.5px;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      paint-order: stroke fill;
+      filter: drop-shadow(0 3px 6px rgba(222, 67, 67, 0.16));
+    }
+
+    /* Heart Bubble Styles */
+    .heart-bubble {
+      position: fixed;
+      pointer-events: none;
+      will-change: transform, opacity;
+      filter: drop-shadow(0 4px 8px rgba(255, 130, 140, 0.25));
+    }
+
+    /* Ambient slowly floating bubble */
+    @keyframes ambientFloat {
+      0% {
+        transform: translateY(110vh) translateX(0) scale(0.6) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      50% {
+        transform: translateY(50vh) translateX(var(--drift, 18px)) scale(0.9) rotate(var(--rot, 10deg));
+      }
+      85% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-15vh) translateX(calc(var(--drift, 18px) * -1)) scale(1.1) rotate(calc(var(--rot, 10deg) * -1.5));
+        opacity: 0;
+      }
+    }
+
+    /* Click spawned heart bubble rising and bursting */
+    @keyframes clickBubbleRise {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(0.4) rotate(0deg);
+      }
+      25% {
+        opacity: 0.95;
+        transform: translate(calc(var(--tx) * 0.4), calc(var(--ty) * 0.4)) scale(1.05) rotate(var(--rot));
+      }
+      75% {
+        opacity: 0.85;
+        transform: translate(var(--tx), calc(var(--ty) - 40px)) scale(1.15) rotate(calc(var(--rot) * 1.5));
+      }
+      100% {
+        opacity: 0;
+        transform: translate(calc(var(--tx) + var(--drift)), calc(var(--ty) - 90px)) scale(1.3) rotate(calc(var(--rot) * 2));
+      }
+    }
+
+    /* Pop keyframes */
+    @keyframes popBehindGif {
+      0% {
+        opacity: 0;
+        transform: translateY(65px) scale(0.65);
+      }
+      65% {
+        transform: translateY(-10px) scale(1.05);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Playful, sweet wiggle animation */
+    @keyframes gentleWiggle {
+      0%, 65%, 100% {
+        transform: rotate(0deg) scale(1);
+      }
+      70% {
+        transform: rotate(-3deg) scale(1.02);
+      }
+      75% {
+        transform: rotate(2.6deg) scale(1.02);
+      }
+      80% {
+        transform: rotate(-2deg) scale(1.01);
+      }
+      85% {
+        transform: rotate(1.4deg) scale(1.01);
+      }
+      90% {
+        transform: rotate(-0.6deg);
+      }
+      95% {
+        transform: rotate(0.4deg);
+      }
+    }
+
+    @keyframes popBottomText {
+      0% {
+        opacity: 0;
+        transform: translateY(28px) scale(0.85);
+      }
+      70% {
+        transform: translateY(-5px) scale(1.04);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Hearts rising from below after I MISS YOU text */
+    .rising-heart {
+      position: fixed;
+      pointer-events: none;
+      z-index: 12;
+      filter: drop-shadow(0 4px 10px rgba(255, 120, 135, 0.35));
+      will-change: transform, opacity;
+    }
+
+    @keyframes riseFromBelow {
+      0% {
+        transform: translateY(0) translateX(0) scale(0.6) rotate(0deg);
+        opacity: 0;
+      }
+      12% {
+        opacity: 0.95;
+        transform: translateY(-15vh) translateX(calc(var(--drift) * 0.25)) scale(1.05) rotate(calc(var(--rot) * 0.5));
+      }
+      75% {
+        opacity: 0.9;
+        transform: translateY(-85vh) translateX(var(--drift)) scale(1) rotate(var(--rot));
+      }
+      100% {
+        transform: translateY(-120vh) translateX(calc(var(--drift) * 1.4)) scale(0.9) rotate(calc(var(--rot) * 1.6));
+        opacity: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .top-text-wrapper, .bottom-text-wrapper, .top-text-wiggle {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .bubble-layer {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Layer for Ambient and Click-Spawned Heart Bubbles -->
+  <div class="bubble-layer" id="bubbleLayer"></div>
+
+  <div class="container">
+    <main class="card">
+      <!-- Pops up from behind the GIF after 2 sec -->
+      <div class="top-text-wrapper">
+        <div class="top-text-wiggle">
+          <svg class="curved-svg-top" viewBox="0 0 520 140" role="img" aria-label="Virtual hug for ya!">
+            <defs>
+              <path id="topCurve" d="M 45,122 A 265,130 0 0,1 475,122" />
+            </defs>
+            
+            <!-- Left burst accents -->
+            <g aria-hidden="true">
+              <line x1="40" y1="92" x2="20" y2="103" class="burst-outline" />
+              <line x1="56" y1="64" x2="36" y2="48" class="burst-outline" />
+              <line x1="40" y1="92" x2="20" y2="103" class="burst-line" />
+              <line x1="56" y1="64" x2="36" y2="48" class="burst-line" />
+            </g>
+
+            <!-- Right burst accents -->
+            <g aria-hidden="true">
+              <line x1="480" y1="92" x2="500" y2="103" class="burst-outline" />
+              <line x1="464" y1="64" x2="484" y2="48" class="burst-outline" />
+              <line x1="480" y1="92" x2="500" y2="103" class="burst-line" />
+              <line x1="464" y1="64" x2="484" y2="48" class="burst-line" />
+            </g>
+
+            <text class="top-curved-text">
+              <textPath href="#topCurve" startOffset="50%" text-anchor="middle">
+                Virtual hug for ya!
+              </textPath>
+            </text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Seamless GIF Frame in front -->
+      <div class="gif-frame">
+        <img src="hug.gif" alt="Two cute pandas hugging lovingly" />
+      </div>
+
+      <!-- Comes up after Virtual Hug -->
+      <div class="bottom-text-wrapper">
+        <svg class="curved-svg-bot" viewBox="0 0 520 100" role="img" aria-label="I MISS YOU">
+          <defs>
+            <path id="botCurve" d="M 60,38 C 160,76 360,76 460,38" />
+          </defs>
+          <text class="bot-curved-text">
+            <textPath href="#botCurve" startOffset="50%" text-anchor="middle">
+              I MISS YOU
+            </textPath>
+          </text>
+        </svg>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const layer = document.getElementById('bubbleLayer');
+
+    // Translucent glassmorphism bubble SVG markup with highlight reflection
+    function createHeartBubbleSvg(size) {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 100 100');
+      svg.setAttribute('width', size);
+      svg.setAttribute('height', size);
+      svg.innerHTML = `
+        <defs>
+          <radialGradient id="bubbleGrad-${Math.random().toString(36).substr(2, 6)}" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9" />
+            <stop offset="35%" stop-color="#FFD6DC" stop-opacity="0.6" />
+            <stop offset="70%" stop-color="#FFA8B5" stop-opacity="0.45" />
+            <stop offset="95%" stop-color="#FF758F" stop-opacity="0.65" />
+            <stop offset="100%" stop-color="#FF5D7A" stop-opacity="0.8" />
+          </radialGradient>
+        </defs>
+        <!-- Outer bubble body -->
+        <path d="M50 86 C20 62 6 44 6 26 C6 11 17 4 31 4 C41 4 47 9 50 14 C53 9 59 4 69 4 C83 4 94 11 94 26 C94 44 80 62 50 86 Z"
+              fill="url(#bubbleGrad-default)"
+              stroke="#FFAEC0"
+              stroke-width="1.8"
+              stroke-opacity="0.75" />
+        <!-- Top-left glassy shine highlight -->
+        <ellipse cx="32" cy="22" rx="9" ry="5.5" transform="rotate(-30 32 22)" fill="#FFFFFF" fill-opacity="0.75" />
+        <circle cx="23" cy="30" r="2.5" fill="#FFFFFF" fill-opacity="0.6" />
+      `;
+      // Fix unique gradient fill
+      const grad = svg.querySelector('radialGradient');
+      const path = svg.querySelector('path');
+      path.setAttribute('fill', `url(#${grad.id})`);
+      return svg;
+    }
+
+    // 1. Just a few ambient heart-shaped bubbles slowly flying up (max 5-6 on screen)
+    function spawnAmbientBubble() {
+      if (document.hidden) return;
+      if (layer.querySelectorAll('.ambient-bubble').length >= 6) return;
+
+      const size = Math.floor(Math.random() * 18) + 24; // 24px - 42px
+      const left = Math.random() * 88 + 6; // 6% - 94%
+      const duration = Math.random() * 6 + 10; // 10s - 16s (gentle, leisurely float)
+      const drift = (Math.random() - 0.5) * 60; // gentle horizontal sway
+      const rot = (Math.random() - 0.5) * 35;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'heart-bubble ambient-bubble';
+      wrapper.style.left = left + '%';
+      wrapper.style.bottom = '-60px';
+      wrapper.style.setProperty('--drift', drift + 'px');
+      wrapper.style.setProperty('--rot', rot + 'deg');
+      wrapper.style.animation = `ambientFloat ${duration}s ease-in-out forwards`;
+
+      wrapper.appendChild(createHeartBubbleSvg(size));
+      layer.appendChild(wrapper);
+
+      setTimeout(() => wrapper.remove(), duration * 1000);
+    }
+
+    // Initial few bubbles with staggered delays
+    for (let i = 0; i < 4; i++) {
+      setTimeout(spawnAmbientBubble, i * 2200);
+    }
+    setInterval(spawnAmbientBubble, 3200);
+
+    // 2. Click / Tap interaction: bubble hearts burst out from mouse pointer
+    window.addEventListener('pointerdown', (e) => {
+      const bubbleCount = Math.floor(Math.random() * 3) + 4; // 4 to 6 bubbles
+      const originX = e.clientX;
+      const originY = e.clientY;
+
+      for (let i = 0; i < bubbleCount; i++) {
+        const size = Math.floor(Math.random() * 16) + 20; // 20px - 36px
+        const angle = (Math.PI * 2 * i) / bubbleCount + (Math.random() - 0.5) * 0.6;
+        const dist = Math.floor(Math.random() * 55) + 35;
+        const tx = Math.cos(angle) * dist;
+        const ty = Math.sin(angle) * dist - 25; // bias slightly upward
+        const drift = (Math.random() - 0.5) * 30;
+        const rot = (Math.random() - 0.5) * 45;
+        const duration = (Math.random() * 0.4 + 1.2).toFixed(2); // 1.2s - 1.6s
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'heart-bubble';
+        wrapper.style.left = (originX - size / 2) + 'px';
+        wrapper.style.top = (originY - size / 2) + 'px';
+        wrapper.style.setProperty('--tx', tx + 'px');
+        wrapper.style.setProperty('--ty', ty + 'px');
+        wrapper.style.setProperty('--drift', drift + 'px');
+        wrapper.style.setProperty('--rot', rot + 'deg');
+        wrapper.style.animation = `clickBubbleRise ${duration}s cubic-bezier(0.2, 0.8, 0.3, 1) forwards`;
+
+        wrapper.appendChild(createHeartBubbleSvg(size));
+        layer.appendChild(wrapper);
+
+        setTimeout(() => wrapper.remove(), duration * 1000);
+      }
+    });
+
+    // 3. Hearts coming up from below after "I MISS YOU" text pops up
+    const bottomTextWrapper = document.querySelector('.bottom-text-wrapper');
+    let postTextHeartsTriggered = false;
+
+    function triggerPostTextHearts() {
+      if (postTextHeartsTriggered) return;
+      postTextHeartsTriggered = true;
+
+      const heartCount = 7; // Just a few cute hearts
+      const colors = ['#FF6B81', '#FF8593', '#FFAAA6', '#FF758F', '#FF9EAA', '#FF5D7A', '#FFA8B5'];
+
+      for (let i = 0; i < heartCount; i++) {
+        setTimeout(() => {
+          if (document.hidden) return;
+          const size = Math.floor(Math.random() * 10) + 24; // 24px - 34px
+          // Distribute across the width with slight randomness
+          const left = 16 + (i * (68 / (heartCount - 1))) + (Math.random() - 0.5) * 6;
+          const duration = (Math.random() * 1.5 + 5.5).toFixed(2); // 5.5s - 7.0s smooth rise
+          const drift = (Math.random() - 0.5) * 60;
+          const rot = (Math.random() - 0.5) * 45;
+          const color = colors[i % colors.length];
+
+          const wrapper = document.createElement('div');
+          wrapper.className = 'rising-heart';
+          wrapper.style.left = left + '%';
+          wrapper.style.bottom = '-45px';
+          wrapper.style.setProperty('--drift', drift + 'px');
+          wrapper.style.setProperty('--rot', rot + 'deg');
+          wrapper.style.animation = `riseFromBelow ${duration}s cubic-bezier(0.25, 1, 0.5, 1) forwards`;
+
+          const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          svg.setAttribute('viewBox', '0 0 24 24');
+          svg.setAttribute('width', size);
+          svg.setAttribute('height', size);
+          svg.innerHTML = `
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  fill="${color}" />
+          `;
+          wrapper.appendChild(svg);
+          layer.appendChild(wrapper);
+
+          setTimeout(() => wrapper.remove(), duration * 1000);
+        }, i * 280);
+      }
+    }
+
+    if (bottomTextWrapper) {
+      bottomTextWrapper.addEventListener('animationend', (e) => {
+        if (e.animationName === 'popBottomText') {
+          triggerPostTextHearts();
+        }
+      });
+    }
+
+    // Fallback timer: 3.85s (2.9s delay + 0.9s animation duration)
+    setTimeout(triggerPostTextHearts, 3850);
+  </script>
+</body>
+</html>
