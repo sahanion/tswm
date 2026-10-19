@@ -1311,6 +1311,50 @@
       box-sizing: border-box;
     }
 
+    .spread2-photo-page {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .spread2-photo-sticker {
+      position: absolute;
+      display: block;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 5px rgba(92, 53, 48, 0.22));
+    }
+
+    /* Photos confined within left page — 3-zone layout (top-left, top-right, mid-left, mid-right, bottom-center) */
+    .spread2-photo-1 { left: 3%;  top: 5%;  width: 40%; transform: rotate(-4deg); }
+    .spread2-photo-2 { left: 52%; top: 4%;  width: 40%; transform: rotate(3deg);  }
+    .spread2-photo-3 { left: 1%;  top: 50%; width: 32%; transform: rotate(-3deg); }
+    .spread2-photo-4 { left: 60%; top: 48%; width: 32%; transform: rotate(3deg);  }
+    .spread2-photo-5 { left: 28%; top: 68%; width: 36%; transform: rotate(-2deg); }
+
+    .spread2-photo-title {
+      position: absolute;
+      top: 50%;
+      left: 32%;
+      width: 36%;
+      min-height: 10%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0.25em;
+      color: #a85165;
+      font-family: 'Alex Brush', 'Cormorant Garamond', cursive;
+      font-size: clamp(11px, 1.9cqw, 28px);
+      font-weight: 500;
+      line-height: 1;
+      text-align: center;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.98), 0 0 8px rgba(255, 250, 240, 0.9);
+      z-index: 2;
+    }
+
     .spread2-header {
       position: absolute;
       top: 6.2%;
@@ -1419,6 +1463,40 @@
       transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.25, 1);
       box-sizing: border-box;
     }
+
+    .spread2-poem {
+      position: absolute;
+      top: 18%;
+      left: 6%;
+      width: 88%;
+      bottom: 22%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(2px, 0.4cqw, 7px);
+      margin: 0;
+      color: #52382f;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(9.5px, 1.4cqw, 20px);
+      font-weight: 600;
+      line-height: 1.25;
+      text-align: center;
+      /* soft frosted card */
+      background: rgba(255, 248, 242, 0.72);
+      border: 1px solid rgba(210, 168, 155, 0.45);
+      border-radius: clamp(6px, 1.1cqw, 16px);
+      padding: clamp(10px, 1.6cqw, 24px) clamp(12px, 1.8cqw, 26px);
+      box-shadow:
+        0 4px 22px rgba(170, 110, 100, 0.12),
+        0 1px 6px rgba(200, 155, 140, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      box-sizing: border-box;
+    }
+
+    .spread2-poem p { margin: 0; }
 
     .spread-container.is-page-turned .spread2-right-page {
       opacity: 1;
@@ -1885,13 +1963,14 @@
                 class="page-leaf-img" 
               />
 
-              <!-- SPREAD 2: LEFT PAGE KEEPSAKE LETTER -->
-              <div class="spread2-left-content" id="spread2LeftContent">
-                <div class="spread2-header">
-                </div>
-
-                <div class="spread2-letter">
-                </div>
+              <!-- SPREAD 2: LEFT PAGE PHOTO COLLAGE -->
+              <div class="spread2-left-content spread2-photo-page" id="spread2LeftContent" role="group" aria-label="Birthday photo collage">
+                <img class="spread2-photo-sticker spread2-photo-1" src="images/memory-sticker-01.png" alt="A couple in a pink heart sticker frame" />
+                <img class="spread2-photo-sticker spread2-photo-2" src="images/memory-sticker-02.png" alt="A smiling portrait surrounded by pink hearts" />
+                <img class="spread2-photo-sticker spread2-photo-3" src="images/memory-sticker-03.png" alt="A playful birthday portrait wearing a cake hat" />
+                <img class="spread2-photo-sticker spread2-photo-4" src="images/memory-sticker-04.png" alt="A crowned portrait with a floral dress and bouquet" />
+                <img class="spread2-photo-sticker spread2-photo-5" src="images/memory-sticker-05.png" alt="A crowned portrait framed by flowers and a ribbon" />
+                <h2 class="spread2-photo-title">The Most Wonderful Woman</h2>
               </div>
               <!-- Dynamic Lighting / Shadow overlay -->
               <div class="leaf-lighting" aria-hidden="true"></div>
@@ -1903,10 +1982,15 @@
                SPREAD 2: RIGHT PAGE (WISH CARDS, PANDA, NEXT PAGE BUTTON)
                ═══════════════════════════════════════════════════════════ -->
           <div class="spread2-right-page" id="spread2RightPage">
-            <div class="spread2-header">
-            </div>
-
-            <div class="spread2-wishes">
+            <div class="spread2-poem" role="group" aria-label="Birthday poem for Muskan">
+              <p>May the stars be soft to you,</p>
+              <p>And may your sky always be blue.</p>
+              <p>You are my favourite.</p>
+              <p>My love for you is infinite.</p>
+              <p>Happiest birthday, Muskan!</p>
+              <p>May your dreams come true.</p>
+              <p>And if there’s one thing life got right,</p>
+              <p>It was bringing me to you.</p>
             </div>
 
             <!-- Cute Panda Character Accent -->
