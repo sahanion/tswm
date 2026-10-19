@@ -2129,7 +2129,7 @@
           }, 300);
 
           // 6. Update button to "turn page"
-          blowBtnLabel.innerHTML = 'next page <span class="btn-sparkle" aria-hidden="true">✿ →</span>';
+          blowBtnLabel.innerHTML = 'next page <span class="btn-sparkle" aria-hidden="true">✿</span>';
           blowCandlesBtn.setAttribute('aria-label', 'next page');
           isCandlesBlown = true;
           isTransitioning = false;
@@ -2203,7 +2203,7 @@
       smokes.forEach(s => s.classList.add('active'));
       wishNoteContainer.classList.add('is-revealed');
       wishNoteContainer.removeAttribute('aria-hidden');
-      blowBtnLabel.innerHTML = 'next page <span class="btn-sparkle" aria-hidden="true">✿ →</span>';
+      blowBtnLabel.innerHTML = 'next page <span class="btn-sparkle" aria-hidden="true">✿</span>';
       blowCandlesBtn.setAttribute('aria-label', 'next page');
       isCandlesBlown = true;
     } else if (urlParams.get('state') === 'flipped') {
@@ -2215,7 +2215,7 @@
       smokes.forEach(s => s.classList.add('active'));
       wishNoteContainer.classList.add('is-revealed');
       wishNoteContainer.removeAttribute('aria-hidden');
-      blowBtnLabel.innerHTML = 'next page <span class="btn-sparkle" aria-hidden="true">✿ →</span>';
+      blowBtnLabel.innerHTML = 'next page <span class="btn-sparkle" aria-hidden="true">✿</span>';
       isCandlesBlown = true;
       pageLeaf.classList.add('flipped');
       pageLeafBack.removeAttribute('aria-hidden');
