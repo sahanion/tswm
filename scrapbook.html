@@ -174,6 +174,60 @@
       transition: transform 0.25s ease;
     }
 
+    /* Discreet Background Music Toggle Button */
+    .music-toggle-btn {
+      position: absolute;
+      top: max(16px, env(safe-area-inset-top, 16px));
+      right: calc(max(16px, env(safe-area-inset-right, 16px)) + clamp(38px, 4.2vw, 44px) + 10px);
+      z-index: 50;
+      width: clamp(38px, 4.2vw, 44px);
+      height: clamp(38px, 4.2vw, 44px);
+      border-radius: 50%;
+      background: var(--fs-btn-bg);
+      border: 1px solid var(--fs-btn-border);
+      color: var(--fs-btn-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 4px 14px rgba(90, 50, 45, 0.12);
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+      opacity: 0.85;
+    }
+
+    .music-toggle-btn:hover {
+      opacity: 1;
+      transform: scale(1.08);
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 6px 20px rgba(90, 50, 45, 0.18);
+    }
+
+    .music-toggle-btn:active {
+      transform: scale(0.96);
+    }
+
+    .music-toggle-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      transition: transform 0.25s ease;
+    }
+
+    .music-toggle-btn.is-playing .music-note {
+      animation: musicBeat 2.2s ease-in-out infinite;
+    }
+
+    @keyframes musicBeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12) rotate(4deg); }
+    }
+
     /* ═══════════════════════════════════════════════════════════
        STAGE ARCHITECTURE (PERSPECTIVE & CONTAINER QUERIES)
        ═══════════════════════════════════════════════════════════ */
@@ -1294,6 +1348,18 @@
         height: 16px;
       }
 
+      .music-toggle-btn {
+        width: 36px;
+        height: 36px;
+        top: max(14px, env(safe-area-inset-top, 14px));
+        right: calc(max(14px, env(safe-area-inset-right, 14px)) + 44px);
+      }
+
+      .music-toggle-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+
       .book-spread-stage {
         width: 100vw;
         max-width: 100vw;
@@ -1787,7 +1853,6 @@
     .scene-stage.closing .book-cover-stage {
       display: block !important;
       opacity: 1 !important;
-      transform: rotateY(0deg) !important;
       transition: transform 1.25s cubic-bezier(0.25, 1, 0.32, 1), opacity 0.4s ease;
       pointer-events: none;
       z-index: 60;
@@ -1970,6 +2035,27 @@
         <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />
       </svg>
     </button>
+
+    <!-- Discreet Background Music Toggle Button -->
+    <button class="music-toggle-btn" id="musicToggle" aria-label="Toggle Background Music" title="Background Music (M)">
+      <svg class="music-note" id="musicIconOn" viewBox="0 0 24 24">
+        <path d="M9 18V5l12-2v13" />
+        <circle cx="6" cy="18" r="3" />
+        <circle cx="18" cy="16" r="3" />
+      </svg>
+      <svg class="music-note-off" id="musicIconOff" viewBox="0 0 24 24" style="display: none;">
+        <path d="M9 18V5l12-2v13" />
+        <circle cx="6" cy="18" r="3" />
+        <circle cx="18" cy="16" r="3" />
+        <line x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="2" />
+      </svg>
+    </button>
+
+    <!-- Ambient Background Audio: Loops from the start until candles are blown -->
+    <audio id="bgMusic" loop preload="auto">
+      <source src="final-rfiy.mp3" type="audio/mpeg">
+      <source src="final-rfin.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- The Scrapbook Stage (Houses Cover and Open Spread) -->
     <main class="scene-stage" id="sceneStage" aria-label="Muskan's Keepsake Scrapbook">
@@ -2282,6 +2368,11 @@
       // 1. Button press feedback
       openBookBtn.classList.add('btn-pressed');
 
+      // Start / resume background music when opening the book
+      if (!isMusicStoppedByCandle && !isMusicManuallyMuted && bgMusic && bgMusic.paused) {
+        startBgMusic();
+      }
+
       setTimeout(() => {
         // 2. Trigger 3D Book Opening Transition
         sceneStage.classList.add('opening');
@@ -2407,6 +2498,9 @@
       // Otherwise, blow the candles!
       isTransitioning = true;
       blowCandlesBtn.classList.add('btn-pressed');
+
+      // Stop background music right when the "blow candle" button hits!
+      stopBgMusic();
 
       setTimeout(() => {
         blowCandlesBtn.classList.remove('btn-pressed');
@@ -2536,6 +2630,8 @@
     if (nextPageBtn) {
       nextPageBtn.addEventListener('click', () => {
         if (!spreadContainer.classList.contains('is-page-turned')) return;
+        if (sceneStage.classList.contains('closing')) return;
+        nextPageBtn.disabled = true;
         nextPageBtn.classList.add('btn-pressed');
         setTimeout(() => nextPageBtn.classList.remove('btn-pressed'), 180);
 
@@ -2568,13 +2664,23 @@
           bookSpreadStage.style.opacity = '0';
         }, 400);
 
-        // 4. Once closed, gentle fade out and navigate to hug.html
-        setTimeout(() => {
+        // 4. Wait for the cover to finish closing, then transition to the hug page.
+        let closeFinished = false;
+        const finishClosing = () => {
+          if (closeFinished) return;
+          closeFinished = true;
+          bookCoverStage.removeEventListener('transitionend', onCoverClosed);
           document.body.classList.add('page-leaving');
           setTimeout(() => {
             window.location.href = 'hug.html';
           }, 550);
-        }, 1350);
+        };
+        const onCoverClosed = (event) => {
+          if (event.target === bookCoverStage && event.propertyName === 'transform') finishClosing();
+        };
+        bookCoverStage.addEventListener('transitionend', onCoverClosed);
+        // Fallback covers browsers that skip transitionend (including reduced-motion settings).
+        setTimeout(finishClosing, reducedMotionQuery.matches ? 80 : 1450);
       });
     }
 
@@ -2675,6 +2781,145 @@
     setTimeout(spawnAmbientPetal, 400);
     setTimeout(spawnAmbientPetal, 2200);
     setInterval(spawnAmbientPetal, 4200);
+
+    // ═══════════════════════════════════════════════════════════
+    // BACKGROUND MUSIC CONTROLLER
+    // "play final-rfiy.mp3 from the start, till the 'blow candle' button hits. on a loop."
+    // ═══════════════════════════════════════════════════════════
+    const bgMusic = document.getElementById('bgMusic');
+    const musicToggle = document.getElementById('musicToggle');
+    const musicIconOn = document.getElementById('musicIconOn');
+    const musicIconOff = document.getElementById('musicIconOff');
+
+    let isMusicManuallyMuted = false;
+    let isMusicStoppedByCandle = sessionStorage.getItem('bgMusicStopped') === 'true';
+
+    function updateMusicButtonUi(isPlaying) {
+      if (!musicToggle) return;
+      if (isPlaying) {
+        musicToggle.classList.add('is-playing');
+        if (musicIconOn) musicIconOn.style.display = 'block';
+        if (musicIconOff) musicIconOff.style.display = 'none';
+        musicToggle.setAttribute('title', 'Pause Music');
+        musicToggle.setAttribute('aria-label', 'Pause Music');
+      } else {
+        musicToggle.classList.remove('is-playing');
+        if (musicIconOn) musicIconOn.style.display = 'none';
+        if (musicIconOff) musicIconOff.style.display = 'block';
+        musicToggle.setAttribute('title', 'Play Music');
+        musicToggle.setAttribute('aria-label', 'Play Music');
+      }
+    }
+
+    function startBgMusic() {
+      if (!bgMusic || isMusicStoppedByCandle || isMusicManuallyMuted) return;
+      bgMusic.volume = 0.65;
+      bgMusic.loop = true;
+
+      // Resume from previous page time if available
+      const savedTime = sessionStorage.getItem('bgMusicTime');
+      if (savedTime && !isNaN(parseFloat(savedTime)) && bgMusic.currentTime === 0) {
+        try {
+          bgMusic.currentTime = parseFloat(savedTime);
+        } catch (_) {}
+      }
+
+      const playPromise = bgMusic.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            updateMusicButtonUi(true);
+            sessionStorage.setItem('bgMusicPlaying', 'true');
+          })
+          .catch(() => {
+            // Autoplay policy prevented immediate playback; waiting for user gesture
+            updateMusicButtonUi(false);
+          });
+      }
+    }
+
+    function stopBgMusic() {
+      if (!bgMusic) return;
+      isMusicStoppedByCandle = true;
+      sessionStorage.setItem('bgMusicStopped', 'true');
+      sessionStorage.removeItem('bgMusicPlaying');
+      sessionStorage.removeItem('bgMusicTime');
+
+      // Smooth fade out over 750ms
+      const startVol = bgMusic.volume;
+      const startTime = performance.now();
+      const fadeDuration = 750;
+
+      function stepFade(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / fadeDuration);
+        bgMusic.volume = Math.max(0, startVol * (1 - progress));
+        if (progress < 1) {
+          requestAnimationFrame(stepFade);
+        } else {
+          bgMusic.pause();
+          bgMusic.currentTime = 0;
+          updateMusicButtonUi(false);
+        }
+      }
+      requestAnimationFrame(stepFade);
+    }
+
+    // Toggle button handler
+    if (musicToggle) {
+      musicToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!bgMusic) return;
+
+        if (!bgMusic.paused) {
+          isMusicManuallyMuted = true;
+          bgMusic.pause();
+          updateMusicButtonUi(false);
+          sessionStorage.setItem('bgMusicPlaying', 'false');
+        } else {
+          isMusicManuallyMuted = false;
+          isMusicStoppedByCandle = false;
+          sessionStorage.removeItem('bgMusicStopped');
+          bgMusic.volume = 0.65;
+          bgMusic.play().then(() => {
+            updateMusicButtonUi(true);
+            sessionStorage.setItem('bgMusicPlaying', 'true');
+          }).catch(() => {});
+        }
+      });
+    }
+
+    // Keyboard shortcut 'm' for mute/unmute
+    window.addEventListener('keydown', (e) => {
+      if ((e.key === 'm' || e.key === 'M') && !e.target.matches('input, textarea')) {
+        if (musicToggle) musicToggle.click();
+      }
+    });
+
+    // Save currentTime periodically so transitions stay seamless
+    window.addEventListener('beforeunload', () => {
+      if (bgMusic && !bgMusic.paused && !isMusicStoppedByCandle) {
+        sessionStorage.setItem('bgMusicTime', bgMusic.currentTime.toString());
+      }
+    });
+
+    // One-time gesture listener to start audio if browser blocked unmuted autoplay
+    const userGestureEvents = ['click', 'touchstart', 'pointerdown'];
+    function unlockAudioOnGesture() {
+      if (!isMusicStoppedByCandle && !isMusicManuallyMuted && bgMusic && bgMusic.paused) {
+        startBgMusic();
+      }
+      userGestureEvents.forEach(evt => window.removeEventListener(evt, unlockAudioOnGesture));
+    }
+    userGestureEvents.forEach(evt => window.addEventListener(evt, unlockAudioOnGesture, { passive: true }));
+
+    // Stop if url param state=blown or flipped
+    if (urlParams.get('state') === 'blown' || urlParams.get('state') === 'flipped') {
+      stopBgMusic();
+    } else {
+      // Try starting right away (works if user navigated from index.html or policy allows)
+      startBgMusic();
+    }
   </script>
 </body>
 </html>
