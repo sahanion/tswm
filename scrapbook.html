@@ -1357,14 +1357,14 @@
        Keep all stickers and title inside x: 40% to 87%, y: 7% to 85%.
        ───────────────────────────────────────────────────────── */
     /* top row */
-    .spread2-photo-1 { left: 41%; top: 7%;  width: 21%; transform: rotate(-4deg); }
-    .spread2-photo-2 { left: 66%; top: 6%;  width: 19%; transform: rotate(3deg);  }
+    .spread2-photo-2 { left: 41%; top: 7%;  width: 22%; transform: rotate(-3deg); }
+    .spread2-photo-5 { left: 66%; top: 6%;  width: 21%; transform: rotate(3deg);  }
     /* middle title */
     .spread2-photo-title {
       position: absolute;
-      top: 40%;
+      top: 40.5%;
       left: 41%;
-      width: 45%;
+      width: 46%;
       min-height: 8%;
       display: flex;
       align-items: center;
@@ -1381,10 +1381,9 @@
       text-shadow: 0 1px 2px rgba(255, 255, 255, 0.98), 0 0 8px rgba(255, 250, 240, 0.9);
       z-index: 2;
     }
-    /* bottom row & accents */
-    .spread2-photo-3 { left: 40%; top: 49%; width: 17%; transform: rotate(-3deg); }
-    .spread2-photo-4 { left: 68%; top: 45%; width: 16%; transform: rotate(3deg);  }
-    .spread2-photo-5 { left: 53%; top: 57%; width: 17%; transform: rotate(-1deg); }
+    /* bottom row */
+    .spread2-photo-3 { left: 41%; top: 50%; width: 20%; transform: rotate(-2.5deg); }
+    .spread2-photo-4 { left: 67%; top: 47%; width: 19%; transform: rotate(2.5deg);  }
 
     .spread2-header {
       position: absolute;
@@ -1882,13 +1881,12 @@
         display: block; transform: none; border-radius: 0;
       }
       .scene-stage.mobile-second-page .page-leaf-back .leaf-lighting { opacity: 0; }
-      .scene-stage.mobile-second-page .spread2-photo-1 { left: 3%; top: 6%; width: 42%; }
-      .scene-stage.mobile-second-page .spread2-photo-2 { left: 59%; top: 6%; width: 38%; }
-      .scene-stage.mobile-second-page .spread2-photo-3 { left: 0; top: 42%; width: 32%; }
-      .scene-stage.mobile-second-page .spread2-photo-4 { left: 69%; top: 45%; width: 30%; }
-      .scene-stage.mobile-second-page .spread2-photo-5 { left: 35%; top: 67%; width: 30%; }
+      .scene-stage.mobile-second-page .spread2-photo-2 { left: 6%; top: 7%; width: 42%; transform: rotate(-3deg); }
+      .scene-stage.mobile-second-page .spread2-photo-5 { left: 52%; top: 6%; width: 42%; transform: rotate(3deg); }
+      .scene-stage.mobile-second-page .spread2-photo-3 { left: 6%; top: 50%; width: 40%; transform: rotate(-2deg); }
+      .scene-stage.mobile-second-page .spread2-photo-4 { left: 52%; top: 48%; width: 40%; transform: rotate(3deg); }
       .scene-stage.mobile-second-page .spread2-photo-title {
-        top: 42%; left: 17%; width: 66%; min-height: 12%;
+        top: 42%; left: 10%; width: 80%; min-height: 12%;
         border-radius: 24px; background: rgba(255, 247, 234, 0.78);
         font-size: clamp(14px, 4vw, 22px); line-height: 1.05;
       }
@@ -2147,12 +2145,11 @@
 
               <!-- SPREAD 2: LEFT PAGE PHOTO COLLAGE -->
               <div class="spread2-left-content spread2-photo-page" id="spread2LeftContent" role="group" aria-label="Birthday photo collage">
-                <img class="spread2-photo-sticker spread2-photo-1" src="images/memory-sticker-01.png" alt="A couple in a pink heart sticker frame" />
                 <img class="spread2-photo-sticker spread2-photo-2" src="images/memory-sticker-02.png" alt="A smiling portrait surrounded by pink hearts" />
-                <img class="spread2-photo-sticker spread2-photo-3" src="images/memory-sticker-03.png" alt="A playful birthday portrait wearing a cake hat" />
-                <img class="spread2-photo-sticker spread2-photo-4" src="images/memory-sticker-04.png" alt="A crowned portrait with a floral dress and bouquet" />
                 <img class="spread2-photo-sticker spread2-photo-5" src="images/memory-sticker-05.png" alt="A crowned portrait framed by flowers and a ribbon" />
                 <h2 class="spread2-photo-title">The Most Wonderful Woman</h2>
+                <img class="spread2-photo-sticker spread2-photo-3" src="images/memory-sticker-03.png" alt="A playful birthday portrait wearing a cake hat" />
+                <img class="spread2-photo-sticker spread2-photo-4" src="images/memory-sticker-04.png" alt="A crowned portrait with a floral dress and bouquet" />
                 <button type="button" id="mobileLetterLaunchBtn" class="book-action-btn mobile-letter-launch">Open the letter <span class="btn-sparkle" aria-hidden="true">♡</span></button>
               </div>
               <!-- Dynamic Lighting / Shadow overlay -->
