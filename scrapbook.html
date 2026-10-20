@@ -690,6 +690,459 @@
       pointer-events: none;
     }
 
+    
+    /* ═══════════════════════════════════════════════════════════
+       STAGE 2: THE CAKE KEEPSAKE CARD (4:5 SIZE CARD)
+       ═══════════════════════════════════════════════════════════ */
+    .cake-card-stage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.96);
+      width: min(90vw, calc(86svh * 4 / 5), 560px);
+      aspect-ratio: 4 / 5;
+      z-index: 20;
+      container-type: inline-size;
+      container-name: cakecard;
+      border-radius: clamp(12px, 2.2vw, 22px);
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      box-shadow:
+        0 26px 65px -14px rgba(30, 12, 10, 0.58),
+        0 14px 32px -8px rgba(30, 12, 10, 0.42),
+        0 0 0 1px rgba(255, 235, 222, 0.38),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+      transition: opacity 0.65s cubic-bezier(0.25, 1, 0.35, 1), transform 0.65s cubic-bezier(0.25, 1, 0.35, 1), visibility 0s linear 0.65s;
+      will-change: transform, opacity;
+    }
+
+    .cake-card-stage.is-active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+      transition: opacity 0.65s cubic-bezier(0.25, 1, 0.35, 1), transform 0.65s cubic-bezier(0.25, 1, 0.35, 1), visibility 0s;
+    }
+
+    .cake-card-stage.is-leaving {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.92);
+      pointer-events: none;
+      transition: opacity 0.75s ease, transform 0.75s cubic-bezier(0.25, 1, 0.35, 1);
+    }
+
+    .cake-card-art {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      display: block;
+      pointer-events: none;
+      -webkit-user-drag: none;
+    }
+
+    /* ── Cake Candles & Flames ── */
+    .card-candles-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .card-flame-wrapper {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      width: clamp(10px, 2.2cqw, 16px);
+      height: clamp(18px, 4cqw, 28px);
+      pointer-events: none;
+    }
+
+    .card-flame {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .card-flame-wrapper.is-blown .card-flame {
+      opacity: 0;
+      transform: scale(0.2) translateY(-12px);
+    }
+
+    .card-flame-glow {
+      position: absolute;
+      width: 220%;
+      height: 220%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 215, 120, 0.85) 0%, rgba(255, 150, 60, 0.4) 45%, transparent 72%);
+      filter: blur(5px);
+      animation: flameGlowPulse 2.8s ease-in-out infinite alternate;
+    }
+
+    .card-flame-body {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50% 50% 35% 35% / 60% 60% 40% 40%;
+      background: radial-gradient(ellipse at 50% 65%, #FFFFFF 10%, #FFE082 35%, #FFB300 65%, #FF5722 92%);
+      filter: drop-shadow(0 0 5px rgba(255, 180, 50, 0.9));
+      animation: flameFlicker 1.8s ease-in-out infinite alternate;
+      transform-origin: 50% 90%;
+    }
+
+    @keyframes flameGlowPulse {
+      0%, 100% { transform: scale(0.92); opacity: 0.75; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+
+    @keyframes flameFlicker {
+      0%, 100% { transform: scale(1) rotate(-1deg); }
+      25% { transform: scale(1.08, 0.94) rotate(1.5deg); }
+      50% { transform: scale(0.95, 1.05) rotate(-2deg); }
+      75% { transform: scale(1.05, 0.98) rotate(1deg); }
+    }
+
+    /* Smoke wisps after blowing */
+    .card-smoke {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 20px;
+      height: 60px;
+      transform: translateX(-50%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .card-flame-wrapper.is-blown .card-smoke {
+      animation: smokeRiseFade 2.6s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+    }
+
+    @keyframes smokeRiseFade {
+      0% { opacity: 0; transform: translate(-50%, 0) scale(0.6); }
+      20% { opacity: 0.75; }
+      60% { opacity: 0.4; }
+      100% { opacity: 0; transform: translate(calc(-50% + var(--smoke-drift, 4px)), -55px) scale(1.4); }
+    }
+
+    /* ── Wish Cards (Properly Positioned & Scaled on Card) ── */
+    .card-wishcards-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: auto;
+      z-index: 12;
+    }
+
+    .card-wish-item {
+      position: absolute;
+      border-radius: clamp(4px, 0.8cqw, 8px);
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* 1. Polaroid Photo */
+    .card-wish-polaroid {
+      top: 38.0%;
+      left: 63.5%;
+      width: 20.8%;
+      height: 18.5%;
+      transform: rotate(-3deg);
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.25, 1), box-shadow 0.35s ease;
+      z-index: 13;
+    }
+
+    .card-wish-polaroid:hover {
+      transform: rotate(-1deg) scale(1.06);
+      box-shadow: 0 8px 22px rgba(110, 60, 50, 0.28);
+    }
+
+    /* 2. Pink Note: 'a little birthday love' */
+    .card-wish-pink {
+      top: 45.8%;
+      left: 76.5%;
+      width: 21.5%;
+      height: 13.0%;
+      transform: rotate(-1deg);
+      perspective: 800px;
+      z-index: 14;
+    }
+
+    /* 3. Cream Note: 'flowers for you' */
+    .card-wish-cream {
+      top: 57.5%;
+      left: 68.5%;
+      width: 23.5%;
+      height: 14.0%;
+      transform: rotate(1deg);
+      perspective: 800px;
+      z-index: 14;
+    }
+
+    .wish-item-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      border-radius: inherit;
+    }
+
+    .wish-item-inner.is-flipped {
+      transform: rotateY(-180deg);
+    }
+
+    .wish-item-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: inherit;
+      overflow: hidden;
+    }
+
+    .wish-item-front {
+      transform: rotateY(0deg);
+      background: transparent;
+    }
+
+    .wish-item-back {
+      transform: rotateY(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 18px rgba(90, 45, 40, 0.22);
+    }
+
+    .wish-note-paper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(3px, 0.6cqw, 8px);
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .pink-note-paper {
+      background: linear-gradient(135deg, #FFF0F3 0%, #FFDFE5 100%);
+      border: 1px solid rgba(220, 150, 160, 0.7);
+    }
+
+    .cream-note-paper {
+      background: linear-gradient(135deg, #FFFDF8 0%, #FAF0E1 100%);
+      border: 1px solid rgba(210, 175, 140, 0.7);
+    }
+
+    .wish-note-pin {
+      font-size: clamp(8px, 1.2cqw, 14px);
+      line-height: 1;
+      margin-bottom: 2px;
+      color: #b86b77;
+    }
+
+    .wish-note-msg {
+      font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+      font-size: clamp(8px, 1.35cqw, 13px);
+      line-height: 1.2;
+      color: #5C322C;
+      font-weight: 600;
+      margin: 0;
+      letter-spacing: 0.01em;
+    }
+
+    .wish-card-glint {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: rgba(255, 255, 255, 0.001);
+      transition: background 0.3s ease;
+    }
+
+    .card-wish-item:hover .wish-card-glint {
+      background: rgba(255, 255, 255, 0.16);
+      box-shadow: 0 0 12px rgba(255, 210, 220, 0.4);
+    }
+
+    /* ── Plaque Action Button ('Blow the candles' -> 'Next page ✿ →') ── */
+    .cake-action-btn {
+      position: absolute !important;
+      top: 80.6% !important;
+      left: 35.0% !important;
+      width: 30.0% !important;
+      height: 5.7% !important;
+      min-height: unset !important;
+      border-radius: 999px;
+      cursor: pointer;
+      pointer-events: auto !important;
+      z-index: 30 !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 225, 230, 0.001) !important;
+      border: 1.5px solid rgba(255, 235, 240, 0.35) !important;
+      padding: 0 !important;
+      outline: none;
+      box-shadow:
+        0 0 18px rgba(245, 140, 160, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.3);
+      animation: coverBtnPulse 3.5s ease-in-out infinite;
+      transition: all 0.35s cubic-bezier(0.2, 0.8, 0.25, 1);
+    }
+
+    .cake-action-btn::before,
+    .cake-action-btn::after {
+      display: none !important;
+    }
+
+    .cake-action-btn:hover {
+      background: rgba(255, 230, 235, 0.18) !important;
+      border-color: rgba(255, 240, 245, 0.9) !important;
+      box-shadow:
+        0 0 28px rgba(255, 130, 160, 0.8),
+        0 0 50px rgba(255, 100, 140, 0.45),
+        inset 0 0 14px rgba(255, 255, 255, 0.4);
+      transform: scale(1.035);
+    }
+
+    .cake-action-btn:active,
+    .cake-action-btn.btn-pressed {
+      transform: scale(0.965);
+      box-shadow:
+        0 0 14px rgba(216, 100, 120, 0.5),
+        inset 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Morph to 'Next page ✿ →' after blowing candles */
+    .cake-action-btn.is-next-step {
+      background: linear-gradient(145deg, #DE8795 0%, #D47987 50%, #C46776 100%) !important;
+      border: 1px solid rgba(255, 240, 245, 0.95) !important;
+      color: #FFFFFF !important;
+      font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif !important;
+      font-size: clamp(12.5px, 1.7cqw, 19px) !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.05em !important;
+      text-shadow: 0 1px 2px rgba(90, 30, 40, 0.35) !important;
+      box-shadow:
+        0 0 26px rgba(255, 130, 160, 0.85),
+        0 0 52px rgba(255, 105, 140, 0.55),
+        0 6px 18px rgba(120, 35, 50, 0.28),
+        inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
+      animation: buttonBreathe 4s ease-in-out infinite !important;
+      white-space: nowrap;
+      gap: 6px;
+    }
+
+    .cake-action-btn.is-next-step:hover {
+      transform: translateY(-2px) scale(1.035);
+      background: linear-gradient(145deg, #E58F9D 0%, #D87F8D 50%, #C96D7C 100%) !important;
+      border-color: rgba(255, 255, 255, 0.95) !important;
+      box-shadow:
+        0 0 35px rgba(235, 115, 138, 0.95),
+        0 0 65px rgba(226, 98, 122, 0.7),
+        0 8px 24px rgba(120, 45, 55, 0.3) !important;
+    }
+
+    .cake-action-btn .btn-arrow {
+      font-size: 1.15em;
+      transition: transform 0.25s ease;
+      display: inline-block;
+    }
+
+    .cake-action-btn:hover .btn-arrow {
+      transform: translateX(3px);
+    }
+
+    .cake-btn-shine {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .cake-btn-shine::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -120%;
+      width: 60%;
+      height: 200%;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.25) 45%,
+        rgba(255, 255, 255, 0.6) 50%,
+        rgba(255, 255, 255, 0.25) 55%,
+        transparent 100%
+      );
+      transform: rotate(25deg);
+      animation: buttonShinePass 4.2s ease-in-out infinite;
+    }
+
+    .cake-action-btn.is-next-step .cake-btn-shine {
+      display: none;
+    }
+
+    /* ── Confetti Explosion Layer ── */
+    .card-confetti-layer {
+      position: absolute;
+      inset: -30px;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 35;
+    }
+
+    .card-confetti-piece {
+      position: absolute;
+      left: var(--start-x);
+      top: var(--start-y);
+      opacity: 0;
+      will-change: transform, opacity;
+      animation: confettiPop var(--dur) cubic-bezier(0.18, 0.85, 0.32, 1) var(--delay) forwards;
+    }
+
+    .confetti-rect {
+      width: clamp(7px, 1.3cqw, 12px);
+      height: clamp(10px, 1.8cqw, 16px);
+      border-radius: 2px;
+    }
+
+    .confetti-petal {
+      width: clamp(8px, 1.4cqw, 13px);
+      height: clamp(8px, 1.4cqw, 13px);
+      border-radius: 100% 0 100% 0;
+    }
+
+    .confetti-star {
+      font-size: clamp(12px, 2.2cqw, 20px);
+      line-height: 1;
+      filter: drop-shadow(0 0 2px rgba(255, 230, 200, 0.8));
+    }
+
+    @keyframes confettiPop {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) scale(0.3) rotate(0deg);
+      }
+      15% {
+        opacity: 1;
+        transform: translate3d(var(--target-x), var(--target-y), 0) scale(1.1) rotate(calc(var(--rot) * 0.3));
+      }
+      80% {
+        opacity: 0.9;
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(calc(var(--target-x) * 1.3), var(--end-y), 0) scale(0.85) rotate(var(--rot));
+      }
+    }
+
     /* ═══════════════════════════════════════════════════════════
        THE DUSTY-PINK ACTION BUTTONS (SLOW RADIATING GLOW)
        Shared design system for "Open the book ✧", "Blow the candles ✿", "Next page ✿ →"
@@ -2643,6 +3096,115 @@
       </section>
 
       <!-- ═══════════════════════════════════════════════════════════
+           STAGE 2: THE CAKE KEEPSAKE CARD (PAGE 3)
+           ═══════════════════════════════════════════════════════════ -->
+      <section class="cake-card-stage" id="cakeCardStage" aria-label="Birthday Cake Keepsake Card" aria-hidden="true">
+        <!-- 4:5 Cake Card Artwork -->
+        <img 
+          src="scrapbook_cake_card.jpg" 
+          alt="Happy Birthday Muskan two-tier birthday cake with lit candles and sweet wish cards" 
+          class="cake-card-art" 
+          draggable="false" 
+        />
+
+        <!-- 4 Candle Flames & Smoke Wisps -->
+        <div class="card-candles-layer" id="cardCandlesLayer" aria-hidden="true">
+          <!-- Candle 1 -->
+          <div class="card-flame-wrapper" id="cardFlame1" style="left: 38.6%; top: 48.6%;">
+            <div class="card-flame">
+              <div class="card-flame-glow"></div>
+              <div class="card-flame-body"></div>
+            </div>
+            <div class="card-smoke" id="cardSmoke1">
+              <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q6,42 12,28 T8,10 T10,0" class="smoke-trail"/></svg>
+            </div>
+          </div>
+          <!-- Candle 2 -->
+          <div class="card-flame-wrapper" id="cardFlame2" style="left: 42.2%; top: 48.3%;">
+            <div class="card-flame">
+              <div class="card-flame-glow"></div>
+              <div class="card-flame-body"></div>
+            </div>
+            <div class="card-smoke" id="cardSmoke2">
+              <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q14,40 8,26 T12,12 T9,0" class="smoke-trail"/></svg>
+            </div>
+          </div>
+          <!-- Candle 3 -->
+          <div class="card-flame-wrapper" id="cardFlame3" style="left: 45.7%; top: 48.3%;">
+            <div class="card-flame">
+              <div class="card-flame-glow"></div>
+              <div class="card-flame-body"></div>
+            </div>
+            <div class="card-smoke" id="cardSmoke3">
+              <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q7,38 13,24 T8,8 T11,0" class="smoke-trail"/></svg>
+            </div>
+          </div>
+          <!-- Candle 4 -->
+          <div class="card-flame-wrapper" id="cardFlame4" style="left: 50.2%; top: 48.5%;">
+            <div class="card-flame">
+              <div class="card-flame-glow"></div>
+              <div class="card-flame-body"></div>
+            </div>
+            <div class="card-smoke" id="cardSmoke4">
+              <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q13,42 7,28 T12,10 T8,0" class="smoke-trail"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Wish Cards (Properly Positioned & Scaled on Card) -->
+        <div class="card-wishcards-layer" id="cardWishcardsLayer">
+          <!-- 1. Polaroid Tulip Photo -->
+          <div class="card-wish-item card-wish-polaroid" id="wishPolaroid" title="A little garden photo for Muskan ♡">
+            <div class="wish-item-inner">
+              <div class="wish-item-face wish-item-front">
+                <span class="wish-card-glint" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Pink Wish Note: 'a little birthday love' -->
+          <div class="card-wish-item card-wish-pink" id="wishPink" title="Tap to flip wish note">
+            <div class="wish-item-inner" id="wishPinkInner">
+              <div class="wish-item-face wish-item-front" aria-hidden="true">
+                <span class="wish-card-glint" aria-hidden="true"></span>
+              </div>
+              <div class="wish-item-face wish-item-back">
+                <div class="wish-note-paper pink-note-paper">
+                  <span class="wish-note-pin">📌</span>
+                  <p class="wish-note-msg">May your days be brighter, your smiles wider, and this year full of surprises! ♡</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Cream Wish Note: 'flowers for you' -->
+          <div class="card-wish-item card-wish-cream" id="wishCream" title="Tap to flip wish note">
+            <div class="wish-item-inner" id="wishCreamInner">
+              <div class="wish-item-face wish-item-front" aria-hidden="true">
+                <span class="wish-card-glint" aria-hidden="true"></span>
+              </div>
+              <div class="wish-item-face wish-item-back">
+                <div class="wish-note-paper cream-note-paper">
+                  <span class="wish-note-pin">✿</span>
+                  <p class="wish-note-msg">Here's to more laughter, adventures, and happy memories together! ✿</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Confetti & Celebration Burst Layer -->
+        <div class="card-confetti-layer" id="cardConfettiLayer" aria-hidden="true"></div>
+
+        <!-- Interactive Plaque Button ('Blow the candles ✿' -> 'Next page ✿ →') -->
+        <button class="cake-action-btn" id="cakeCardBlowBtn" aria-label="Blow the candles">
+          <span class="sr-only" id="blowBtnSrText">Blow the candles</span>
+          <span class="cake-btn-shine" aria-hidden="true"></span>
+          <span class="cake-btn-label" id="cakeBtnLabel"></span>
+        </button>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════
            STAGE 2: THE OPEN TWO-PAGE SPREAD & FLAWLESS PAGE FLIP
            ═══════════════════════════════════════════════════════════ -->
       <section class="book-spread-stage" id="bookSpreadStage" aria-label="Scrapbook Pages" aria-hidden="true">
@@ -2959,26 +3521,175 @@
       }, 160);
     });
 
+    const cakeCardStage = document.getElementById('cakeCardStage');
+    const cakeCardBlowBtn = document.getElementById('cakeCardBlowBtn');
+    const cakeBtnLabel = document.getElementById('cakeBtnLabel');
+    const blowBtnSrText = document.getElementById('blowBtnSrText');
+    const wishPinkInner = document.getElementById('wishPinkInner');
+    const wishCreamInner = document.getElementById('wishCreamInner');
+    const wishPolaroid = document.getElementById('wishPolaroid');
+    let isCandlesBlownOnCard = false;
+
+    // Trigger card confetti celebration burst
+    function triggerCardConfetti() {
+      const container = document.getElementById('cardConfettiLayer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const colors = ['#FF9EAA', '#FFD700', '#FFB6C1', '#B5EAD7', '#C7CEEA', '#FFF3D4', '#FFAAA6'];
+      const shapes = ['rect', 'star', 'petal'];
+      const symbols = ['✦', '✧', '✿', '★', '♡'];
+
+      for (let i = 0; i < 48; i++) {
+        const piece = document.createElement('div');
+        const shapeType = shapes[Math.floor(Math.random() * shapes.length)];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        piece.className = `card-confetti-piece confetti-${shapeType}`;
+        const startX = 36 + Math.random() * 22; // originating from around the cake
+        const startY = 46 + Math.random() * 12;
+        const targetX = (Math.random() - 0.5) * 180;
+        const targetY = -70 - Math.random() * 130;
+        const endY = targetY + 160 + Math.random() * 140;
+        const rot = (Math.random() - 0.5) * 720;
+        const dur = 2.2 + Math.random() * 1.3;
+        const delay = Math.random() * 0.22;
+
+        piece.style.setProperty('--start-x', startX + '%');
+        piece.style.setProperty('--start-y', startY + '%');
+        piece.style.setProperty('--target-x', targetX + 'px');
+        piece.style.setProperty('--target-y', targetY + 'px');
+        piece.style.setProperty('--end-y', endY + 'px');
+        piece.style.setProperty('--rot', rot + 'deg');
+        piece.style.setProperty('--dur', dur + 's');
+        piece.style.setProperty('--delay', delay + 's');
+
+        if (shapeType === 'star') {
+          piece.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+          piece.style.color = color;
+        } else {
+          piece.style.backgroundColor = color;
+        }
+
+        container.appendChild(piece);
+      }
+    }
+
+    // Interactive wish card tapping
+    const wishPink = document.getElementById('wishPink');
+    const wishCream = document.getElementById('wishCream');
+    if (wishPink && wishPinkInner) {
+      wishPink.addEventListener('click', (e) => {
+        e.stopPropagation();
+        wishPinkInner.classList.toggle('is-flipped');
+      });
+    }
+    if (wishCream && wishCreamInner) {
+      wishCream.addEventListener('click', (e) => {
+        e.stopPropagation();
+        wishCreamInner.classList.toggle('is-flipped');
+      });
+    }
+    if (wishPolaroid) {
+      wishPolaroid.addEventListener('click', (e) => {
+        e.stopPropagation();
+        wishPolaroid.style.transform = 'rotate(-1deg) scale(1.08)';
+        setTimeout(() => { wishPolaroid.style.transform = ''; }, 400);
+      });
+    }
+
+    // Transition from Page 2 to Page 3 (The Cake Card)
     if (pageTwoNextBtn) {
       pageTwoNextBtn.addEventListener('click', () => {
         pageTwoNextBtn.classList.add('btn-pressed');
 
         setTimeout(() => {
-          // 3. Trigger 3D Transition to Birthday Cake Stage
-          setLandscapePageState('cake');
-          sceneStage.classList.add('opening');
-          ambientBackdrop.classList.add('open-mode');
-          scheduleCandleOverlayPosition();
-          bookSpreadStage.removeAttribute('aria-hidden');
-          bookCoverStage.setAttribute('aria-hidden', 'true');
+          // Hide Page 1 & 2 Cover Card
+          if (bookCoverStage) {
+            bookCoverStage.style.transition = 'opacity 0.65s ease, transform 0.65s cubic-bezier(0.25, 1, 0.35, 1)';
+            bookCoverStage.style.opacity = '0';
+            bookCoverStage.style.transform = 'translate(-50%, -50%) scale(0.92)';
+            bookCoverStage.style.pointerEvents = 'none';
+            bookCoverStage.setAttribute('aria-hidden', 'true');
+          }
 
-          // 4. Settle into open spread after 1.25s
-          setTimeout(() => {
-            sceneStage.classList.add('opened');
-            sceneStage.classList.remove('opening');
-            scheduleCandleOverlayPosition();
-          }, 1250);
+          // Show Page 3: Cake Card (Backdrop stays the same less-blurred opening_backdrop.jpg!)
+          if (cakeCardStage) {
+            cakeCardStage.classList.add('is-active');
+            cakeCardStage.removeAttribute('aria-hidden');
+          }
         }, 160);
+      });
+    }
+
+    // Interaction on Cake Card: "Blow the candles ✿" -> "Next page ✿ →"
+    if (cakeCardBlowBtn) {
+      cakeCardBlowBtn.addEventListener('click', () => {
+        if (!isCandlesBlownOnCard) {
+          // FIRST CLICK: Blow out the 4 candles!
+          isCandlesBlownOnCard = true;
+          cakeCardBlowBtn.classList.add('btn-pressed');
+
+          // 1. Extinguish candle flames and emit smoke
+          for (let i = 1; i <= 4; i++) {
+            const flame = document.getElementById(`cardFlame${i}`);
+            if (flame) flame.classList.add('is-blown');
+          }
+
+          // 2. Explode festive confetti across card
+          triggerCardConfetti();
+
+          // 3. Stop background music (final-rfiy.mp3) and start birthday song (hbd.wav)
+          if (bgMusic && !bgMusic.paused) {
+            bgMusic.pause();
+            bgMusic.currentTime = 0;
+          }
+          if (!isMusicManuallyMuted && birthdaySong) {
+            activeMusic = birthdaySong;
+            playMusicTrack(birthdaySong);
+          }
+
+          // 4. Flip wish cards sequentially to reveal sweet messages
+          setTimeout(() => { if (wishPinkInner) wishPinkInner.classList.add('is-flipped'); }, 420);
+          setTimeout(() => { if (wishCreamInner) wishCreamInner.classList.add('is-flipped'); }, 720);
+
+          // 5. Morph button into "Next page ✿ →"
+          setTimeout(() => {
+            cakeCardBlowBtn.classList.remove('btn-pressed');
+            cakeCardBlowBtn.classList.add('is-next-step');
+            if (cakeBtnLabel) {
+              cakeBtnLabel.innerHTML = 'Next page <span class="btn-sparkle" aria-hidden="true">✿</span> <span class="btn-arrow" aria-hidden="true">→</span>';
+            }
+            if (blowBtnSrText) {
+              blowBtnSrText.textContent = 'Next page';
+            }
+            cakeCardBlowBtn.setAttribute('aria-label', 'Next page');
+          }, 350);
+
+        } else {
+          // SECOND CLICK: "Next page" clicked -> transition to Photo & Letter spread
+          cakeCardBlowBtn.classList.add('btn-pressed');
+
+          setTimeout(() => {
+            if (cakeCardStage) {
+              cakeCardStage.classList.remove('is-active');
+              cakeCardStage.classList.add('is-leaving');
+              cakeCardStage.setAttribute('aria-hidden', 'true');
+            }
+
+            // Open directly to the next spread (Letter & Photo spread)
+            sceneStage.classList.add('opening');
+            ambientBackdrop.classList.add('open-mode');
+            bookSpreadStage.removeAttribute('aria-hidden');
+
+            setTimeout(() => {
+              sceneStage.classList.add('opened');
+              sceneStage.classList.remove('opening');
+              turnToNextPage();
+              startFriendshipMusic();
+            }, 600);
+          }, 160);
+        }
       });
     }
 
