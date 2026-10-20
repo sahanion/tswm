@@ -54,6 +54,178 @@
       overflow: hidden;
     }
 
+    /* ── 0. Welcome Popup Modal Overlay ── */
+    .welcome-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: clamp(16px, 4vw, 24px);
+      background: rgba(36, 16, 14, 0.48);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      opacity: 1;
+      transition: opacity .45s ease;
+    }
+
+    .welcome-overlay.is-closing {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .welcome-overlay[hidden] {
+      display: none;
+    }
+
+    .welcome-note {
+      position: relative;
+      width: min(100%, 420px);
+      max-height: 90svh;
+      overflow-y: auto;
+      padding: clamp(30px, 7vw, 46px) clamp(22px, 6vw, 42px) 30px;
+      text-align: center;
+      color: #684844;
+      background:
+        radial-gradient(ellipse at 12% 8%, rgba(255, 255, 255, 0.82), transparent 40%),
+        linear-gradient(145deg, rgba(255, 250, 239, 0.98), rgba(250, 228, 218, 0.98));
+      border: 1px solid rgba(169, 117, 104, 0.55);
+      border-radius: 12px 22px 14px 20px;
+      box-shadow: 0 20px 60px rgba(45, 18, 14, 0.45), inset 0 0 0 5px rgba(255, 255, 255, 0.35);
+      animation: welcomeArrive .65s cubic-bezier(.2, .8, .25, 1) both;
+    }
+
+    .welcome-note::before,
+    .welcome-note::after {
+      content: '';
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(177, 128, 111, 0.34);
+      border-radius: 8px 16px 9px 14px;
+      pointer-events: none;
+    }
+
+    .welcome-note::after {
+      inset: 16px;
+      border-style: dashed;
+      border-color: rgba(190, 144, 122, 0.22);
+    }
+
+    .welcome-flower {
+      position: absolute;
+      z-index: 1;
+      color: #c17e83;
+      text-shadow: 0 2px 5px rgba(151, 96, 87, 0.18);
+      pointer-events: none;
+    }
+
+    .welcome-flower.top-left { top: 16px; left: 22px; font-size: 26px; transform: rotate(-18deg); }
+    .welcome-flower.top-right { top: 20px; right: 24px; color: #9eaa85; font-size: 20px; transform: rotate(14deg); }
+    .welcome-flower.bottom-left { bottom: 18px; left: 26px; color: #d99b91; font-size: 18px; }
+    .welcome-flower.bottom-right { right: 24px; bottom: 18px; color: #9eaa85; font-size: 24px; transform: rotate(-12deg); }
+
+    .welcome-title {
+      position: relative;
+      z-index: 2;
+      color: #744c48;
+      font: 600 clamp(2rem, 7vw, 2.7rem)/1.08 'Playfair Display', Georgia, serif;
+    }
+
+    .welcome-copy {
+      position: relative;
+      z-index: 2;
+      margin: 16px auto 0;
+      max-width: 320px;
+      font: 500 clamp(17px, 4.2vw, 20px)/1.45 'Cormorant Garamond', Georgia, serif;
+      color: #7c544e;
+    }
+
+    .welcome-sound-btn {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 54px;
+      margin-top: 22px;
+      padding: 10px 26px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 999px;
+      color: #fffaf4;
+      background: linear-gradient(135deg, #bd747d, #a95f6e);
+      box-shadow: 0 7px 20px rgba(146, 77, 88, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+      font: 700 clamp(20px, 4.8vw, 24px) 'Playfair Display', Georgia, serif;
+      letter-spacing: .04em;
+      cursor: pointer;
+      transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+    }
+
+    .welcome-sound-btn:hover,
+    .welcome-sound-btn:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 9px 24px rgba(146, 77, 88, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    .welcome-sound-btn:active {
+      transform: translateY(1px);
+    }
+
+    .welcome-sound-btn.is-on {
+      background: linear-gradient(135deg, #8fa878, #748f5e);
+      box-shadow: 0 7px 20px rgba(100, 130, 80, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    }
+
+    .sound-speaker { font-size: 24px; line-height: 1; }
+
+    .sound-waves {
+      display: inline-block;
+      font: 700 22px/1 Arial, sans-serif;
+      animation: soundWave 1.8s ease-in-out infinite;
+      transform-origin: left center;
+    }
+
+    .welcome-sound-btn.is-on .sound-waves { animation-duration: 1.1s; }
+
+    @keyframes soundWave {
+      0%, 100% { opacity: .65; transform: scale(.94); }
+      50% { opacity: 1; transform: scale(1.08); }
+    }
+
+    .welcome-get-in {
+      position: relative;
+      z-index: 2;
+      display: block;
+      margin: 18px auto 0;
+      min-width: 145px;
+      min-height: 44px;
+      padding: 9px 26px;
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 999px;
+      color: #fffaf4;
+      background: linear-gradient(135deg, #cf8790, #b96f7b);
+      box-shadow: 0 5px 15px rgba(154, 85, 94, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+      font: 600 17px 'Playfair Display', Georgia, serif;
+      letter-spacing: .04em;
+      cursor: pointer;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .welcome-get-in:hover,
+    .welcome-get-in:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 19px rgba(154, 85, 94, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    .welcome-get-in:active {
+      transform: translateY(1px);
+    }
+
+    @keyframes welcomeArrive {
+      from { opacity: 0; transform: translateY(14px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
     /* ── 1. Blurred Backdrop (Second Image) ── */
     .backdrop-container {
       position: absolute;
@@ -366,11 +538,33 @@
         width: 16px;
         height: 16px;
       }
+      .welcome-note {
+        padding-top: 38px;
+        padding-bottom: 26px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="viewport-stage">
+    <!-- Welcome Note Popup Modal -->
+    <section class="welcome-overlay" id="welcomeOverlay" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle" aria-describedby="welcomeCopy">
+      <div class="welcome-note">
+        <span class="welcome-flower top-left" aria-hidden="true">&#10047;</span>
+        <span class="welcome-flower top-right" aria-hidden="true">&#10048;</span>
+        <span class="welcome-flower bottom-left" aria-hidden="true">&#10046;</span>
+        <span class="welcome-flower bottom-right" aria-hidden="true">&#10047;</span>
+        <h1 class="welcome-title" id="welcomeTitle">Hi, Muskan.</h1>
+        <p class="welcome-copy" id="welcomeCopy">I hope it brings you a smile and reminds you how special you are to me.</p>
+        <button class="welcome-sound-btn" id="welcomeSoundBtn" type="button" aria-describedby="welcomeCopy">
+          <span class="sound-speaker" aria-hidden="true">&#128266;</span>
+          <span>Sound On</span>
+          <span class="sound-waves" aria-hidden="true">)))</span>
+        </button>
+        <button class="welcome-get-in" id="welcomeGetIn" type="button" autofocus>Get in <span aria-hidden="true">&#10047;</span></button>
+      </div>
+    </section>
+
     <!-- Ambient Background Audio: Loops from the start until candles are blown -->
     <audio id="bgMusic" loop preload="auto">
       <source src="final-rfiy.mp3" type="audio/mpeg">
@@ -378,7 +572,7 @@
     </audio>
 
     <!-- Floating Discreet Music Toggle Button -->
-    <button class="music-toggle-btn" id="musicToggle" aria-label="Toggle Background Music" title="Background Music (M)">
+    <button class="music-toggle-btn" id="musicToggle" aria-label="Toggle Background Music" title="Background Music (M)" aria-hidden="true" tabindex="-1">
       <svg class="music-note" id="musicIconOn" viewBox="0 0 24 24">
         <path d="M9 18V5l12-2v13" />
         <circle cx="6" cy="18" r="3" />
@@ -404,7 +598,7 @@
     <div class="petal-layer" id="petalLayer" aria-hidden="true"></div>
 
     <!-- Central 4:5 Keepsake Card (First Image) -->
-    <main class="card-stage" id="cardStage">
+    <main class="card-stage" id="cardStage" aria-hidden="true">
       <div class="card-4x5" id="card4x5">
         <img
           src="opening_card.jpg"
@@ -619,7 +813,56 @@
     }
     userGestureEvents.forEach(evt => window.addEventListener(evt, unlockAudioOnGesture, { passive: true }));
 
-    startBgMusic();
+    // ═══════════════════════════════════════════════════════════
+    // 4. WELCOME NOTE POPUP MODAL LOGIC (SOUND ON & GET IN)
+    // ═══════════════════════════════════════════════════════════
+    const welcomeOverlay = document.getElementById('welcomeOverlay');
+    const welcomeGetIn = document.getElementById('welcomeGetIn');
+    const welcomeSoundBtn = document.getElementById('welcomeSoundBtn');
+    const cardStage = document.getElementById('cardStage');
+
+    if (welcomeSoundBtn) {
+      welcomeSoundBtn.addEventListener('click', () => {
+        isMusicManuallyMuted = false;
+        sessionStorage.setItem(musicPreferenceKey, 'false');
+        if (bgMusic) {
+          bgMusic.volume = 0.65;
+          bgMusic.loop = true;
+          bgMusic.play().then(() => {
+            updateMusicButtonUi(true);
+            sessionStorage.setItem('bgMusicPlaying', 'true');
+            welcomeSoundBtn.classList.add('is-on');
+            welcomeSoundBtn.setAttribute('aria-pressed', 'true');
+            welcomeSoundBtn.setAttribute('aria-label', 'Sound is on');
+          }).catch(() => {});
+        }
+      });
+    }
+
+    if (welcomeGetIn && welcomeOverlay) {
+      welcomeGetIn.focus();
+      welcomeGetIn.addEventListener('click', () => {
+        // Unlock audio on this button click gesture
+        if (!isMusicManuallyMuted && bgMusic && bgMusic.paused) {
+          startBgMusic();
+        }
+        welcomeOverlay.classList.add('is-closing');
+        window.setTimeout(() => {
+          welcomeOverlay.hidden = true;
+          welcomeOverlay.setAttribute('aria-hidden', 'true');
+          if (musicToggle) {
+            musicToggle.removeAttribute('aria-hidden');
+            musicToggle.removeAttribute('tabindex');
+          }
+          if (cardStage) {
+            cardStage.removeAttribute('aria-hidden');
+          }
+          if (enterBtn) {
+            enterBtn.focus();
+          }
+        }, 420);
+      }, { once: true });
+    }
   </script>
 </body>
 </html>
