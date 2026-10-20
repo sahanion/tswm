@@ -653,15 +653,7 @@
       });
     }
 
-    // Also allow tapping/clicking the card to enter for effortless mobile interaction
-    const card4x5 = document.getElementById('card4x5');
-    if (card4x5 && enterBtn) {
-      card4x5.addEventListener('click', function(e) {
-        if (e.target !== enterBtn && !enterBtn.contains(e.target)) {
-          enterBtn.click();
-        }
-      });
-    }
+    // Card click is restricted: only the action button triggers navigation.
 
     // ═══════════════════════════════════════════════════════════
     // 2. SLOW, TRANQUIL DRIFTING PETALS
