@@ -206,7 +206,7 @@
     }
 
     /* ═══════════════════════════════════════════════════════════
-       STAGE 1: THE CLOSED BOOK COVER VIEW (4:5 KEEPSAKE CARD)
+       STAGE 1 & 2: THE 4:5 KEEPSAKE FLIP CARD SYSTEM (PAGES 1 & 2)
        ═══════════════════════════════════════════════════════════ */
     .book-cover-stage {
       position: absolute;
@@ -216,17 +216,9 @@
       width: min(90vw, calc(86svh * 4 / 5), 560px);
       aspect-ratio: 4 / 5;
       z-index: 20;
-      transform-origin: 0% 50%;
+      perspective: 2600px;
       transform-style: preserve-3d;
-      backface-visibility: hidden;
-      border-radius: clamp(12px, 2.2vw, 22px);
-      overflow: hidden;
-      box-shadow:
-        0 26px 65px -14px rgba(30, 12, 10, 0.58),
-        0 14px 32px -8px rgba(30, 12, 10, 0.42),
-        0 0 0 1px rgba(255, 235, 222, 0.38),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.28);
-      transition: transform 1.25s cubic-bezier(0.25, 1, 0.32, 1), opacity 0.55s ease 0.65s, box-shadow 0.45s ease;
+      transition: transform 1.1s cubic-bezier(0.25, 1, 0.32, 1), opacity 0.55s ease 0.55s;
       will-change: transform, opacity;
       animation: coverEntrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
@@ -242,12 +234,67 @@
       }
     }
 
-    .book-cover-stage:hover {
+    /* 3D Flip Container */
+    .card-flip-flipper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 1.25s cubic-bezier(0.22, 1, 0.36, 1);
+      transform-origin: center center;
+    }
+
+    .card-flip-flipper.is-flipped {
+      transform: rotateY(-180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: clamp(12px, 2.2vw, 22px);
+      overflow: hidden;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      box-shadow:
+        0 26px 65px -14px rgba(30, 12, 10, 0.58),
+        0 14px 32px -8px rgba(30, 12, 10, 0.42),
+        0 0 0 1px rgba(255, 235, 222, 0.38),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+      transition: box-shadow 0.45s ease;
+      transform-style: preserve-3d;
+    }
+
+    .card-face:hover {
       box-shadow:
         0 30px 75px -12px rgba(30, 12, 10, 0.65),
         0 18px 40px -8px rgba(30, 12, 10, 0.48),
         0 0 0 1px rgba(255, 240, 230, 0.5),
         inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    }
+
+    .card-front {
+      transform: rotateY(0deg);
+      z-index: 2;
+      transition: opacity 0.35s ease 0.55s;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      z-index: 1;
+    }
+
+    .card-flip-flipper.is-flipped .card-front {
+      z-index: 1;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .card-flip-flipper.is-flipped .card-back {
+      z-index: 2;
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .cover-card-art {
@@ -259,7 +306,7 @@
       -webkit-user-drag: none;
     }
 
-    /* Plaque Action Button aligned seamlessly over 'Open the book ✧' on the 4:5 card */
+    /* Plaque Action Button aligned seamlessly over 'Open the book ✧' on Page 1 */
     .cover-action-btn {
       position: absolute;
       top: 60.8%;
@@ -305,6 +352,69 @@
       box-shadow:
         0 0 14px rgba(216, 100, 120, 0.5),
         inset 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Page 2: 'Next page ✿ →' Action Button */
+    .page2-next-btn {
+      position: absolute;
+      bottom: 8.5%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 25;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: clamp(38px, 4.6cqw, 48px);
+      padding: clamp(6px, 1cqw, 11px) clamp(22px, 3.2cqw, 36px);
+      font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+      font-size: clamp(14px, 1.8cqw, 20px);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #FFFFFF;
+      background: linear-gradient(145deg, #DE8795 0%, #D47987 50%, #C46776 100%);
+      border: 1px solid rgba(255, 235, 240, 0.85);
+      border-radius: 9999px;
+      cursor: pointer;
+      text-shadow: 0 1px 2px rgba(90, 30, 40, 0.35);
+      box-shadow:
+        0 0 22px rgba(255, 130, 160, 0.75),
+        0 0 46px rgba(255, 105, 140, 0.5),
+        0 5px 16px rgba(120, 35, 50, 0.25),
+        inset 0 1px 1px rgba(255, 255, 255, 0.7);
+      animation: buttonBreathe 4s ease-in-out infinite;
+      transition: all 0.32s cubic-bezier(0.2, 0.8, 0.3, 1);
+      isolation: isolate;
+      white-space: nowrap;
+    }
+
+    .page2-next-btn:hover {
+      transform: translateX(-50%) translateY(-2px) scale(1.035);
+      background: linear-gradient(145deg, #E58F9D 0%, #D87F8D 50%, #C96D7C 100%);
+      border-color: rgba(255, 255, 255, 0.95);
+      box-shadow:
+        0 0 32px rgba(235, 115, 138, 0.9),
+        0 0 60px rgba(226, 98, 122, 0.65),
+        0 7px 20px rgba(120, 45, 55, 0.28),
+        inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    }
+
+    .page2-next-btn:active,
+    .page2-next-btn.btn-pressed {
+      transform: translateX(-50%) translateY(1px) scale(0.965);
+      box-shadow:
+        0 0 16px rgba(216, 100, 120, 0.5),
+        inset 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    .page2-next-btn .btn-arrow {
+      font-size: 1.15em;
+      transition: transform 0.25s ease;
+      display: inline-block;
+    }
+
+    .page2-next-btn:hover .btn-arrow {
+      transform: translateX(3px);
     }
 
     @keyframes coverBtnPulse {
@@ -1368,7 +1478,7 @@
        TRANSITION STATE CLASSES
        ═══════════════════════════════════════════════════════════ */
     .scene-stage.opening .book-cover-stage {
-      transform: translate(-50%, -50%) rotateY(-110deg) scale(0.95);
+      transform: translate(-50%, -50%) scale(0.92);
       opacity: 0;
       pointer-events: none;
     }
@@ -2490,22 +2600,43 @@
     <main class="scene-stage" id="sceneStage" aria-label="Muskan's Keepsake Scrapbook">
 
       <!-- ═══════════════════════════════════════════════════════════
-           STAGE 1: THE CLOSED BOOK COVER (4:5 KEEPSAKE CARD)
+           STAGE 1 & 2: 4:5 KEEPSAKE FLIP CARD (PAGE 1 & PAGE 2)
            ═══════════════════════════════════════════════════════════ -->
-      <section class="book-cover-stage" id="bookCoverStage" aria-label="Closed Scrapbook Keepsake Card">
-        <!-- High-res 4:5 Illustrated Keepsake Album Card Artwork -->
-        <img 
-          src="scrapbook_cover_card.jpg" 
-          alt="Vintage handmade keepsake card for Muskan with delicate pink tulips, white blossoms, cute cartoon panda, and calligraphy" 
-          class="cover-card-art" 
-          draggable="false" 
-        />
+      <section class="book-cover-stage" id="bookCoverStage" aria-label="Muskan's Keepsake Scrapbook Cards">
+        <div class="card-flip-flipper" id="cardFlipper">
+          
+          <!-- FRONT FACE: PAGE 1 (COVER) -->
+          <div class="card-face card-front" id="cardPageOne">
+            <img 
+              src="scrapbook_cover_card.jpg" 
+              alt="Vintage handmade keepsake card for Muskan with delicate pink tulips, white blossoms, cute cartoon panda, and calligraphy" 
+              class="cover-card-art" 
+              draggable="false" 
+            />
+            <!-- Clickable Plaque Button Aligned Over 'Open the book ✧' -->
+            <button class="book-action-btn cover-action-btn" id="openBookBtn" aria-label="Open the book">
+              <span class="sr-only">Open the book</span>
+              <span class="btn-shine" aria-hidden="true"></span>
+            </button>
+          </div>
 
-        <!-- Clickable Plaque Button Aligned Over 'Open the book ✧' -->
-        <button class="book-action-btn cover-action-btn" id="openBookBtn" aria-label="Open the book">
-          <span class="sr-only">Open the book</span>
-          <span class="btn-shine" aria-hidden="true"></span>
-        </button>
+          <!-- BACK FACE: PAGE 2 ("HAPPY BIRTHDAY, MUSKAN ♡") -->
+          <div class="card-face card-back" id="cardPageTwo" aria-hidden="true">
+            <img 
+              src="scrapbook_page2_card.jpg" 
+              alt="Happy Birthday Muskan keepsake card with soft pink tulips and floral border" 
+              class="cover-card-art" 
+              draggable="false" 
+            />
+            <!-- Next Page Button -->
+            <button class="book-action-btn page2-next-btn" id="pageTwoNextBtn" aria-label="Next page">
+              <span>Next page</span>
+              <span class="btn-sparkle" aria-hidden="true">✿</span>
+              <span class="btn-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+
+        </div>
       </section>
 
       <!-- ═══════════════════════════════════════════════════════════
@@ -2803,6 +2934,11 @@
       sceneStage.classList.add(`desktop-${page}-page`);
     }
 
+    const cardFlipper = document.getElementById('cardFlipper');
+    const cardPageOne = document.getElementById('cardPageOne');
+    const cardPageTwo = document.getElementById('cardPageTwo');
+    const pageTwoNextBtn = document.getElementById('pageTwoNextBtn');
+
     openBookBtn.addEventListener('click', () => {
       // 1. Button press feedback
       openBookBtn.classList.add('btn-pressed');
@@ -2813,22 +2949,35 @@
       }
 
       setTimeout(() => {
-        // 2. Trigger 3D Book Opening Transition
-        setLandscapePageState('title');
-        sceneStage.classList.add('opening');
-        ambientBackdrop.classList.add('open-mode');
-        scheduleCandleOverlayPosition();
-        bookSpreadStage.removeAttribute('aria-hidden');
-        bookCoverStage.setAttribute('aria-hidden', 'true');
-
-        // 3. Settle into open spread after 1.25s
-        setTimeout(() => {
-          sceneStage.classList.add('opened');
-          sceneStage.classList.remove('opening');
-          scheduleCandleOverlayPosition();
-        }, 1250);
+        // 2. 3D Card Flip to Page 2 (Keeps same blurred backdrop!)
+        if (cardFlipper) cardFlipper.classList.add('is-flipped');
+        if (cardPageOne) cardPageOne.setAttribute('aria-hidden', 'true');
+        if (cardPageTwo) cardPageTwo.removeAttribute('aria-hidden');
       }, 160);
     });
+
+    if (pageTwoNextBtn) {
+      pageTwoNextBtn.addEventListener('click', () => {
+        pageTwoNextBtn.classList.add('btn-pressed');
+
+        setTimeout(() => {
+          // 3. Trigger 3D Transition to Birthday Cake Stage
+          setLandscapePageState('cake');
+          sceneStage.classList.add('opening');
+          ambientBackdrop.classList.add('open-mode');
+          scheduleCandleOverlayPosition();
+          bookSpreadStage.removeAttribute('aria-hidden');
+          bookCoverStage.setAttribute('aria-hidden', 'true');
+
+          // 4. Settle into open spread after 1.25s
+          setTimeout(() => {
+            sceneStage.classList.add('opened');
+            sceneStage.classList.remove('opening');
+            scheduleCandleOverlayPosition();
+          }, 1250);
+        }, 160);
+      });
+    }
 
     // ═══════════════════════════════════════════════════════════
     // INTERACTION 2: "Blow the candles ✿" -> "turn page ✿ →" -> FLAWLESS FLIP
