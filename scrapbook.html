@@ -1282,6 +1282,405 @@
       transform: translateX(3px);
     }
 
+    
+    /* ═══════════════════════════════════════════════════════════
+       STAGE 5: THE LETTER ENVELOPE 4:5 CARD ("A Little Letter for You")
+       ═══════════════════════════════════════════════════════════ */
+    .card-flip-flipper.is-flipped-envelope {
+      transform: rotateY(-360deg);
+    }
+
+    .envelope-card-content {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* "Made with love" washi tape tag */
+    .card-letter-made-tag {
+      position: absolute;
+      top: 15.5%;
+      left: 8.5%;
+      z-index: 4;
+      padding: clamp(3px, 0.8cqi, 6px) clamp(8px, 2cqi, 14px);
+      border: 1px dashed rgba(176, 135, 99, 0.45);
+      background: rgba(255, 248, 235, 0.92);
+      box-shadow: 0 2px 8px rgba(88, 60, 45, 0.14);
+      color: #856255;
+      font-family: 'Caveat', cursive;
+      font-size: clamp(11px, 2.6cqi, 16px);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transform: rotate(-5deg);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Envelope Container */
+    .card-envelope {
+      position: absolute;
+      left: 50%;
+      top: 28%;
+      width: 82%;
+      height: 44%;
+      transform: translateX(-50%);
+      perspective: 1200px;
+      transform-style: preserve-3d;
+      z-index: 10;
+      transition: z-index 0.3s step-end;
+    }
+
+    .card-envelope.is-open {
+      z-index: 25;
+      transition: z-index 0.1s step-start;
+    }
+
+    /* Envelope Backing */
+    .card-envelope-backing {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, rgba(130, 91, 79, 0.025) 0 1px, transparent 1px 5px),
+                  linear-gradient(145deg, #F5DCD5 0%, #ECCAC4 55%, #DEB3B0 100%);
+      border: 1px solid rgba(175, 120, 115, 0.5);
+      border-radius: 6px 6px 14px 14px;
+      box-shadow: 0 14px 30px rgba(90, 50, 45, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      z-index: 1;
+    }
+
+    /* Envelope Flap */
+    .card-envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 54%;
+      background: linear-gradient(180deg, #F0C4BD 0%, #E8B4AC 55%, #DC9F96 100%);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform 0.75s cubic-bezier(0.25, 1, 0.35, 1), filter 0.75s ease;
+      z-index: 8;
+      filter: drop-shadow(0 4px 6px rgba(90, 50, 45, 0.2));
+    }
+
+    .card-envelope.is-open .card-envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 2;
+      filter: drop-shadow(0 -4px 6px rgba(90, 50, 45, 0.15));
+    }
+
+    /* Wax Seal with Glowing Heart */
+    .card-wax-seal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: clamp(38px, 9.2cqi, 54px);
+      height: clamp(38px, 9.2cqi, 54px);
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #F49DAA 0%, #D86B7C 45%, #B74B5C 85%, #8B2C3B 100%);
+      border: 1.5px solid rgba(255, 235, 240, 0.75);
+      color: #FFFDF9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 14;
+      animation: waxHeartGlowPulse 2.2s ease-in-out infinite alternate;
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.25, 1), opacity 0.35s ease;
+      touch-action: manipulation;
+    }
+
+    .card-wax-seal .seal-heart {
+      font-size: clamp(16px, 4cqi, 24px);
+      line-height: 1;
+      display: inline-block;
+      animation: heartInnerBeat 1.8s ease-in-out infinite;
+      filter: drop-shadow(0 0 3px #FFFFFF) drop-shadow(0 0 10px #FFA0C0) drop-shadow(0 0 18px #FF386B);
+      pointer-events: none;
+    }
+
+    @keyframes waxHeartGlowPulse {
+      0% {
+        box-shadow:
+          0 4px 12px rgba(110, 40, 50, 0.35),
+          0 0 14px rgba(255, 120, 150, 0.65),
+          0 0 28px rgba(255, 80, 120, 0.38),
+          inset 0 1px 3px rgba(255, 230, 235, 0.8);
+      }
+      100% {
+        box-shadow:
+          0 6px 18px rgba(110, 40, 50, 0.45),
+          0 0 26px rgba(255, 140, 175, 0.95),
+          0 0 48px rgba(255, 90, 135, 0.65),
+          0 0 70px rgba(255, 160, 195, 0.38),
+          inset 0 1px 4px rgba(255, 245, 250, 0.95);
+      }
+    }
+
+    @keyframes heartInnerBeat {
+      0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 3px #FFFFFF) drop-shadow(0 0 10px #FFA0C0) drop-shadow(0 0 18px #FF386B);
+      }
+      50% {
+        transform: scale(1.18);
+        filter: drop-shadow(0 0 5px #FFFFFF) drop-shadow(0 0 16px #FFA0C0) drop-shadow(0 0 28px #FF1E56);
+      }
+    }
+
+    .card-envelope.is-open .card-wax-seal {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -100%) scale(0.6);
+    }
+
+    /* "Tap to open" text hint */
+    .card-envelope-tap-hint {
+      position: absolute;
+      top: 31%;
+      left: 63%;
+      z-index: 12;
+      color: #74514C;
+      font-family: 'Caveat', cursive;
+      font-size: clamp(13px, 3.2cqi, 20px);
+      line-height: 1;
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      animation: cardTapHintNudge 2s ease-in-out infinite;
+      transition: opacity 0.25s ease;
+    }
+
+    @keyframes cardTapHintNudge {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-3px) rotate(-1.5deg); }
+    }
+
+    /* Curved Arrow pointing to wax seal */
+    .card-envelope-tap-arrow {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      width: 17%;
+      height: 24%;
+      overflow: visible;
+      pointer-events: none;
+      animation: cardTapArrowWiggle 2s ease-in-out infinite;
+      transform-origin: 85% 5%;
+      transition: opacity 0.25s ease;
+      z-index: 11;
+    }
+
+    .card-envelope-tap-arrow path {
+      fill: none;
+      stroke: #A86D70;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    @keyframes cardTapArrowWiggle {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(3deg) translate(-2px, -2px); }
+    }
+
+    .card-envelope.is-open .card-envelope-tap-hint,
+    .card-envelope.is-open .card-envelope-tap-arrow {
+      opacity: 0;
+    }
+
+    /* Envelope Pocket Front */
+    .card-envelope-pocket {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(246, 215, 210, 0.98) 0%, rgba(238, 198, 192, 0.99) 100%);
+      clip-path: polygon(0 0, 50% 50%, 100% 0, 100% 100%, 0 100%);
+      z-index: 6;
+      border-radius: 4px 4px 12px 12px;
+      box-shadow: 0 14px 30px rgba(80, 45, 40, 0.22);
+      pointer-events: none;
+    }
+
+    /* Tulip SVG sticker on envelope */
+    .card-envelope-tulip {
+      position: absolute;
+      left: 7%;
+      bottom: 7%;
+      width: 12%;
+      height: 25%;
+      z-index: 7;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 4px rgba(80, 40, 40, 0.15));
+    }
+
+    /* "For you, Muskan ♡" address */
+    .card-envelope-address {
+      position: absolute;
+      right: 7%;
+      bottom: 9%;
+      color: #855D56;
+      font-family: 'Caveat', cursive;
+      font-size: clamp(13px, 3.2cqi, 20px);
+      line-height: 1;
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      z-index: 7;
+      transform: rotate(-1deg);
+    }
+
+    /* Envelope Letter Card Slot & Stationery */
+    .card-envelope-slot {
+      position: absolute;
+      inset: -52% 4% 8%;
+      z-index: 5;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .card-envelope.is-open .card-envelope-slot {
+      overflow: visible;
+      pointer-events: auto;
+      z-index: 10;
+    }
+
+    .card-letter-paper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      padding: clamp(14px, 3.4cqi, 22px) clamp(12px, 2.8cqi, 20px);
+      border-radius: 8px;
+      background: radial-gradient(ellipse at 15% 15%, #FFFDF8 0%, #FAF2E4 65%, #F4E7D0 100%);
+      border: 1px solid rgba(175, 135, 105, 0.5);
+      outline: 1px solid rgba(213, 186, 148, 0.45);
+      outline-offset: -5px;
+      box-shadow:
+        0 14px 34px rgba(70, 40, 35, 0.32),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+      color: #523C32;
+      text-align: center;
+      transform: translateY(82%) rotate(1deg);
+      transition: transform 0.85s cubic-bezier(0.2, 0.8, 0.25, 1);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card-envelope.is-open .card-letter-paper {
+      transform: translateY(-8%) rotate(0deg);
+    }
+
+    .card-letter-heading {
+      font-family: 'Great Vibes', 'Playfair Display', cursive, serif;
+      font-size: clamp(19px, 4.4cqi, 27px);
+      font-weight: 400;
+      color: #8C4755;
+      margin: 0 0 clamp(6px, 1.4cqi, 12px) 0;
+      line-height: 1.15;
+    }
+
+    .card-letter-poem {
+      font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+      font-size: clamp(11.5px, 2.6cqi, 15px);
+      line-height: 1.45;
+      font-weight: 500;
+      font-style: italic;
+      color: #553E35;
+      margin: 0;
+    }
+
+    .card-letter-poem p {
+      margin: 2px 0;
+    }
+
+    .card-letter-close-hint {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(10px, 2.2cqi, 13px);
+      color: #A87E75;
+      margin-top: clamp(6px, 1.2cqi, 10px);
+      margin-bottom: 0;
+    }
+
+    /* Panda Accent on Envelope Card */
+    .envelope-card-panda {
+      position: absolute;
+      bottom: 5.2%;
+      right: 3.5%;
+      width: clamp(52px, 14cqi, 80px);
+      z-index: 22;
+      pointer-events: none;
+      user-select: none;
+      filter: drop-shadow(0 4px 8px rgba(80, 40, 40, 0.18));
+    }
+
+    .envelope-card-panda img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Envelope Card: Next Page Action Button */
+    .envelope-next-btn {
+      position: absolute !important;
+      bottom: 6.8% !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      z-index: 25;
+      padding: clamp(10px, 2.2cqi, 15px) clamp(22px, 5cqi, 34px);
+      border-radius: 9999px;
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      background: linear-gradient(145deg, #DE8795 0%, #D47987 50%, #C46776 100%);
+      color: #FFFDF9;
+      font-family: inherit;
+      font-size: clamp(0.88rem, 2.8cqi, 1.12rem);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      box-shadow:
+        0 0 24px rgba(222, 135, 149, 0.75),
+        0 8px 24px rgba(138, 55, 70, 0.38),
+        inset 0 1px 2px rgba(255, 255, 255, 0.65);
+      transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.25, 1), box-shadow 0.28s ease, background 0.28s ease;
+      white-space: nowrap;
+      pointer-events: auto !important;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .envelope-next-btn:hover {
+      transform: translateX(-50%) translateY(-2px) scale(1.035) !important;
+      background: linear-gradient(145deg, #E58F9D 0%, #D87F8D 50%, #C96D7C 100%);
+      border-color: rgba(255, 255, 255, 0.95);
+      box-shadow:
+        0 0 32px rgba(235, 115, 138, 0.9),
+        0 10px 28px rgba(138, 55, 70, 0.45),
+        inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    }
+
+    .envelope-next-btn:active,
+    .envelope-next-btn.btn-pressed {
+      transform: translateX(-50%) translateY(1px) scale(0.965) !important;
+      box-shadow:
+        0 0 16px rgba(216, 100, 120, 0.5),
+        inset 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    .envelope-next-btn .btn-arrow {
+      font-size: 1.15em;
+      transition: transform 0.25s ease;
+      display: inline-block;
+    }
+
+    .envelope-next-btn:hover .btn-arrow {
+      transform: translateX(3px);
+    }
+
     /* ═══════════════════════════════════════════════════════════
        THE DUSTY-PINK ACTION BUTTONS (SLOW RADIATING GLOW)
        Shared design system for "Open the book ✧", "Blow the candles ✿", "Next page ✿ →"
@@ -3242,7 +3641,9 @@
 
           <!-- FRONT FACE: PAGE 3 (THE CAKE CARD) -->
           <div class="card-face card-front" id="cakeCardFrontFace">
-            <img 
+            <!-- CAKE CARD CONTENT (PAGE 3) -->
+            <div id="cakeCardFrontContent">
+              <img 
               src="scrapbook_cake_card.jpg" 
               alt="Happy Birthday Muskan two-tier birthday cake with lit candles and sweet wish cards" 
               class="cake-card-art" 
@@ -3344,9 +3745,83 @@
               <span class="cake-btn-shine" aria-hidden="true"></span>
               <span class="cake-btn-label" id="cakeBtnLabel"></span>
             </button>
-          </div>
+            </div>
 
-          <!-- BACK FACE: PAGE 4 (THE PHOTO KEEPSAKE CARD: "THE MOST WONDERFUL WOMAN") -->
+            <!-- ENVELOPE CARD CONTENT (PAGE 5: "A Little Letter for You") -->
+            <div id="envelopeCardFrontContent" class="envelope-card-content" style="display: none;" aria-hidden="true">
+              <!-- 4:5 Envelope Card Artwork -->
+              <img 
+                src="scrapbook_envelope_card.jpg" 
+                alt="Keepsake letter envelope card for Muskan" 
+                class="cake-card-art" 
+                draggable="false" 
+              />
+
+              <!-- "Made with love" washi tape tag -->
+              <span class="card-letter-made-tag" aria-hidden="true">Made with love</span>
+
+              <!-- Interactive Letter Envelope -->
+              <div class="card-envelope" id="cardLetterEnvelope">
+                <div class="card-envelope-backing" aria-hidden="true"></div>
+
+                <!-- Sliding Letter Slot -->
+                <div class="card-envelope-slot">
+                  <article class="card-letter-paper" id="cardLetterPaper" title="Tap letter to tuck back">
+                    <h2 class="card-letter-heading">A little letter for you <span aria-hidden="true">♡</span></h2>
+                    <div class="card-letter-poem">
+                      <p>Another year of laughter, warmth, and grace,</p>
+                      <p>A brighter world because you're in this place.</p>
+                      <p>Through every memory and every dream we share,</p>
+                      <p>I hope you feel how deeply people care.</p>
+                      <p>May joy surround you everywhere you go,</p>
+                      <p>And all the sweetest blessings overflow.</p>
+                      <p style="margin-top: 6px; font-weight: 600; color: #8C4755;">Happy Birthday, Muskan! ♡</p>
+                    </div>
+                    <p class="card-letter-close-hint">tap letter to put back ♡</p>
+                  </article>
+                </div>
+
+                <!-- Envelope Pocket Front & Details -->
+                <div class="card-envelope-pocket" aria-hidden="true"></div>
+
+                <!-- Tulip Flower Sticker -->
+                <svg class="card-envelope-tulip" viewBox="0 0 80 130" aria-hidden="true">
+                  <path d="M39 124c2-30 1-57 1-82" fill="none" stroke="#718568" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M39 98c-18-15-27-13-31-8 7 13 17 18 31 17m2-24c13-18 25-19 31-13-5 15-15 21-31 22" fill="#b8c7a5" stroke="#718568" stroke-width="2"/>
+                  <path d="M25 38c-4-14 2-25 13-31 3 9 12 13 12 25 0 10-10 17-25 6Zm16-3c-2-15 6-26 18-28 1 11 8 15 7 27-1 12-13 17-25 1Z" fill="#d9929c" stroke="#ad6e78" stroke-width="2"/>
+                  <path d="M30 36c4 3 8 4 12 2m5-3c4 2 8 2 12-1" stroke="#f8e2d8" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+
+                <span class="card-envelope-address">For you, Muskan ♡</span>
+
+                <!-- Envelope Flap -->
+                <div class="card-envelope-flap" aria-hidden="true"></div>
+
+                <!-- Glowing Heart Wax Seal Button -->
+                <button type="button" id="cardLetterToggleBtn" class="card-wax-seal" aria-label="Tap to open the birthday letter">
+                  <span class="seal-heart" aria-hidden="true">♡</span>
+                </button>
+
+                <!-- Tap hint & arrow -->
+                <span class="card-envelope-tap-hint" aria-hidden="true">Tap to open</span>
+                <svg class="card-envelope-tap-arrow" viewBox="0 0 100 100" aria-hidden="true">
+                  <path d="M94 5C68 13 46 30 24 60m0 0 2-17m-2 17 17-5"/>
+                </svg>
+              </div>
+
+              <!-- Cuddling Panda Sticker Accent -->
+              <div class="envelope-card-panda" aria-hidden="true">
+                <img src="images/pandas_transparent.png" alt="" />
+              </div>
+
+              <!-- Next Page Action Button on Envelope Card -->
+              <button class="book-action-btn envelope-next-btn" id="envelopeNextBtn" aria-label="Next page">
+                <span>Next page</span>
+                <span class="btn-sparkle" aria-hidden="true">✿</span>
+                <span class="btn-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div>
           <div class="card-face card-back" id="photoCardBackFace" aria-hidden="true">
             <img 
               src="scrapbook_photo_card.jpg" 
@@ -3900,31 +4375,87 @@
       });
     });
 
-    // Clicking "Next page" on Photo Card -> Transitions to Keepsake Letter & Virtual Hug Spread
+    // Clicking "Next page" on Photo Card -> 3D Flip into The Letter Envelope Card!
+    const cakeCardFrontContent = document.getElementById('cakeCardFrontContent');
+    const envelopeCardFrontContent = document.getElementById('envelopeCardFrontContent');
+    const cardLetterEnvelope = document.getElementById('cardLetterEnvelope');
+    const cardLetterToggleBtn = document.getElementById('cardLetterToggleBtn');
+    const cardLetterPaper = document.getElementById('cardLetterPaper');
+    const envelopeNextBtn = document.getElementById('envelopeNextBtn');
+
     if (photoCardNextBtn) {
       photoCardNextBtn.addEventListener('click', () => {
         photoCardNextBtn.classList.add('btn-pressed');
 
         setTimeout(() => {
-          // Hide Cake & Photo Card Stage
+          photoCardNextBtn.classList.remove('btn-pressed');
+
+          // Switch front face content to Envelope Card while it faces away
+          if (cakeCardFrontContent) cakeCardFrontContent.style.display = 'none';
+          if (envelopeCardFrontContent) {
+            envelopeCardFrontContent.style.display = 'block';
+            envelopeCardFrontContent.removeAttribute('aria-hidden');
+          }
+
+          // Flip another 180deg to land on Envelope Card!
+          if (cakeCardFlipper) {
+            cakeCardFlipper.classList.remove('is-flipped');
+            cakeCardFlipper.classList.add('is-flipped-envelope');
+          }
+
+          if (photoCardBackFace) photoCardBackFace.setAttribute('aria-hidden', 'true');
+        }, 160);
+      });
+    }
+
+    // Envelope Open / Close Interaction on Envelope Card
+    function toggleCardEnvelope() {
+      if (!cardLetterEnvelope) return;
+      const isOpen = cardLetterEnvelope.classList.contains('is-open');
+      if (!isOpen) {
+        cardLetterEnvelope.classList.add('is-open');
+        if (cardLetterToggleBtn) cardLetterToggleBtn.setAttribute('aria-expanded', 'true');
+      } else {
+        cardLetterEnvelope.classList.remove('is-open');
+        if (cardLetterToggleBtn) cardLetterToggleBtn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    if (cardLetterToggleBtn) {
+      cardLetterToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleCardEnvelope();
+      });
+    }
+
+    if (cardLetterPaper) {
+      cardLetterPaper.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleCardEnvelope();
+      });
+    }
+
+    // Clicking "Next page" on Envelope Card -> Transitions to Final Virtual Hug!
+    if (envelopeNextBtn) {
+      envelopeNextBtn.addEventListener('click', () => {
+        envelopeNextBtn.classList.add('btn-pressed');
+
+        setTimeout(() => {
           if (cakeCardStage) {
             cakeCardStage.classList.remove('is-active');
             cakeCardStage.classList.add('is-leaving');
             cakeCardStage.setAttribute('aria-hidden', 'true');
           }
 
-          // Open the open book spread (Letter & Photo collage)
-          sceneStage.classList.add('opening');
-          ambientBackdrop.classList.add('open-mode');
-          bookSpreadStage.removeAttribute('aria-hidden');
-
-          setTimeout(() => {
-            sceneStage.classList.add('opened');
-            sceneStage.classList.remove('opening');
-            turnToNextPage();
-            startFriendshipMusic();
-          }, 600);
-        }, 160);
+          if (hugFinalStage) {
+            hugFinalStage.classList.add('is-active');
+            hugFinalStage.removeAttribute('aria-hidden');
+            if (hugFinalGif && !hugFinalGif.getAttribute('src')) {
+              requestAnimationFrame(() => { hugFinalGif.src = hugFinalGif.dataset.src; });
+            }
+          }
+          startFriendshipMusic();
+        }, 180);
       });
     }
 
