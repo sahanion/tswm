@@ -59,29 +59,28 @@
       background: radial-gradient(circle at 48% 45%, #FFFDF9 0%, #FAF3EA 55%, #F4E7DC 100%);
     }
 
-    /* Dreamy Ambient Backdrop for Seamless Edge-to-Edge Bleed */
+    /* Dreamy Ambient Backdrop for Seamless Edge-to-Edge Bleed (Second Image - Less Blurred) */
     .ambient-backdrop {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('scrapbook_cover_clean.jpg');
+      inset: -35px;
+      width: calc(100% + 70px);
+      height: calc(100% + 70px);
+      background-image: url('opening_backdrop.jpg');
       background-size: cover;
       background-position: center;
-      filter: blur(28px) brightness(1.05) saturate(1.12);
-      transform: scale(1.08);
-      opacity: 0.68;
+      filter: blur(10px) brightness(0.94) saturate(1.14);
+      transform: scale(1.06);
+      opacity: 0.88;
       pointer-events: none;
       z-index: 1;
-      transition: opacity 0.8s ease, filter 0.8s ease;
+      transition: opacity 0.8s ease, filter 0.8s ease, background-image 0.8s ease;
     }
 
     .ambient-backdrop.is-changing { opacity: 0 !important; transition: opacity 0.45s ease !important; }
 
     .ambient-backdrop.open-mode {
       background-image: url('open_spread_flawless.jpg');
-      filter: blur(26px) brightness(1.04) saturate(1.08);
+      filter: blur(24px) brightness(1.04) saturate(1.08);
       opacity: 0.75;
     }
 
@@ -207,31 +206,163 @@
     }
 
     /* ═══════════════════════════════════════════════════════════
-       STAGE 1: THE CLOSED BOOK COVER VIEW
+       STAGE 1: THE CLOSED BOOK COVER VIEW (4:5 KEEPSAKE CARD)
        ═══════════════════════════════════════════════════════════ */
     .book-cover-stage {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 10;
-      transform-origin: 21.8% 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(90vw, calc(86svh * 4 / 5), 560px);
+      aspect-ratio: 4 / 5;
+      z-index: 20;
+      transform-origin: 0% 50%;
       transform-style: preserve-3d;
       backface-visibility: hidden;
-      transition: transform 1.35s cubic-bezier(0.25, 1, 0.32, 1), opacity 0.5s ease 0.9s;
+      border-radius: clamp(12px, 2.2vw, 22px);
+      overflow: hidden;
+      box-shadow:
+        0 26px 65px -14px rgba(30, 12, 10, 0.58),
+        0 14px 32px -8px rgba(30, 12, 10, 0.42),
+        0 0 0 1px rgba(255, 235, 222, 0.38),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+      transition: transform 1.25s cubic-bezier(0.25, 1, 0.32, 1), opacity 0.55s ease 0.65s, box-shadow 0.45s ease;
       will-change: transform, opacity;
+      animation: coverEntrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
-    .cover-illustration {
-      position: absolute;
-      top: 0;
-      left: 0;
+    @keyframes coverEntrance {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, calc(-50% + 22px)) scale(0.96);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    .book-cover-stage:hover {
+      box-shadow:
+        0 30px 75px -12px rgba(30, 12, 10, 0.65),
+        0 18px 40px -8px rgba(30, 12, 10, 0.48),
+        0 0 0 1px rgba(255, 240, 230, 0.5),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    }
+
+    .cover-card-art {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: fill;
       display: block;
       pointer-events: none;
+      -webkit-user-drag: none;
+    }
+
+    /* Plaque Action Button aligned seamlessly over 'Open the book ✧' on the 4:5 card */
+    .cover-action-btn {
+      position: absolute;
+      top: 60.8%;
+      left: 30.5%;
+      width: 39.0%;
+      height: 7.4%;
+      min-height: unset !important;
+      border-radius: 999px;
+      cursor: pointer;
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 225, 230, 0.001) !important;
+      border: 1.5px solid rgba(255, 235, 240, 0.35) !important;
+      padding: 0 !important;
+      outline: none;
+      box-shadow:
+        0 0 18px rgba(245, 140, 160, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.3);
+      animation: coverBtnPulse 3.5s ease-in-out infinite;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.25, 1);
+    }
+
+    .cover-action-btn::before,
+    .cover-action-btn::after {
+      display: none !important;
+    }
+
+    .cover-action-btn:hover {
+      background: rgba(255, 230, 235, 0.18) !important;
+      border-color: rgba(255, 240, 245, 0.9) !important;
+      box-shadow:
+        0 0 28px rgba(255, 130, 160, 0.8),
+        0 0 50px rgba(255, 100, 140, 0.45),
+        inset 0 0 14px rgba(255, 255, 255, 0.4);
+      transform: scale(1.035);
+    }
+
+    .cover-action-btn:active,
+    .cover-action-btn.btn-pressed {
+      transform: scale(0.965);
+      box-shadow:
+        0 0 14px rgba(216, 100, 120, 0.5),
+        inset 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    @keyframes coverBtnPulse {
+      0%, 100% {
+        box-shadow:
+          0 0 16px rgba(245, 140, 160, 0.35),
+          inset 0 1px 1px rgba(255, 255, 255, 0.3);
+      }
+      50% {
+        box-shadow:
+          0 0 26px rgba(255, 140, 170, 0.75),
+          0 0 45px rgba(255, 100, 140, 0.38),
+          inset 0 1px 2px rgba(255, 255, 255, 0.5);
+      }
+    }
+
+    .btn-shine {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .btn-shine::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -120%;
+      width: 60%;
+      height: 200%;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.25) 45%,
+        rgba(255, 255, 255, 0.6) 50%,
+        rgba(255, 255, 255, 0.25) 55%,
+        transparent 100%
+      );
+      transform: rotate(25deg);
+      animation: buttonShinePass 4.2s ease-in-out infinite;
+    }
+
+    @keyframes buttonShinePass {
+      0%, 25% { left: -120%; }
+      55%, 100% { left: 160%; }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
     }
 
     .scene-stage.closing .cover-dedication-wrap {
@@ -1237,7 +1368,7 @@
        TRANSITION STATE CLASSES
        ═══════════════════════════════════════════════════════════ */
     .scene-stage.opening .book-cover-stage {
-      transform: rotateY(-180deg);
+      transform: translate(-50%, -50%) rotateY(-110deg) scale(0.95);
       opacity: 0;
       pointer-events: none;
     }
@@ -1943,6 +2074,7 @@
     .scene-stage.closing .book-cover-stage {
       display: block !important;
       opacity: 1 !important;
+      transform: translate(-50%, -50%);
       transition: transform 1.35s cubic-bezier(0.25, 1, 0.32, 1), opacity 0.5s ease;
       pointer-events: none;
       z-index: 60;
@@ -2358,44 +2490,22 @@
     <main class="scene-stage" id="sceneStage" aria-label="Muskan's Keepsake Scrapbook">
 
       <!-- ═══════════════════════════════════════════════════════════
-           STAGE 1: THE CLOSED BOOK COVER
+           STAGE 1: THE CLOSED BOOK COVER (4:5 KEEPSAKE CARD)
            ═══════════════════════════════════════════════════════════ -->
-      <section class="book-cover-stage" id="bookCoverStage" aria-label="Closed Scrapbook Cover">
-        <!-- High-res Illustrated Keepsake Album Artwork -->
+      <section class="book-cover-stage" id="bookCoverStage" aria-label="Closed Scrapbook Keepsake Card">
+        <!-- High-res 4:5 Illustrated Keepsake Album Card Artwork -->
         <img 
-          src="scrapbook_cover_clean.jpg" 
-          alt="Handmade vintage scrapbook with dusty-pink fabric spine, delicate pink tulips, white blossoms, and a cute cartoon panda" 
-          class="cover-illustration" 
+          src="scrapbook_cover_card.jpg" 
+          alt="Vintage handmade keepsake card for Muskan with delicate pink tulips, white blossoms, cute cartoon panda, and calligraphy" 
+          class="cover-card-art" 
+          draggable="false" 
         />
 
-        <!-- Cover Dedication Typography & "Open the book ✧" Button -->
-        <div class="cover-dedication-wrap">
-          <h1 class="dedication-heading">
-            To the best person<br />I have met
-          </h1>
-
-          <div class="dedication-divider" aria-hidden="true">
-            <span class="divider-rule"></span>
-            <svg class="divider-heart-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="var(--heart-color)" />
-            </svg>
-            <span class="divider-rule"></span>
-          </div>
-
-          <p class="dedication-sub">
-            and to the
-          </p>
-
-          <p class="dedication-calligraphy">
-            bestest friend
-          </p>
-
-          <!-- "Open the book ✧" Button -->
-          <button class="book-action-btn" id="openBookBtn" aria-label="Open the book">
-            <span>Open the book</span>
-            <span class="btn-sparkle" aria-hidden="true">✧</span>
-          </button>
-        </div>
+        <!-- Clickable Plaque Button Aligned Over 'Open the book ✧' -->
+        <button class="book-action-btn cover-action-btn" id="openBookBtn" aria-label="Open the book">
+          <span class="sr-only">Open the book</span>
+          <span class="btn-shine" aria-hidden="true"></span>
+        </button>
       </section>
 
       <!-- ═══════════════════════════════════════════════════════════
