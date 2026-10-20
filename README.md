@@ -23,7 +23,7 @@ An illustrated, interactive birthday surprise website crafted with romantic vint
    - **3D Book Closing Animation**: Tapping *"Next page ✿ →"* gracefully folds the book closed shut in 3D around its spine, settles peacefully, and smoothly fades into the final surprise.
 
 3. **Virtual Hug Surprise (`hug.html`)**
-   - The finale page: An affectionate animated panda hug with floating hearts and curved typography (*"A VIRTUAL HUG FOR YA! ❤️"*).
+   - The finale page: An affectionate animated panda hug with floating hearts and curved typography (*"A VIRTUAL HUG FOR YOU! ❤️"*).
 
 ---
 
