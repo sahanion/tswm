@@ -2091,6 +2091,226 @@
       .envelope-wax-seal,.envelope-tap-hint,.envelope-tap-arrow { animation: none !important; }
     }
 
+    /* Landscape: present each printed scrapbook page on its own card. */
+    .page-one-next-btn { display: none; }
+
+    @keyframes singlePageTurn {
+      0% { transform: perspective(1500px) rotateY(0deg); filter: brightness(1); }
+      44% { transform: perspective(1500px) rotateY(-78deg); filter: brightness(.82); }
+      56% { transform: perspective(1500px) rotateY(78deg); filter: brightness(.82); }
+      100% { transform: perspective(1500px) rotateY(0deg); filter: brightness(1); }
+    }
+
+    @media (min-aspect-ratio: 1/1) {
+      .scene-stage.desktop-single-page .book-spread-stage {
+        width: min(94vw, 128.9vh);
+        max-width: 1400px;
+        aspect-ratio: 907 / 618;
+      }
+
+      .scene-stage.desktop-single-page .spread-container {
+        overflow: hidden;
+        border: 1px solid rgba(199, 157, 132, .72);
+        border-radius: clamp(10px, 1.3cqw, 20px);
+        background: #f6e8d7;
+        box-shadow: 0 18px 48px rgba(70, 45, 40, .24), 0 2px 12px rgba(70, 45, 40, .12);
+      }
+
+      .scene-stage.desktop-single-page .spread-container.single-page-turning {
+        animation: singlePageTurn 820ms cubic-bezier(.25,.75,.25,1) both;
+      }
+
+      .scene-stage.desktop-single-page .spread-illustration {
+        left: 0;
+        width: 200%;
+        max-width: none;
+        height: 100%;
+        object-fit: fill;
+        object-position: left center;
+        border-radius: inherit;
+      }
+
+      .scene-stage.desktop-single-page .left-page-typography {
+        top: 9%;
+        left: 8%;
+        width: 84%;
+        align-items: center;
+      }
+
+      .scene-stage.desktop-single-page .spread-heading-main {
+        font-size: clamp(26px, 4.3cqw, 58px);
+      }
+
+      .scene-stage.desktop-single-page .spread-heading-name {
+        font-size: clamp(42px, 7.2cqw, 94px);
+      }
+
+      .scene-stage.desktop-single-page .poem-content {
+        top: 38%;
+        left: 14%;
+        width: 72%;
+        height: 42%;
+      }
+
+      .scene-stage.desktop-single-page .birthday-floral-art {
+        width: clamp(170px, 27cqw, 340px);
+        max-width: 64%;
+      }
+
+      .scene-stage.desktop-single-page .page-one-next-btn {
+        display: inline-flex;
+        position: absolute;
+        left: 50%;
+        bottom: 6%;
+        z-index: 40;
+        min-height: clamp(42px, 5.4cqw, 64px);
+        padding: 8px clamp(22px, 3cqw, 42px);
+        transform: translateX(-50%);
+        font-size: clamp(15px, 1.75cqw, 23px);
+        white-space: nowrap;
+      }
+
+      .scene-stage.desktop-single-page .page-one-next-btn:hover {
+        transform: translateX(-50%) translateY(-2px) scale(1.035);
+      }
+
+      .scene-stage.desktop-single-page .page-one-next-btn:active,
+      .scene-stage.desktop-single-page .page-one-next-btn.btn-pressed {
+        transform: translateX(-50%) translateY(1px) scale(.965);
+      }
+
+      .scene-stage.desktop-single-page .page-leaf-wrapper {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        transform-origin: left center;
+      }
+
+      .scene-stage.desktop-single-page .page-leaf-front,
+      .scene-stage.desktop-single-page .page-leaf-back {
+        border-radius: inherit;
+      }
+
+      .scene-stage.desktop-single-page .page-leaf-front .page-leaf-img,
+      .scene-stage.desktop-single-page .page-leaf-back .page-leaf-img {
+        object-fit: contain;
+      }
+
+      .scene-stage.desktop-single-page .page-leaf-wrapper.flipped .page-leaf-front {
+        display: block !important;
+        visibility: visible !important;
+        pointer-events: none !important;
+      }
+
+      .scene-stage.desktop-single-page .spread-container.is-page-turned .page-leaf-front {
+        display: none !important;
+        visibility: hidden !important;
+      }
+
+      .scene-stage.desktop-single-page .under-page-shadow,
+      .scene-stage.desktop-single-page .left-page-typography,
+      .scene-stage.desktop-single-page .poem-content,
+      .scene-stage.desktop-single-page .spread-illustration,
+      .scene-stage.desktop-single-page .page-one-next-btn { display: none !important; }
+
+      .scene-stage.desktop-single-page.desktop-title-page .spread-illustration,
+      .scene-stage.desktop-single-page.desktop-title-page .left-page-typography,
+      .scene-stage.desktop-single-page.desktop-title-page .poem-content,
+      .scene-stage.desktop-single-page.desktop-title-page .page-one-next-btn { display: block !important; }
+
+      .scene-stage.desktop-single-page.desktop-title-page .left-page-typography,
+      .scene-stage.desktop-single-page.desktop-title-page .poem-content { display: flex !important; }
+
+      .scene-stage.desktop-single-page.desktop-title-page .page-one-next-btn { display: inline-flex !important; }
+      .scene-stage.desktop-single-page.desktop-title-page .page-leaf-wrapper { display: none !important; }
+
+      .scene-stage.desktop-single-page.desktop-cake-page .page-leaf-wrapper,
+      .scene-stage.desktop-single-page.desktop-collage-page .page-leaf-wrapper { display: block; }
+
+      .scene-stage.desktop-single-page .mobile-letter-launch {
+        display: inline-flex;
+        position: absolute;
+        left: 50%;
+        bottom: 4%;
+        z-index: 40;
+        min-height: clamp(42px, 5cqw, 60px);
+        padding: 8px clamp(18px, 2.7cqw, 38px);
+        transform: translateX(-50%);
+        font-size: clamp(14px, 1.65cqw, 21px);
+        white-space: nowrap;
+        pointer-events: auto;
+      }
+
+      .scene-stage.desktop-single-page .mobile-letter-launch:hover {
+        transform: translateX(-50%) translateY(-2px) scale(1.035);
+      }
+
+      .scene-stage.desktop-single-page .mobile-letter-launch:active {
+        transform: translateX(-50%) translateY(1px) scale(.965);
+      }
+
+      .scene-stage.desktop-single-page .spread2-right-page { display: none; }
+
+      .scene-stage.desktop-single-page .spread-container.desktop-letter-view .page-leaf-wrapper { display: none !important; }
+      .scene-stage.desktop-single-page .spread-container.desktop-letter-view .spread2-right-page {
+        display: block;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 40;
+        opacity: 1;
+        pointer-events: auto;
+        border-radius: inherit;
+        background: #f6e8d7 url('page_leaf_back.jpg') center / 100% 100% no-repeat;
+        box-shadow: inset 0 0 34px rgba(97, 61, 48, .14);
+      }
+
+      .scene-stage.desktop-single-page .spread-container.desktop-letter-view .mobile-photos-return {
+        display: inline-flex;
+        position: absolute;
+        top: 3%;
+        left: 4%;
+        z-index: 46;
+        min-height: 42px;
+        align-items: center;
+        padding: 6px 16px;
+        border: 1px solid rgba(163, 117, 100, .4);
+        border-radius: 999px;
+        background: rgba(255, 248, 237, .92);
+        color: #6f4b40;
+        font: 600 clamp(14px, 1.5cqw, 19px) 'Cormorant Garamond', Georgia, serif;
+        cursor: pointer;
+      }
+
+      .scene-stage.desktop-single-page .spread-container.desktop-letter-view .letter-envelope {
+        top: 23%;
+        width: 78%;
+        height: 51%;
+      }
+
+      .scene-stage.desktop-single-page .spread-container.desktop-letter-view .letter-card-heading {
+        font-size: clamp(22px, 3.2cqw, 40px);
+        margin-bottom: clamp(8px, 1.1cqw, 14px);
+      }
+
+      .scene-stage.desktop-single-page .spread-container.desktop-letter-view .letter-card-poem {
+        font-size: clamp(15px, 1.85cqw, 23px);
+        line-height: 1.3;
+        gap: clamp(3px, .45cqw, 6px);
+      }
+
+      .scene-stage.desktop-single-page .spread-container.desktop-letter-view .spread2-next-btn {
+        left: 50%;
+        bottom: 3%;
+        min-height: clamp(42px, 5cqw, 60px);
+        font-size: clamp(14px, 1.65cqw, 21px);
+      }
+
+      .scene-stage.desktop-single-page .spread2-panda-accent { width: clamp(58px, 8cqw, 100px); right: 3%; bottom: 2%; }
+    }
+
 </style>
 </head>
 <body>
@@ -2181,7 +2401,7 @@
       <!-- ═══════════════════════════════════════════════════════════
            STAGE 2: THE OPEN TWO-PAGE SPREAD & FLAWLESS PAGE FLIP
            ═══════════════════════════════════════════════════════════ -->
-      <section class="book-spread-stage" id="bookSpreadStage" aria-label="Open Scrapbook Spread" aria-hidden="true">
+      <section class="book-spread-stage" id="bookSpreadStage" aria-label="Scrapbook Pages" aria-hidden="true">
         <div class="spread-container" id="spreadContainer">
           
           <!-- STATIC BASE: THE OPEN SCRAPBOOK WITH VINTAGE COVER, TABLE & FLORAL GARDEN -->
@@ -2232,6 +2452,10 @@
               <g fill="#d89197" opacity=".8"><path d="M55 64 C48 56 51 49 57 46 C58 53 65 56 55 64Z"/><path d="M190 57 C183 49 187 42 193 40 C194 47 201 50 190 57Z"/></g>
             </svg>
           </div>
+
+          <button type="button" id="pageOneNextBtn" class="book-action-btn page-one-next-btn" aria-label="Next page">
+            Next page <span class="btn-sparkle" aria-hidden="true">✿</span>
+          </button>
 
           <!-- ═══════════════════════════════════════════════════════════
                THE PAGE LEAF: FLIPS FROM THE CENTRAL SPINE BINDING FLAWLESSLY
@@ -2460,6 +2684,14 @@
     const hugFinalGif = document.getElementById('hugFinalGif');
     const ambientBackdrop = document.getElementById('ambientBackdrop');
     const openBookBtn = document.getElementById('openBookBtn');
+    const landscapeSinglePageQuery = window.matchMedia('(min-aspect-ratio: 1/1)');
+
+    function setLandscapePageState(page) {
+      if (!landscapeSinglePageQuery.matches) return;
+      sceneStage.classList.add('desktop-single-page');
+      sceneStage.classList.remove('desktop-title-page', 'desktop-cake-page', 'desktop-collage-page');
+      sceneStage.classList.add(`desktop-${page}-page`);
+    }
 
     openBookBtn.addEventListener('click', () => {
       // 1. Button press feedback
@@ -2472,6 +2704,7 @@
 
       setTimeout(() => {
         // 2. Trigger 3D Book Opening Transition
+        setLandscapePageState('title');
         sceneStage.classList.add('opening');
         ambientBackdrop.classList.add('open-mode');
         scheduleCandleOverlayPosition();
@@ -2583,6 +2816,25 @@
     let isPageTurned = false;
     let isTransitioning = false;
 
+    const pageOneNextBtn = document.getElementById('pageOneNextBtn');
+    pageOneNextBtn.addEventListener('click', () => {
+      if (!sceneStage.classList.contains('desktop-single-page') || isTransitioning) return;
+      isTransitioning = true;
+      pageOneNextBtn.classList.add('btn-pressed');
+      spreadContainer.classList.add('single-page-turning');
+
+      window.setTimeout(() => {
+        pageOneNextBtn.classList.remove('btn-pressed');
+        setLandscapePageState('cake');
+        scheduleCandleOverlayPosition();
+      }, 410);
+
+      window.setTimeout(() => {
+        spreadContainer.classList.remove('single-page-turning');
+        isTransitioning = false;
+      }, 850);
+    });
+
     // Helper: spawn floating celebration sparkles & petals
     function triggerCelebrationBurst() {
       celebrationBurst.innerHTML = '';
@@ -2644,7 +2896,8 @@
         pageLeaf.removeEventListener('transitionend', onLeafTurnEnd);
         spreadContainer.classList.add('is-page-turned');
         enableSecondSpreadControls();
-        if (mobileBookQuery.matches) sceneStage.classList.add('mobile-second-page');
+        if (mobileBookQuery.matches && !sceneStage.classList.contains('desktop-single-page')) sceneStage.classList.add('mobile-second-page');
+        if (sceneStage.classList.contains('desktop-single-page')) setLandscapePageState('collage');
         leftPageTypo.style.opacity = '0';
         if (poemContent) poemContent.style.opacity = '0';
       };
@@ -2746,6 +2999,24 @@
     let letterIsOpen = false;
     let letterIsAnimating = false;
 
+    landscapeSinglePageQuery.addEventListener('change', (event) => {
+      if (!sceneStage.classList.contains('opened')) return;
+      if (event.matches) {
+        const letterWasVisible = spreadContainer.classList.contains('mobile-letter-view');
+        sceneStage.classList.remove('mobile-second-page');
+        setLandscapePageState(isPageTurned ? 'collage' : (isCandlesBlown ? 'cake' : 'title'));
+        spreadContainer.classList.remove('mobile-letter-view');
+        if (letterWasVisible) spreadContainer.classList.add('desktop-letter-view');
+      } else {
+        const letterWasVisible = spreadContainer.classList.contains('desktop-letter-view');
+        sceneStage.classList.remove('desktop-single-page', 'desktop-title-page', 'desktop-cake-page', 'desktop-collage-page');
+        spreadContainer.classList.remove('desktop-letter-view');
+        if (isPageTurned) sceneStage.classList.add('mobile-second-page');
+        if (letterWasVisible) spreadContainer.classList.add('mobile-letter-view');
+      }
+      scheduleCandleOverlayPosition();
+    });
+
     letterToggleBtn.addEventListener('click', (event) => {
       event.stopPropagation();
       if (!spreadContainer.classList.contains('is-page-turned')) return;
@@ -2797,10 +3068,14 @@
     });
 
     mobileLetterLaunchBtn.addEventListener('click', () => {
-      spreadContainer.classList.add('mobile-letter-view');
+      if (sceneStage.classList.contains('desktop-single-page')) {
+        spreadContainer.classList.add('desktop-letter-view');
+      } else {
+        spreadContainer.classList.add('mobile-letter-view');
+      }
     });
     mobilePhotosReturnBtn.addEventListener('click', () => {
-      spreadContainer.classList.remove('mobile-letter-view');
+      spreadContainer.classList.remove('mobile-letter-view', 'desktop-letter-view');
     });
 
     // ═══════════════════════════════════════════════════════════
@@ -2884,11 +3159,13 @@
     // ═══════════════════════════════════════════════════════════
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('state') === 'opened') {
+      setLandscapePageState('title');
       sceneStage.classList.add('opened');
       ambientBackdrop.classList.add('open-mode');
       bookSpreadStage.removeAttribute('aria-hidden');
       bookCoverStage.setAttribute('aria-hidden', 'true');
     } else if (urlParams.get('state') === 'blown') {
+      setLandscapePageState('cake');
       sceneStage.classList.add('opened');
       ambientBackdrop.classList.add('open-mode');
       bookSpreadStage.removeAttribute('aria-hidden');
@@ -2901,6 +3178,7 @@
       blowCandlesBtn.setAttribute('aria-label', 'next page');
       isCandlesBlown = true;
     } else if (urlParams.get('state') === 'flipped') {
+      setLandscapePageState('collage');
       sceneStage.classList.add('opened');
       ambientBackdrop.classList.add('open-mode');
       bookSpreadStage.removeAttribute('aria-hidden');
@@ -2915,7 +3193,7 @@
       pageLeafBack.removeAttribute('aria-hidden');
       spreadContainer.classList.add('is-page-turned');
       enableSecondSpreadControls();
-      if (mobileBookQuery.matches) sceneStage.classList.add('mobile-second-page');
+      if (mobileBookQuery.matches && !sceneStage.classList.contains('desktop-single-page')) sceneStage.classList.add('mobile-second-page');
       leftPageTypo.style.opacity = '0';
       if (poemContent) poemContent.style.opacity = '0';
       isPageTurned = true;
