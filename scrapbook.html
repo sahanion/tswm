@@ -2248,41 +2248,41 @@
 
               <!-- 5 Candle Flames & Wispy Smoke -->
               <div class="candles-container" id="candlesContainer">
-                <div class="candle-flame" id="flame-1" style="left: 22.8%; top: 22.7%;">
+                <div class="candle-flame" id="flame-1" style="left: 22.7%; top: 22.7%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
-                <div class="candle-flame" id="flame-2" style="left: 26.5%; top: 23.0%;">
+                <div class="candle-flame" id="flame-2" style="left: 27.9%; top: 23.0%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
-                <div class="candle-flame" id="flame-3" style="left: 29.5%; top: 23.2%;">
+                <div class="candle-flame" id="flame-3" style="left: 33.0%; top: 23.2%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
-                <div class="candle-flame" id="flame-4" style="left: 33.2%; top: 23.0%;">
+                <div class="candle-flame" id="flame-4" style="left: 37.2%; top: 23.0%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
-                <div class="candle-flame" id="flame-5" style="left: 37.0%; top: 22.7%;">
+                <div class="candle-flame" id="flame-5" style="left: 41.5%; top: 22.7%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
 
                 <!-- 5 Wispy Rising Smoke Trails -->
-                <div class="candle-smoke" id="smoke-1" style="left: 22.8%; top: 22.7%; --smoke-drift: -5px;">
+                <div class="candle-smoke" id="smoke-1" style="left: 22.7%; top: 22.7%; --smoke-drift: -5px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q6,42 12,28 T8,10 T10,0" class="smoke-trail"/></svg>
                 </div>
-                <div class="candle-smoke" id="smoke-2" style="left: 26.5%; top: 23.0%; --smoke-drift: 6px;">
+                <div class="candle-smoke" id="smoke-2" style="left: 27.9%; top: 23.0%; --smoke-drift: 6px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q14,40 8,26 T12,12 T9,0" class="smoke-trail"/></svg>
                 </div>
-                <div class="candle-smoke" id="smoke-3" style="left: 29.5%; top: 23.2%; --smoke-drift: -3px;">
+                <div class="candle-smoke" id="smoke-3" style="left: 33.0%; top: 23.2%; --smoke-drift: -3px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q7,38 13,24 T8,8 T11,0" class="smoke-trail"/></svg>
                 </div>
-                <div class="candle-smoke" id="smoke-4" style="left: 33.2%; top: 23.0%; --smoke-drift: 7px;">
+                <div class="candle-smoke" id="smoke-4" style="left: 37.2%; top: 23.0%; --smoke-drift: 7px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q13,42 7,28 T12,10 T8,0" class="smoke-trail"/></svg>
                 </div>
-                <div class="candle-smoke" id="smoke-5" style="left: 37.0%; top: 22.7%; --smoke-drift: -4px;">
+                <div class="candle-smoke" id="smoke-5" style="left: 41.5%; top: 22.7%; --smoke-drift: -4px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q6,39 12,25 T9,10 T11,0" class="smoke-trail"/></svg>
                 </div>
               </div>
@@ -2474,6 +2474,7 @@
         // 2. Trigger 3D Book Opening Transition
         sceneStage.classList.add('opening');
         ambientBackdrop.classList.add('open-mode');
+        scheduleCandleOverlayPosition();
         bookSpreadStage.removeAttribute('aria-hidden');
         bookCoverStage.setAttribute('aria-hidden', 'true');
 
@@ -2481,6 +2482,7 @@
         setTimeout(() => {
           sceneStage.classList.add('opened');
           sceneStage.classList.remove('opening');
+          scheduleCandleOverlayPosition();
         }, 1250);
       }, 160);
     });
@@ -2500,6 +2502,82 @@
     const celebrationBurst = document.getElementById('celebrationBurst');
     const flames = [1, 2, 3, 4, 5].map(i => document.getElementById(`flame-${i}`));
     const smokes = [1, 2, 3, 4, 5].map(i => document.getElementById(`smoke-${i}`));
+    const candlesContainer = document.getElementById('candlesContainer');
+    const candleArtwork = document.querySelector('.page-leaf-front .page-leaf-img');
+    const candleArtworkAnchors = [
+      { x: 0.227, y: 0.227 },
+      { x: 0.279, y: 0.230 },
+      { x: 0.330, y: 0.232 },
+      { x: 0.372, y: 0.230 },
+      { x: 0.415, y: 0.227 }
+    ];
+
+    function objectPositionOffset(freeSpace, value) {
+      const token = (value || '50%').toLowerCase();
+      if (token === 'center') return freeSpace / 2;
+      if (token === 'right' || token === 'bottom') return freeSpace;
+      if (token === 'left' || token === 'top') return 0;
+      if (token.endsWith('%')) return freeSpace * (parseFloat(token) / 100);
+      return parseFloat(token) || 0;
+    }
+
+    // Resolve each candle's source-art position through the image's actual object-fit crop.
+    function positionCandleOverlays() {
+      if (!candleArtwork.complete || !candleArtwork.naturalWidth || !candleArtwork.offsetWidth || !candlesContainer.offsetWidth) return;
+
+      const imageStyle = getComputedStyle(candleArtwork);
+      const boxWidth = candleArtwork.clientWidth;
+      const boxHeight = candleArtwork.clientHeight;
+      const scaleX = boxWidth / candleArtwork.naturalWidth;
+      const scaleY = boxHeight / candleArtwork.naturalHeight;
+      let renderWidth = boxWidth;
+      let renderHeight = boxHeight;
+
+      if (imageStyle.objectFit === 'cover' || imageStyle.objectFit === 'contain' || imageStyle.objectFit === 'scale-down') {
+        let scale = imageStyle.objectFit === 'cover' ? Math.max(scaleX, scaleY) : Math.min(scaleX, scaleY);
+        if (imageStyle.objectFit === 'scale-down') scale = Math.min(1, scale);
+        renderWidth = candleArtwork.naturalWidth * scale;
+        renderHeight = candleArtwork.naturalHeight * scale;
+      } else if (imageStyle.objectFit === 'none') {
+        renderWidth = candleArtwork.naturalWidth;
+        renderHeight = candleArtwork.naturalHeight;
+      }
+
+      const position = imageStyle.objectPosition.split(/\s+/);
+      const imageLeft = candleArtwork.offsetLeft - candlesContainer.offsetLeft;
+      const imageTop = candleArtwork.offsetTop - candlesContainer.offsetTop;
+      const offsetX = objectPositionOffset(boxWidth - renderWidth, position[0]);
+      const offsetY = objectPositionOffset(boxHeight - renderHeight, position[1]);
+
+      candleArtworkAnchors.forEach((anchor, index) => {
+        const left = imageLeft + offsetX + renderWidth * anchor.x;
+        const top = imageTop + offsetY + renderHeight * anchor.y;
+        [flames[index], smokes[index]].forEach((overlay) => {
+          overlay.style.left = `${left}px`;
+          overlay.style.top = `${top}px`;
+        });
+      });
+    }
+
+    let candlePositionFrame = 0;
+    function scheduleCandleOverlayPosition() {
+      if (candlePositionFrame) return;
+      candlePositionFrame = requestAnimationFrame(() => {
+        candlePositionFrame = 0;
+        positionCandleOverlays();
+      });
+    }
+
+    candleArtwork.addEventListener('load', scheduleCandleOverlayPosition);
+    window.addEventListener('load', scheduleCandleOverlayPosition);
+    window.addEventListener('resize', scheduleCandleOverlayPosition, { passive: true });
+    window.addEventListener('orientationchange', scheduleCandleOverlayPosition, { passive: true });
+    if ('ResizeObserver' in window) {
+      const candleLayoutObserver = new ResizeObserver(scheduleCandleOverlayPosition);
+      candleLayoutObserver.observe(candleArtwork);
+      candleLayoutObserver.observe(candlesContainer);
+    }
+    scheduleCandleOverlayPosition();
 
     let isCandlesBlown = false;
     let isPageTurned = false;
