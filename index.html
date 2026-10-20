@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
   <title>A Little Spring Garden For Muskan 🌷</title>
   
   <!-- Romantic Google Fonts -->
@@ -784,58 +784,6 @@
       .petal-layer, .btn-sparkle {
         display: none !important;
       }
-    }
-
-    /* Portrait screens: keep the invitation centered and the controls easy to read. */
-    @media (max-width: 768px), (max-aspect-ratio: 1/1) {
-      .center-content {
-        justify-content: center;
-        width: min(100%, 520px);
-        max-width: 520px;
-        padding: max(20px, env(safe-area-inset-top, 20px)) 18px max(22px, env(safe-area-inset-bottom, 22px));
-      }
-      .greeting-header { margin-bottom: 12px; }
-      .main-title {
-        max-width: 100%; white-space: normal; text-wrap: balance;
-        font-size: clamp(34px, 9vw, 46px); line-height: 1.12;
-      }
-      .ribbon-flourish-wrap { width: min(62vw, 250px); height: 30px; }
-      .subtitle {
-        max-width: 340px; margin-bottom: 24px;
-        font-size: clamp(19px, 5vw, 22px); line-height: 1.4;
-        letter-spacing: .025em;
-      }
-      .button-wrapper { width: 100%; margin-bottom: 14px; }
-      .garden-btn {
-        min-height: 56px; max-width: 100%; white-space: normal;
-        padding: 13px 22px; gap: 8px;
-        font-size: clamp(17px, 4.5vw, 19px); line-height: 1.15;
-      }
-      .footer-text { font-size: 15px; }
-      .mobile-left-overlay, .mobile-right-overlay {
-        width: clamp(145px, 39vw, 220px); max-height: 27vh;
-        opacity: .82;
-      }
-      .welcome-note {
-        width: min(100%, 440px); max-height: calc(100dvh - 28px);
-        padding: 46px 28px 30px;
-      }
-      .welcome-title { font-size: clamp(34px, 9vw, 43px); }
-      .welcome-copy { font-size: clamp(19px, 5vw, 22px); line-height: 1.4; }
-      .welcome-sound-btn {
-        min-height: 60px; margin-top: 22px; padding: 11px 25px;
-        font-size: clamp(23px, 6vw, 27px);
-      }
-      .welcome-get-in { min-height: 52px; margin-top: 18px; font-size: 19px; }
-    }
-
-    @media (max-height: 700px) and (orientation: portrait) {
-      .center-content { padding-top: 18px; padding-bottom: 18px; }
-      .subtitle { margin-bottom: 14px; }
-      .welcome-note { padding-top: 38px; padding-bottom: 24px; }
-      .welcome-copy { margin-top: 12px; }
-      .welcome-sound-btn { min-height: 54px; margin-top: 15px; }
-      .welcome-get-in { min-height: 46px; margin-top: 12px; }
     }
   </style>
 </head>
