@@ -1436,12 +1436,6 @@
       }
       .page-leaf-front .leaf-lighting { height: 55%; }
       .candles-container { width: 100%; height: 55%; }
-      .candle-flame:nth-child(1), .candle-smoke:nth-child(6) { left: 20.5% !important; }
-      .candle-flame:nth-child(2), .candle-smoke:nth-child(7) { left: 28.5% !important; }
-      .candle-flame:nth-child(3), .candle-smoke:nth-child(8) { left: 34.5% !important; }
-      .candle-flame:nth-child(4), .candle-smoke:nth-child(9) { left: 42.5% !important; }
-      .candle-flame:nth-child(5), .candle-smoke:nth-child(10) { left: 50.5% !important; }
-
       .wish-card-pink, .wish-card-cream {
         top: 60%; left: 4%; width: 44%; height: 25%; perspective: 1000px;
       }
@@ -2237,17 +2231,20 @@
         background: linear-gradient(180deg, #f4dfd0 0%, #fff8eb 54%, #f3e4d1 100%);
       }
       .page-leaf-front .page-leaf-img {
-        position: absolute; top: 0; left: 0; width: 100%; height: 54%;
-        object-fit: cover; object-position: 24% center;
+        position: absolute;
+        left: min(0px, calc(24vw - 19.02dvh));
+        top: min(0px, calc(27dvh - 34.07vw));
+        width: max(100vw, 79.25dvh); height: max(68.14vw, 54dvh);
+        max-width: none; object-fit: fill; transform: none;
       }
       .page-leaf-front .leaf-lighting { height: 54%; }
-      .candles-container { width: 100%; height: 54%; }
+      .candles-container {
+        top: min(0px, calc(27dvh - 34.07vw));
+        left: min(0px, calc(24vw - 19.02dvh));
+        width: max(100vw, 79.25dvh); height: max(68.14vw, 54dvh);
+        transform: none;
+      }
       .candle-flame { width: 12px; height: 21px; }
-      .candle-flame:nth-child(1), .candle-smoke:nth-child(6) { left: 20.5% !important; }
-      .candle-flame:nth-child(2), .candle-smoke:nth-child(7) { left: 28.5% !important; }
-      .candle-flame:nth-child(3), .candle-smoke:nth-child(8) { left: 34.5% !important; }
-      .candle-flame:nth-child(4), .candle-smoke:nth-child(9) { left: 42.5% !important; }
-      .candle-flame:nth-child(5), .candle-smoke:nth-child(10) { left: 50.5% !important; }
 
       .wish-card-pink, .wish-card-cream {
         left: 7%; width: 86%; height: 15.5%; perspective: 1000px;
@@ -2530,41 +2527,41 @@
 
               <!-- 5 Candle Flames & Wispy Smoke -->
               <div class="candles-container" id="candlesContainer">
-                <div class="candle-flame" id="flame-1" style="left: 22.8%; top: 22.7%;">
+                <div class="candle-flame" id="flame-1" style="left: 22.7%; top: 22.7%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
-                <div class="candle-flame" id="flame-2" style="left: 26.5%; top: 23.0%;">
+                <div class="candle-flame" id="flame-2" style="left: 27.9%; top: 23.0%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
-                <div class="candle-flame" id="flame-3" style="left: 29.5%; top: 23.2%;">
+                <div class="candle-flame" id="flame-3" style="left: 33.0%; top: 23.2%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
-                <div class="candle-flame" id="flame-4" style="left: 33.2%; top: 23.0%;">
+                <div class="candle-flame" id="flame-4" style="left: 37.2%; top: 23.0%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
-                <div class="candle-flame" id="flame-5" style="left: 37.0%; top: 22.7%;">
+                <div class="candle-flame" id="flame-5" style="left: 41.5%; top: 22.7%;">
                   <div class="flame-halo"></div>
                   <div class="flame-core"></div>
                 </div>
 
                 <!-- 5 Wispy Rising Smoke Trails -->
-                <div class="candle-smoke" id="smoke-1" style="left: 22.8%; top: 22.7%; --smoke-drift: -5px;">
+                <div class="candle-smoke" id="smoke-1" style="left: 22.7%; top: 22.7%; --smoke-drift: -5px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q6,42 12,28 T8,10 T10,0" class="smoke-trail"/></svg>
                 </div>
-                <div class="candle-smoke" id="smoke-2" style="left: 26.5%; top: 23.0%; --smoke-drift: 6px;">
+                <div class="candle-smoke" id="smoke-2" style="left: 27.9%; top: 23.0%; --smoke-drift: 6px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q14,40 8,26 T12,12 T9,0" class="smoke-trail"/></svg>
                 </div>
-                <div class="candle-smoke" id="smoke-3" style="left: 29.5%; top: 23.2%; --smoke-drift: -3px;">
+                <div class="candle-smoke" id="smoke-3" style="left: 33.0%; top: 23.2%; --smoke-drift: -3px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q7,38 13,24 T8,8 T11,0" class="smoke-trail"/></svg>
                 </div>
-                <div class="candle-smoke" id="smoke-4" style="left: 33.2%; top: 23.0%; --smoke-drift: 7px;">
+                <div class="candle-smoke" id="smoke-4" style="left: 37.2%; top: 23.0%; --smoke-drift: 7px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q13,42 7,28 T12,10 T8,0" class="smoke-trail"/></svg>
                 </div>
-                <div class="candle-smoke" id="smoke-5" style="left: 37.0%; top: 22.7%; --smoke-drift: -4px;">
+                <div class="candle-smoke" id="smoke-5" style="left: 41.5%; top: 22.7%; --smoke-drift: -4px;">
                   <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q6,39 12,25 T9,10 T11,0" class="smoke-trail"/></svg>
                 </div>
               </div>
