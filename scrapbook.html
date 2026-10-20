@@ -336,7 +336,7 @@
     @keyframes hugFinalTextIn { to { opacity:1;transform:translateY(0) scale(1); } }
     @keyframes hugFinalWiggle { 0%,65%,100%{transform:rotate(0) scale(1)}70%{transform:rotate(-2deg) scale(1.01)}75%{transform:rotate(1.8deg) scale(1.01)}80%{transform:rotate(-1.4deg)}90%{transform:rotate(.5deg)} }
 
-    @media (max-width:680px), (orientation:portrait) {
+    @media (orientation:portrait) {
       .hug-final-stage { padding:2.5svh 3vw; }
       .hug-final-book { width:min(94vw,490px);height:min(92svh,820px);aspect-ratio:auto;border-radius:16px;background:radial-gradient(ellipse at 50% 42%,rgba(255,250,235,.9),transparent 64%),repeating-linear-gradient(3deg,rgba(130,88,50,.025) 0 1px,transparent 1px 5px),linear-gradient(140deg,#f2dfbf,#f8ecd3 48%,#e7cfad); }
       .hug-final-art { opacity:.24;object-position:center; }
@@ -351,6 +351,13 @@
       .hug-final-start { bottom:0;transform:translate(-50%, 8px);font-size:15px; }
     }
     @media (max-width:380px) { .hug-final-card{width:82%;height:60%;}.hug-final-top text{font-size:37px}.hug-final-bottom text{font-size:44px} }
+
+    @media (max-aspect-ratio: 1/1) {
+      .hug-final-stage { padding: max(12px, env(safe-area-inset-top, 12px)) 3vw max(12px, env(safe-area-inset-bottom, 12px)); }
+      .hug-final-book { width: min(94vw, 490px); height: min(88dvh, 820px); max-height: calc(100dvh - 24px); }
+      .hug-final-bottom { left: 12%; bottom: 8%; width: 76%; }
+      .hug-final-start { bottom: 10px; transform: translateX(-50%); }
+    }
 
     /* Cover Dedication Wrapper */
     .cover-dedication-wrap {
@@ -1383,7 +1390,7 @@
     /* ═══════════════════════════════════════════════════════════
        PHONE SCREEN OPTIMIZATION (PORTRAIT & SMALL SCREENS)
        ═══════════════════════════════════════════════════════════ */
-    @media (max-width: 768px), (max-aspect-ratio: 1/1) {
+    @media (max-aspect-ratio: 1/1) {
       .scrapbook-viewport {
         padding: 0;
         overflow: hidden;
@@ -1391,11 +1398,61 @@
 
       .scene-stage {
         width: 100vw;
-        height: calc(100vw * 576 / 1024);
-        max-height: none;
+        height: 100vh;
+        height: 100dvh;
+        max-height: 100dvh;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
+      }
+
+      .book-cover-stage { transform-origin: 8% 50%; }
+      .cover-illustration { object-fit: cover; object-position: 62% center; }
+      .cover-dedication-wrap { top: 31%; left: 10%; width: 80%; height: 42%; padding: 12px 4px; }
+      .dedication-heading { font-size: clamp(23px, 6.7vw, 31px); line-height: 1.16; }
+      .dedication-divider { width: min(68vw, 250px); margin: 8px 0; }
+      .dedication-sub { font-size: clamp(14px, 4vw, 18px); margin-bottom: 3px; }
+      .dedication-calligraphy { font-size: clamp(38px, 11vw, 53px); white-space: normal; line-height: 1; margin-bottom: 17px; }
+      .book-cover-stage .book-action-btn { min-height: 48px; padding: 9px 22px; font-size: 15px; }
+
+      .book-spread-stage {
+        top: 50%; left: 50%; width: 100vw; max-width: none;
+        height: 100vh; height: 100dvh; aspect-ratio: auto;
+      }
+      .spread-container {
+        height: 100%; overflow: hidden; border-radius: 0; perspective: 1800px;
+        background: #f6eadb url('page_leaf_back.jpg') center / cover no-repeat;
+        box-shadow: none;
+      }
+      .spread-illustration, .left-page-typography, .poem-content, .under-page-shadow { display: none !important; }
+      .page-leaf-wrapper {
+        top: 0; left: 0; width: 100%; height: 100%;
+        transform-origin: left center; border-radius: 0;
+      }
+      .page-leaf-front { border-radius: 0; background: #f6eadb url('page_leaf_back.jpg') center / cover no-repeat; }
+      .page-leaf-front .page-leaf-img {
+        position: absolute; top: 0; left: 0; width: 100%; height: 55%;
+        object-fit: cover; object-position: 25% center;
+      }
+      .page-leaf-front .leaf-lighting { height: 55%; }
+      .candles-container { width: 100%; height: 55%; }
+      .candle-flame:nth-child(1), .candle-smoke:nth-child(6) { left: 20.5% !important; }
+      .candle-flame:nth-child(2), .candle-smoke:nth-child(7) { left: 28.5% !important; }
+      .candle-flame:nth-child(3), .candle-smoke:nth-child(8) { left: 34.5% !important; }
+      .candle-flame:nth-child(4), .candle-smoke:nth-child(9) { left: 42.5% !important; }
+      .candle-flame:nth-child(5), .candle-smoke:nth-child(10) { left: 50.5% !important; }
+
+      .wish-card-pink, .wish-card-cream {
+        top: 60%; left: 4%; width: 44%; height: 25%; perspective: 1000px;
+      }
+      .wish-card-cream { left: 52%; top: 60%; }
+      .wish-card-face { gap: 7px; padding: 10px; border-radius: 16px; }
+      .wish-card-art svg { width: clamp(48px, 15vw, 68px); max-height: 60%; }
+      .wish-card-art-label { font-size: clamp(10px, 3vw, 12px); }
+      .wish-card-text, .wish-card-message .wish-card-text { font-size: clamp(12px, 3.45vw, 15px); line-height: 1.24; }
+      .blow-candles-btn {
+        top: auto; left: 50%; bottom: max(14px, env(safe-area-inset-bottom, 14px));
+        min-height: 48px; padding: 9px 20px; font-size: clamp(13px, 3.7vw, 16px);
       }
 
       .dedication-heading {
@@ -1541,6 +1598,7 @@
     /* bottom row */
     .spread2-photo-3 { left: 42%; top: 56%; width: 13.5%; transform: rotate(-2.5deg); }
     .spread2-photo-4 { left: 69%; top: 53%; width: 13.5%; transform: rotate(2.5deg);  }
+    .spread2-photo-1 { left: 57%; top: 72%; width: 11%; transform: rotate(-2deg); }
 
     .spread2-header {
       position: absolute;
@@ -1961,7 +2019,7 @@
     /* ═══════════════════════════════════════════════════════════
        SPREAD 2: MOBILE VIEW ADJUSTMENTS
        ═══════════════════════════════════════════════════════════ */
-    @media (max-width: 768px), (max-aspect-ratio: 1/1) {
+    @media (max-aspect-ratio: 1/1) {
       .spread2-letter {
         top: 47%;
         height: 46%;
@@ -2078,6 +2136,46 @@
       .scene-stage.mobile-second-page .letter-card-poem { font-size: clamp(13px, 3.8vw, 16px); line-height: 1.28; gap: 4px; }
       .scene-stage.mobile-second-page .spread2-next-btn { left: 50%; bottom: 1%; min-height: 44px; font-size: 13px; }
       .scene-stage.mobile-second-page .spread2-panda-accent { width: 52px; right: 3%; bottom: 1%; }
+
+      /* Full-height photo page with five stickers in a balanced portrait grid. */
+      .scene-stage.mobile-second-page { height: 100vh; height: 100dvh; }
+      .scene-stage.mobile-second-page .book-spread-stage { top: 50%; left: 50%; width: 100vw; height: 100vh; height: 100dvh; }
+      .scene-stage.mobile-second-page .spread-container {
+        height: 100%; background: #f5e8d8 url('page_leaf_back.jpg') center / cover no-repeat;
+      }
+      .scene-stage.mobile-second-page .page-leaf-back { display: block; transform: none; border-radius: 0; }
+      .scene-stage.mobile-second-page .page-leaf-back .page-leaf-img { object-fit: cover; object-position: 50% center; }
+      .scene-stage.mobile-second-page .page-leaf-back .leaf-lighting { opacity: 0; }
+      .scene-stage.mobile-second-page .spread2-photo-2 { left: 5%; top: 16%; width: 37%; transform: rotate(-3deg); }
+      .scene-stage.mobile-second-page .spread2-photo-5 { left: 58%; top: 15%; width: 37%; transform: rotate(3deg); }
+      .scene-stage.mobile-second-page .spread2-photo-title {
+        top: 41%; left: 5%; width: 90%; min-height: 7%; white-space: normal;
+        color: #87464e; font-size: clamp(20px, 5.5vw, 26px); line-height: 1.12;
+        text-shadow: 0 1px 3px rgba(255,255,255,.98), 0 0 12px rgba(255,250,240,.95);
+      }
+      .scene-stage.mobile-second-page .spread2-photo-3 { left: 4%; top: 54%; width: 28%; transform: rotate(-2deg); }
+      .scene-stage.mobile-second-page .spread2-photo-4 { left: 36%; top: 54%; width: 28%; transform: rotate(2deg); }
+      .scene-stage.mobile-second-page .spread2-photo-1 { left: 68%; top: 56%; width: 28%; transform: rotate(2deg); }
+      .scene-stage.mobile-second-page .mobile-letter-launch {
+        left: 50%; bottom: max(14px, env(safe-area-inset-bottom, 14px));
+        min-height: 48px; padding: 9px 20px; font-size: 14px;
+      }
+      .scene-stage.mobile-second-page .spread2-right-page { display: none; }
+      .scene-stage.mobile-second-page .spread-container.mobile-letter-view .page-leaf-wrapper { display: none; }
+      .scene-stage.mobile-second-page .spread-container.mobile-letter-view .spread2-right-page {
+        display: block; inset: 0; width: 100%; height: 100%;
+        background: #f5e8d8 url('page_leaf_back.jpg') center / cover no-repeat;
+      }
+      .scene-stage.mobile-second-page .mobile-photos-return { top: max(14px, env(safe-area-inset-top, 14px)); left: 5%; min-height: 42px; }
+      .scene-stage.mobile-second-page .letter-envelope { top: 20%; left: 5%; width: 90%; height: 58%; }
+      .scene-stage.mobile-second-page .letter-made-tag { display: none; }
+      .scene-stage.mobile-second-page .letter-card-heading { font-size: clamp(22px, 6vw, 30px); margin-bottom: 14px; }
+      .scene-stage.mobile-second-page .letter-card-poem { font-size: clamp(15px, 4.3vw, 18px); line-height: 1.32; gap: 8px; }
+      .scene-stage.mobile-second-page .spread2-next-btn {
+        left: 50%; bottom: max(14px, env(safe-area-inset-bottom, 14px));
+        min-height: 48px; padding: 9px 22px; font-size: 15px;
+      }
+      .scene-stage.mobile-second-page .spread2-panda-accent { display: none; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -2353,6 +2451,7 @@
 
               <!-- SPREAD 2: LEFT PAGE PHOTO COLLAGE -->
               <div class="spread2-left-content spread2-photo-page" id="spread2LeftContent" role="group" aria-label="Birthday photo collage">
+                <img class="spread2-photo-sticker spread2-photo-1" src="images/memory-sticker-01.png" alt="A couple smiling together in a heart-framed photo sticker" />
                 <img class="spread2-photo-sticker spread2-photo-2" src="images/memory-sticker-02.png" alt="A smiling portrait surrounded by pink hearts" />
                 <img class="spread2-photo-sticker spread2-photo-5" src="images/memory-sticker-05.png" alt="A crowned portrait framed by flowers and a ribbon" />
                 <h2 class="spread2-photo-title">The Most Wonderful Woman</h2>

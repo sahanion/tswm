@@ -347,6 +347,7 @@
       z-index: 1;
       width: 100%;
       height: 100svh;
+      height: 100dvh;
       min-height: 100svh;
       padding: 3svh 2vw;
     }
@@ -542,16 +543,17 @@
       outline-offset: 3px;
     }
 
-    @media (max-width: 680px), (orientation: portrait) {
-      html, body { overflow: auto; }
+    @media (orientation: portrait) {
+      html, body { overflow: hidden; }
       .container {
-        height: 100svh;
-        min-height: 100svh;
-        padding: 2.5svh 3vw;
+        height: 100dvh;
+        min-height: 100dvh;
+        padding: max(12px, env(safe-area-inset-top, 12px)) 3vw max(12px, env(safe-area-inset-bottom, 12px));
       }
       .back-cover {
         width: min(94vw, 490px);
-        height: min(92svh, 820px);
+        height: min(88dvh, 820px);
+        max-height: calc(100dvh - 24px);
         aspect-ratio: auto;
         border-radius: 16px;
         background:
@@ -570,7 +572,7 @@
         box-shadow: inset 0 0 0 5px rgba(255, 245, 220, .25), inset 0 0 0 7px rgba(153, 111, 65, .2);
       }
       .back-cover::after { top: 5%; right: 9%; font-size: 20px; }
-      .start-over-btn { bottom: 4%; font-size: 15px; }
+      .start-over-btn { bottom: 10px; font-size: 15px; }
       .back-cover-spine {
         position: absolute;
         inset: 0 auto 0 0;
@@ -609,6 +611,7 @@
       .top-curved-text { font-size: 40px; }
       .bottom-text-wrapper { bottom: -1%; }
       .bot-curved-text { font-size: 48px; }
+      .bottom-text-wrapper { bottom: 8%; left: 12%; width: 76%; }
     }
 
     @media (max-width: 380px) {
