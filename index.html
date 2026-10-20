@@ -57,6 +57,165 @@
       background: radial-gradient(circle at 48% 42%, #FFFDF9 0%, #FAF3EA 55%, #F4E7DC 100%);
     }
 
+    .welcome-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background: rgba(72, 44, 39, .3);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      opacity: 1;
+      transition: opacity .45s ease;
+    }
+
+    .welcome-overlay.is-closing { opacity: 0; pointer-events: none; }
+    .welcome-overlay[hidden] { display: none; }
+
+    .welcome-note {
+      position: relative;
+      width: min(100%, 440px);
+      padding: clamp(30px, 7vw, 48px) clamp(24px, 7vw, 48px) 34px;
+      overflow: hidden;
+      text-align: center;
+      color: #684844;
+      background:
+        radial-gradient(ellipse at 12% 8%, rgba(255,255,255,.75), transparent 40%),
+        linear-gradient(145deg, rgba(255,250,239,.98), rgba(250,228,218,.98));
+      border: 1px solid rgba(169, 117, 104, .55);
+      border-radius: 9px 18px 10px 16px;
+      box-shadow: 0 20px 60px rgba(68, 39, 34, .3), inset 0 0 0 5px rgba(255,255,255,.32);
+      animation: welcomeArrive .65s cubic-bezier(.2,.8,.25,1) both;
+    }
+
+    .welcome-note::before,
+    .welcome-note::after {
+      content: '';
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(177, 128, 111, .34);
+      border-radius: 5px 13px 6px 11px;
+      pointer-events: none;
+    }
+
+    .welcome-note::after {
+      inset: 17px;
+      border-style: dashed;
+      border-color: rgba(190, 144, 122, .22);
+    }
+
+    .welcome-flower {
+      position: absolute;
+      z-index: 1;
+      color: #c17e83;
+      text-shadow: 0 2px 5px rgba(151, 96, 87, .18);
+      pointer-events: none;
+    }
+
+    .welcome-flower.top-left { top: 17px; left: 25px; font-size: 27px; transform: rotate(-18deg); }
+    .welcome-flower.top-right { top: 23px; right: 28px; color: #9eaa85; font-size: 21px; transform: rotate(14deg); }
+    .welcome-flower.bottom-left { bottom: 20px; left: 31px; color: #d99b91; font-size: 19px; }
+    .welcome-flower.bottom-right { right: 28px; bottom: 19px; color: #9eaa85; font-size: 25px; transform: rotate(-12deg); }
+
+    .welcome-title {
+      position: relative;
+      z-index: 2;
+      color: #744c48;
+      font: 600 clamp(2rem, 8vw, 2.8rem)/1.08 'Playfair Display', Georgia, serif;
+    }
+
+    .welcome-copy {
+      position: relative;
+      z-index: 2;
+      margin: 19px auto 0;
+      max-width: 330px;
+      font: 500 clamp(18px, 4.5vw, 21px)/1.45 'Cormorant Garamond', Georgia, serif;
+    }
+
+    .welcome-sound-btn {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 58px;
+      margin-top: 24px;
+      padding: 10px 25px;
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 999px;
+      color: #fffaf4;
+      background: linear-gradient(135deg, #bd747d, #a95f6e);
+      box-shadow: 0 7px 20px rgba(146, 77, 88, .3), inset 0 1px 0 rgba(255,255,255,.55);
+      font: 700 clamp(21px, 5vw, 25px) 'Playfair Display', Georgia, serif;
+      letter-spacing: .04em;
+      cursor: pointer;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .welcome-sound-btn:hover,
+    .welcome-sound-btn:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 9px 24px rgba(146, 77, 88, .38), inset 0 1px 0 rgba(255,255,255,.6);
+    }
+
+    .welcome-sound-btn:focus-visible { outline: 3px solid #87575a; outline-offset: 3px; }
+
+    .sound-speaker { font-size: 27px; line-height: 1; }
+
+    .sound-waves {
+      display: inline-block;
+      font: 700 24px/1 Arial, sans-serif;
+      animation: soundWave 1.8s ease-in-out infinite;
+      transform-origin: left center;
+    }
+
+    .welcome-sound-btn.is-on .sound-waves { animation-duration: 1.25s; }
+
+    @keyframes soundWave {
+      0%, 100% { opacity: .65; transform: scale(.94); }
+      50% { opacity: 1; transform: scale(1.08); }
+    }
+
+    .welcome-get-in {
+      position: relative;
+      z-index: 2;
+      min-width: 155px;
+      min-height: 48px;
+      margin-top: 22px;
+      padding: 10px 28px;
+      border: 1px solid rgba(255,255,255,.85);
+      border-radius: 999px;
+      color: #fffaf4;
+      background: linear-gradient(135deg, #cf8790, #b96f7b);
+      box-shadow: 0 5px 15px rgba(154, 85, 94, .25), inset 0 1px 0 rgba(255,255,255,.55);
+      font: 600 18px 'Playfair Display', Georgia, serif;
+      letter-spacing: .04em;
+      cursor: pointer;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .welcome-get-in:hover,
+    .welcome-get-in:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 19px rgba(154, 85, 94, .3), inset 0 1px 0 rgba(255,255,255,.6);
+    }
+
+    .welcome-get-in:focus-visible { outline: 3px solid #87575a; outline-offset: 3px; }
+
+    @keyframes welcomeArrive {
+      from { opacity: 0; transform: translateY(12px) scale(.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (max-width: 420px) {
+      .welcome-note { padding-top: 42px; padding-bottom: 29px; }
+      .welcome-flower.top-left { top: 12px; left: 18px; }
+      .welcome-flower.top-right { top: 17px; right: 20px; }
+    }
+
     /* Illustrated Garden Background */
     .garden-scenery {
       position: absolute;
@@ -616,8 +775,25 @@
 </head>
 <body>
   <div class="garden-viewport">
+    <section class="welcome-overlay" id="welcomeOverlay" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle" aria-describedby="welcomeCopy">
+      <div class="welcome-note">
+        <span class="welcome-flower top-left" aria-hidden="true">&#10047;</span>
+        <span class="welcome-flower top-right" aria-hidden="true">&#10048;</span>
+        <span class="welcome-flower bottom-left" aria-hidden="true">&#10046;</span>
+        <span class="welcome-flower bottom-right" aria-hidden="true">&#10047;</span>
+        <h1 class="welcome-title" id="welcomeTitle">Hi, Muskan.</h1>
+        <p class="welcome-copy" id="welcomeCopy">I hope it brings you a smile and reminds you how special you are to me.</p>
+        <button class="welcome-sound-btn" id="welcomeSoundBtn" type="button" aria-describedby="welcomeCopy">
+          <span class="sound-speaker" aria-hidden="true">&#128266;</span>
+          <span>Sound On</span>
+          <span class="sound-waves" aria-hidden="true">)))</span>
+        </button>
+        <button class="welcome-get-in" id="welcomeGetIn" type="button" autofocus>Get in <span aria-hidden="true">&#10047;</span></button>
+      </div>
+    </section>
+
     <!-- Discreet Music Toggle Button -->
-    <button class="music-toggle-btn" id="musicToggle" aria-label="Toggle Background Music" title="Background Music (M)">
+    <button class="music-toggle-btn" id="musicToggle" aria-label="Toggle Background Music" title="Background Music (M)" aria-hidden="true" tabindex="-1">
       <svg class="music-note" id="musicIconOn" viewBox="0 0 24 24">
         <path d="M9 18V5l12-2v13" />
         <circle cx="6" cy="18" r="3" />
@@ -663,7 +839,7 @@
     </div>
 
     <!-- Central Garden Invitation -->
-    <main class="center-content">
+    <main class="center-content" aria-hidden="true">
       <!-- Main Heading -->
       <header class="greeting-header">
         <h1 class="main-title">
@@ -804,6 +980,10 @@
     // Fresh start from the garden resets the candle-stopped flag
     sessionStorage.removeItem('bgMusicStopped');
 
+    const musicPreferenceKey = 'muskanMusicManuallyMuted';
+    // A new visit to the opening page always starts with music enabled.
+    // The preference is still respected while moving through the scrapbook pages.
+    sessionStorage.setItem(musicPreferenceKey, 'false');
     let isMusicManuallyMuted = false;
 
     function updateMusicButtonUi(isPlaying) {
@@ -849,11 +1029,13 @@
 
         if (!bgMusic.paused) {
           isMusicManuallyMuted = true;
+          sessionStorage.setItem(musicPreferenceKey, 'true');
           bgMusic.pause();
           updateMusicButtonUi(false);
           sessionStorage.setItem('bgMusicPlaying', 'false');
         } else {
           isMusicManuallyMuted = false;
+          sessionStorage.setItem(musicPreferenceKey, 'false');
           bgMusic.volume = 0.65;
           bgMusic.play().then(() => {
             updateMusicButtonUi(true);
@@ -889,6 +1071,47 @@
 
     // Try starting on load if browser autoplay policy permits
     startBgMusic();
+
+    const welcomeOverlay = document.getElementById('welcomeOverlay');
+    const welcomeGetIn = document.getElementById('welcomeGetIn');
+    const welcomeSoundBtn = document.getElementById('welcomeSoundBtn');
+    const centerContent = document.querySelector('.center-content');
+    if (welcomeSoundBtn) {
+      welcomeSoundBtn.addEventListener('click', () => {
+        isMusicManuallyMuted = false;
+        sessionStorage.setItem(musicPreferenceKey, 'false');
+        if (bgMusic) {
+          bgMusic.volume = 0.65;
+          bgMusic.loop = true;
+          bgMusic.play().then(() => {
+            updateMusicButtonUi(true);
+            sessionStorage.setItem('bgMusicPlaying', 'true');
+            welcomeSoundBtn.classList.add('is-on');
+            welcomeSoundBtn.setAttribute('aria-pressed', 'true');
+            welcomeSoundBtn.setAttribute('aria-label', 'Sound is on');
+          }).catch(() => {});
+        }
+      });
+    }
+    if (welcomeGetIn && welcomeOverlay) {
+      welcomeGetIn.focus();
+      welcomeGetIn.addEventListener('click', () => {
+        // The button click is a user gesture, so it also unlocks audio in browsers
+        // that block autoplay until the visitor interacts with the page.
+        if (!isMusicManuallyMuted && bgMusic && bgMusic.paused) startBgMusic();
+        welcomeOverlay.classList.add('is-closing');
+        window.setTimeout(() => {
+          welcomeOverlay.hidden = true;
+          welcomeOverlay.setAttribute('aria-hidden', 'true');
+          if (musicToggle) {
+            musicToggle.removeAttribute('aria-hidden');
+            musicToggle.removeAttribute('tabindex');
+          }
+          if (centerContent) centerContent.setAttribute('aria-hidden', 'false');
+          if (enterBtn) enterBtn.focus();
+        }, 450);
+      }, { once: true });
+    }
   </script>
 </body>
 </html>

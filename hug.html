@@ -619,6 +619,7 @@
   </style>
 </head>
 <body>
+  <audio id="finalMusic" src="fb.mp3" loop preload="auto"></audio>
   <!-- Layer for Ambient and Click-Spawned Heart Bubbles -->
   <div class="bubble-layer" id="bubbleLayer"></div>
 
@@ -688,6 +689,40 @@
   </div>
 
   <script>
+    const finalMusicHandoffKey = 'muskanFinalMusicHandoff';
+    const musicPreferenceKey = 'muskanMusicManuallyMuted';
+    const finalMusic = document.getElementById('finalMusic');
+    let isMusicManuallyMuted = sessionStorage.getItem(musicPreferenceKey) === 'true';
+    let finalMusicHandoff = null;
+    try {
+      finalMusicHandoff = JSON.parse(sessionStorage.getItem(finalMusicHandoffKey) || 'null');
+    } catch (_) {}
+
+    function startFinalMusicFromHandoff() {
+      if (isMusicManuallyMuted) return;
+      if (!finalMusicHandoff || finalMusicHandoff.track !== 'fb.mp3') return;
+      const resumeAt = Number(finalMusicHandoff.currentTime);
+      if (Number.isFinite(resumeAt) && resumeAt > 0) {
+        try { finalMusic.currentTime = resumeAt; } catch (_) {}
+      }
+      finalMusic.play().then(() => {
+        sessionStorage.removeItem(finalMusicHandoffKey);
+      }).catch(() => {});
+    }
+
+    if (finalMusicHandoff && finalMusicHandoff.track === 'fb.mp3') {
+      if (!isMusicManuallyMuted) {
+        if (finalMusic.readyState >= 1) startFinalMusicFromHandoff();
+        else finalMusic.addEventListener('loadedmetadata', startFinalMusicFromHandoff, { once: true });
+      }
+    } else {
+      finalMusicHandoff = { track: 'fb.mp3', shouldPlay: true, currentTime: 0 };
+      if (!isMusicManuallyMuted) {
+        if (finalMusic.readyState >= 1) startFinalMusicFromHandoff();
+        else finalMusic.addEventListener('loadedmetadata', startFinalMusicFromHandoff, { once: true });
+      }
+    }
+
     const layer = document.getElementById('bubbleLayer');
 
     // Translucent glassmorphism bubble SVG markup with highlight reflection
