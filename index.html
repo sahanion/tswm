@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
   <title>A Little Spring Garden For Muskan 🌷</title>
-  
+
   <!-- Romantic Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,16 +12,12 @@
 
   <style>
     :root {
-      --bg-ivory: #FAF4EB;
-      --bg-cream: #FFFDF9;
-      --text-main: #5C3D37;
-      --text-sub: #845F57;
-      --accent-flourish: #B2827A;
-      --btn-bg: rgba(242, 210, 210, 0.85);
-      --btn-hover-bg: rgba(247, 222, 222, 0.96);
-      --btn-border: rgba(212, 168, 168, 0.75);
-      --btn-text: #5A3933;
-      --footer-color: #9E7B74;
+      --bg-deep: #2e1a17;
+      --card-radius: clamp(12px, 2.2vw, 22px);
+      --btn-glow: rgba(235, 160, 172, 0.45);
+      --toggle-bg: rgba(255, 252, 247, 0.88);
+      --toggle-border: rgba(212, 168, 168, 0.75);
+      --toggle-color: #5C3D37;
     }
 
     * {
@@ -35,703 +31,265 @@
       width: 100%;
       height: 100%;
       min-height: 100svh;
-      background-color: var(--bg-ivory);
+      background-color: var(--bg-deep);
       overflow: hidden;
       font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
       user-select: none;
+      -webkit-user-select: none;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Fullscreen Stage */
-    .garden-viewport {
+    /* ═══════════════════════════════════════════════════════════
+       STAGE ARCHITECTURE (100% RESPONSIVE: 16:9, 9:16, TABLETS)
+       ═══════════════════════════════════════════════════════════ */
+    .viewport-stage {
       position: relative;
-      width: 100%;
-      height: 100%;
-      min-height: 100svh;
+      width: 100vw;
+      height: 100vh;
+      height: 100svh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      background: radial-gradient(circle at 48% 42%, #FFFDF9 0%, #FAF3EA 55%, #F4E7DC 100%);
     }
 
-    .welcome-overlay {
-      position: fixed;
+    /* ── 1. Blurred Backdrop (Second Image) ── */
+    .backdrop-container {
+      position: absolute;
+      inset: -35px; /* Over-bleeds past edges so blur never leaves border halos */
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .backdrop-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: blur(20px) brightness(0.9) saturate(1.18);
+      transform: scale(1.08); /* Scales slightly to avoid edge-fade clipping */
+      transform-origin: center;
+      transition: transform 0.6s ease, opacity 0.6s ease;
+    }
+
+    /* Dreamy Ambient Vignette and Warm Tint */
+    .backdrop-overlay {
+      position: absolute;
       inset: 0;
-      z-index: 20;
-      display: grid;
-      place-items: center;
-      padding: 22px;
-      background: rgba(72, 44, 39, .3);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      opacity: 1;
-      transition: opacity .45s ease;
-    }
-
-    .welcome-overlay.is-closing { opacity: 0; pointer-events: none; }
-    .welcome-overlay[hidden] { display: none; }
-
-    .welcome-note {
-      position: relative;
-      width: min(100%, 440px);
-      padding: clamp(30px, 7vw, 48px) clamp(24px, 7vw, 48px) 34px;
-      overflow: hidden;
-      text-align: center;
-      color: #684844;
+      z-index: 2;
+      pointer-events: none;
       background:
-        radial-gradient(ellipse at 12% 8%, rgba(255,255,255,.75), transparent 40%),
-        linear-gradient(145deg, rgba(255,250,239,.98), rgba(250,228,218,.98));
-      border: 1px solid rgba(169, 117, 104, .55);
-      border-radius: 9px 18px 10px 16px;
-      box-shadow: 0 20px 60px rgba(68, 39, 34, .3), inset 0 0 0 5px rgba(255,255,255,.32);
-      animation: welcomeArrive .65s cubic-bezier(.2,.8,.25,1) both;
+        radial-gradient(ellipse at 50% 50%, rgba(255, 245, 238, 0.12) 0%, rgba(55, 28, 24, 0.42) 75%, rgba(35, 16, 14, 0.65) 100%),
+        linear-gradient(180deg, rgba(35, 18, 16, 0.3) 0%, transparent 40%, rgba(35, 18, 16, 0.4) 100%);
     }
 
-    .welcome-note::before,
-    .welcome-note::after {
-      content: '';
-      position: absolute;
-      inset: 12px;
-      border: 1px solid rgba(177, 128, 111, .34);
-      border-radius: 5px 13px 6px 11px;
-      pointer-events: none;
-    }
-
-    .welcome-note::after {
-      inset: 17px;
-      border-style: dashed;
-      border-color: rgba(190, 144, 122, .22);
-    }
-
-    .welcome-flower {
-      position: absolute;
-      z-index: 1;
-      color: #c17e83;
-      text-shadow: 0 2px 5px rgba(151, 96, 87, .18);
-      pointer-events: none;
-    }
-
-    .welcome-flower.top-left { top: 17px; left: 25px; font-size: 27px; transform: rotate(-18deg); }
-    .welcome-flower.top-right { top: 23px; right: 28px; color: #9eaa85; font-size: 21px; transform: rotate(14deg); }
-    .welcome-flower.bottom-left { bottom: 20px; left: 31px; color: #d99b91; font-size: 19px; }
-    .welcome-flower.bottom-right { right: 28px; bottom: 19px; color: #9eaa85; font-size: 25px; transform: rotate(-12deg); }
-
-    .welcome-title {
-      position: relative;
-      z-index: 2;
-      color: #744c48;
-      font: 600 clamp(2rem, 8vw, 2.8rem)/1.08 'Playfair Display', Georgia, serif;
-    }
-
-    .welcome-copy {
-      position: relative;
-      z-index: 2;
-      margin: 19px auto 0;
-      max-width: 330px;
-      font: 500 clamp(18px, 4.5vw, 21px)/1.45 'Cormorant Garamond', Georgia, serif;
-    }
-
-    .welcome-sound-btn {
-      position: relative;
-      z-index: 2;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      min-height: 58px;
-      margin-top: 24px;
-      padding: 10px 25px;
-      border: 1px solid rgba(255,255,255,.9);
-      border-radius: 999px;
-      color: #fffaf4;
-      background: linear-gradient(135deg, #bd747d, #a95f6e);
-      box-shadow: 0 7px 20px rgba(146, 77, 88, .3), inset 0 1px 0 rgba(255,255,255,.55);
-      font: 700 clamp(21px, 5vw, 25px) 'Playfair Display', Georgia, serif;
-      letter-spacing: .04em;
-      cursor: pointer;
-      transition: transform .25s ease, box-shadow .25s ease;
-    }
-
-    .welcome-sound-btn:hover,
-    .welcome-sound-btn:focus-visible {
-      transform: translateY(-2px);
-      box-shadow: 0 9px 24px rgba(146, 77, 88, .38), inset 0 1px 0 rgba(255,255,255,.6);
-    }
-
-    .welcome-sound-btn:focus-visible { outline: 3px solid #87575a; outline-offset: 3px; }
-
-    .sound-speaker { font-size: 27px; line-height: 1; }
-
-    .sound-waves {
-      display: inline-block;
-      font: 700 24px/1 Arial, sans-serif;
-      animation: soundWave 1.8s ease-in-out infinite;
-      transform-origin: left center;
-    }
-
-    .welcome-sound-btn.is-on .sound-waves { animation-duration: 1.25s; }
-
-    @keyframes soundWave {
-      0%, 100% { opacity: .65; transform: scale(.94); }
-      50% { opacity: 1; transform: scale(1.08); }
-    }
-
-    .welcome-get-in {
-      position: relative;
-      z-index: 2;
-      min-width: 155px;
-      min-height: 48px;
-      margin-top: 22px;
-      padding: 10px 28px;
-      border: 1px solid rgba(255,255,255,.85);
-      border-radius: 999px;
-      color: #fffaf4;
-      background: linear-gradient(135deg, #cf8790, #b96f7b);
-      box-shadow: 0 5px 15px rgba(154, 85, 94, .25), inset 0 1px 0 rgba(255,255,255,.55);
-      font: 600 18px 'Playfair Display', Georgia, serif;
-      letter-spacing: .04em;
-      cursor: pointer;
-      transition: transform .25s ease, box-shadow .25s ease;
-    }
-
-    .welcome-get-in:hover,
-    .welcome-get-in:focus-visible {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 19px rgba(154, 85, 94, .3), inset 0 1px 0 rgba(255,255,255,.6);
-    }
-
-    .welcome-get-in:focus-visible { outline: 3px solid #87575a; outline-offset: 3px; }
-
-    @keyframes welcomeArrive {
-      from { opacity: 0; transform: translateY(12px) scale(.97); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    @media (max-width: 420px) {
-      .welcome-note { padding-top: 42px; padding-bottom: 29px; }
-      .welcome-flower.top-left { top: 12px; left: 18px; }
-      .welcome-flower.top-right { top: 17px; right: 20px; }
-    }
-
-    /* Illustrated Garden Background */
-    .garden-scenery {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('garden_bg.jpg');
-      background-size: cover;
-      background-position: center bottom;
-      background-repeat: no-repeat;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0;
-      animation: sceneFadeIn 1.6s cubic-bezier(0.2, 0.8, 0.25, 1) 0.1s forwards;
-    }
-
-    /* Mobile Responsive Corner Illustrations */
-    .mobile-left-overlay,
-    .mobile-right-overlay {
-      display: none;
-      position: absolute;
-      bottom: 0;
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    .mobile-left-overlay {
-      left: 0;
-      width: clamp(210px, 48vw, 360px);
-    }
-
-    .mobile-right-overlay {
-      right: 0;
-      width: clamp(210px, 48vw, 360px);
-    }
-
-    .mobile-left-overlay img,
-    .mobile-right-overlay img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-
-
-    /* Dreamy Sunlight Beams */
-    .sunlight-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 3;
-      background: 
-        radial-gradient(ellipse at 15% 12%, rgba(255, 255, 250, 0.45) 0%, transparent 55%),
-        linear-gradient(132deg, rgba(255, 250, 238, 0.38) 0%, rgba(255, 245, 232, 0.14) 38%, transparent 68%);
-      mix-blend-mode: soft-light;
-      animation: sunlightShimmer 10s ease-in-out infinite alternate;
-    }
-
-    /* Particle / Petal Layer */
+    /* ── 2. Drifting Petals Layer ── */
     .petal-layer {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
+      z-index: 3;
       pointer-events: none;
-      z-index: 4;
       overflow: hidden;
     }
 
-    /* Central Content Card */
-    .center-content {
-      position: relative;
-      z-index: 5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: clamp(14px, 3vw, 32px);
-      max-width: 660px;
-      width: 92%;
-      margin: 0 auto;
-    }
-
-    /* Main Heading */
-    .greeting-header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: clamp(10px, 2.2vh, 20px);
-      width: 100%;
-      opacity: 0;
-      transform: translateY(18px);
-      animation: gentleRise 1.1s cubic-bezier(0.2, 0.8, 0.3, 1) 0.35s forwards;
-    }
-
-    .main-title {
-      font-size: clamp(2.0rem, 7.2vw, 4.2rem);
-      font-weight: 600;
-      color: var(--text-main);
-      line-height: 1.15;
-      letter-spacing: 0.015em;
-      text-shadow: 
-        0 1px 2px rgba(255, 250, 244, 0.95),
-        0 3px 12px rgba(92, 61, 55, 0.06);
-      display: inline-flex;
-      align-items: baseline;
-      justify-content: center;
-      white-space: nowrap;
-    }
-
-    .title-heart {
-      font-size: 0.65em;
-      color: #A36B62;
-      margin-left: 6px;
-      font-weight: 400;
-      display: inline-block;
-      transform: translateY(-2px);
-    }
-
-    /* Ribbon Flourish Underline */
-    .ribbon-flourish-wrap {
-      width: clamp(180px, 50vw, 340px);
-      height: clamp(26px, 4.5vh, 36px);
-      margin-top: 2px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transform: scale(0.92);
-      animation: flourishAppear 1.2s ease-out 0.65s forwards;
-    }
-
-    .ribbon-flourish {
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-
-    .flourish-line {
-      stroke: var(--accent-flourish);
-      stroke-width: 1.7;
-      stroke-linecap: round;
-      fill: none;
-    }
-
-    .bow-loop {
-      stroke: var(--accent-flourish);
-      stroke-width: 1.7;
-      fill: #F5DFDC;
-      fill-opacity: 0.55;
-    }
-
-    .bow-knot {
-      fill: var(--accent-flourish);
-    }
-
-    .bow-tail {
-      stroke: var(--accent-flourish);
-      stroke-width: 1.6;
-      stroke-linecap: round;
-      fill: none;
-    }
-
-    /* Subtitle */
-    .subtitle {
-      font-size: clamp(0.96rem, 2.5vw, 1.5rem);
-      font-weight: 500;
-      color: var(--text-sub);
-      line-height: 1.45;
-      letter-spacing: 0.065em;
-      margin-bottom: clamp(20px, 3.8vh, 38px);
-      text-shadow: 0 1px 2px rgba(255, 250, 245, 0.9);
-      max-width: 92%;
-      opacity: 0;
-      transform: translateY(14px);
-      animation: gentleRise 1.1s cubic-bezier(0.2, 0.8, 0.3, 1) 0.95s forwards;
-    }
-
-    .sub-heart {
-      color: #A87168;
-      font-size: 0.9em;
-      margin-left: 2px;
-      display: inline-block;
-    }
-
-    /* Main Action Button */
-    .button-wrapper {
-      position: relative;
-      margin-bottom: clamp(26px, 5vh, 52px);
-      opacity: 0;
-      transform: translateY(16px);
-      animation: gentleRise 1.1s cubic-bezier(0.2, 0.8, 0.3, 1) 1.25s forwards;
-    }
-
-    .garden-btn {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(6px, 1.5vw, 12px);
-      padding: clamp(11px, 2vh, 16px) clamp(18px, 4vw, 38px);
-      background-color: var(--btn-bg);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1.5px solid var(--btn-border);
-      border-radius: 9999px;
-      color: var(--btn-text);
-      font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
-      font-size: clamp(0.95rem, 2.3vw, 1.35rem);
-      font-weight: 600;
-      letter-spacing: 0.025em;
-      text-decoration: none;
-      cursor: pointer;
-      box-shadow: 
-        0 6px 20px rgba(190, 135, 135, 0.18),
-        0 1px 3px rgba(120, 80, 80, 0.08),
-        inset 0 1px 2px rgba(255, 255, 255, 0.85);
-      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-      outline: none;
-      white-space: nowrap;
-      max-width: 94vw;
-    }
-
-    .garden-btn:hover {
-      transform: translateY(-3px) scale(1.018);
-      background-color: var(--btn-hover-bg);
-      border-color: rgba(200, 145, 145, 0.92);
-      box-shadow: 
-        0 12px 28px rgba(190, 125, 125, 0.28),
-        0 2px 6px rgba(120, 80, 80, 0.1),
-        inset 0 1px 3px rgba(255, 255, 255, 0.95);
-      color: #4A2822;
-    }
-
-    .garden-btn:active {
-      transform: translateY(-1px) scale(0.99);
-      box-shadow: 
-        0 4px 14px rgba(190, 125, 125, 0.2),
-        inset 0 1px 2px rgba(255, 255, 255, 0.7);
-    }
-
-    .garden-btn:focus-visible {
-      box-shadow: 
-        0 0 0 3px rgba(230, 180, 180, 0.6),
-        0 8px 24px rgba(190, 125, 125, 0.25);
-    }
-
-    .btn-flower {
-      font-size: 1.15em;
-      color: #8C544B;
-      transform: translateY(-1px);
-      transition: transform 0.35s ease;
-    }
-
-    .btn-arrow {
-      font-size: 1.2em;
-      color: #6C423B;
-      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.3, 1);
-    }
-
-    .garden-btn:hover .btn-flower {
-      transform: rotate(24deg) scale(1.1);
-    }
-
-    .garden-btn:hover .btn-arrow {
-      transform: translateX(4px);
-    }
-
-    /* Subtle Sparkle on Button */
-    .btn-sparkle {
-      position: absolute;
-      top: -8px;
-      right: 18px;
-      font-size: 15px;
-      color: #D9887B;
-      opacity: 0.8;
-      pointer-events: none;
-      animation: sparkleGlint 3s ease-in-out infinite;
-    }
-
-    /* Footer */
-    .footer {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      opacity: 0;
-      transform: translateY(12px);
-      animation: gentleRise 1.1s cubic-bezier(0.2, 0.8, 0.3, 1) 1.55s forwards;
-    }
-
-    .footer-text {
-      font-size: clamp(0.92rem, 2.1vw, 1.1rem);
-      font-weight: 500;
-      color: var(--footer-color);
-      letter-spacing: 0.12em;
-      text-transform: lowercase;
-    }
-
-    .footer-divider {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: clamp(140px, 32vw, 220px);
-    }
-
-    .divider-line {
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(to right, transparent, rgba(178, 130, 122, 0.45), transparent);
-    }
-
-    .footer-heart {
-      font-size: 0.95em;
-      color: #B5847C;
-      transform: translateY(-1px);
-    }
-
-    /* Atmospheric Twinkling Stars */
-    .twinkle-star {
-      position: absolute;
-      pointer-events: none;
-      color: #D49C82;
-      font-family: sans-serif;
-      line-height: 1;
-      filter: drop-shadow(0 0 2px rgba(255, 235, 215, 0.8));
-      z-index: 4;
-      animation: starTwinkle 3.8s ease-in-out infinite;
-    }
-
-    /* Drifting Soft Petal */
     .drifting-petal {
       position: absolute;
       pointer-events: none;
       will-change: transform, opacity;
-      filter: drop-shadow(0 2px 5px rgba(220, 140, 140, 0.2));
-    }
-
-    /* Page Exit Transition */
-    body.page-leaving {
-      transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), filter 0.65s ease;
-      opacity: 0;
-      filter: blur(4px);
-    }
-
-    /* Keyframes */
-    @keyframes sceneFadeIn {
-      from { opacity: 0; transform: scale(1.015); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes gentleRise {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes flourishAppear {
-      from { opacity: 0; transform: scale(0.88); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes sunlightShimmer {
-      0% { opacity: 0.65; transform: scale(1); }
-      100% { opacity: 0.9; transform: scale(1.02); }
-    }
-
-    @keyframes starTwinkle {
-      0%, 100% { opacity: 0.25; transform: scale(0.85); }
-      50% { opacity: 0.9; transform: scale(1.18); }
-    }
-
-    @keyframes sparkleGlint {
-      0%, 100% { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
-      50% { opacity: 1; transform: scale(1.25) rotate(45deg); }
+      filter: drop-shadow(0 2px 4px rgba(95, 45, 38, 0.18));
     }
 
     @keyframes petalFloat {
       0% {
-        transform: translateY(-40px) translateX(0) rotate(0deg) scale(0.8);
         opacity: 0;
+        transform: translate3d(0, 0, 0) rotate(0deg) scale(0.85);
       }
-      15% {
-        opacity: 0.85;
-      }
-      50% {
-        transform: translateY(50vh) translateX(var(--drift, 35px)) rotate(var(--rot, 80deg)) scale(1);
+      10% {
+        opacity: 0.95;
       }
       85% {
-        opacity: 0.8;
+        opacity: 0.85;
       }
       100% {
-        transform: translateY(105vh) translateX(calc(var(--drift, 35px) * -1.2)) rotate(calc(var(--rot, 80deg) * 2.2)) scale(0.9);
         opacity: 0;
+        transform: translate3d(var(--drift, 50px), 108vh, 0) rotate(var(--rot, 180deg)) scale(1.05);
       }
     }
 
-    /* Switch to clean corner framing on mobile & portrait screens */
-    @media (max-width: 768px), (max-aspect-ratio: 1/1) {
-      .garden-scenery {
-        display: none; /* Hide wide desktop background on mobile */
-      }
-      .mobile-left-overlay,
-      .mobile-right-overlay {
-        display: block;
+    /* ── 3. The 4:5 Size Card Container ── */
+    .card-stage {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: env(safe-area-inset-top, 16px) env(safe-area-inset-right, 16px) env(safe-area-inset-bottom, 16px) env(safe-area-inset-left, 16px);
+      width: 100%;
+      height: 100%;
+    }
+
+    .card-4x5 {
+      position: relative;
+      /* Invariant formula: guarantees 4:5 ratio that never overflows 90vw nor 86svh */
+      width: min(90vw, calc(86svh * 4 / 5), 560px);
+      aspect-ratio: 4 / 5;
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow:
+        0 26px 65px -14px rgba(30, 12, 10, 0.58),
+        0 14px 32px -8px rgba(30, 12, 10, 0.42),
+        0 0 0 1px rgba(255, 235, 222, 0.38),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+      transform: translateZ(0);
+      transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.25, 1), box-shadow 0.45s ease;
+      animation: cardEntrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .card-4x5:hover {
+      box-shadow:
+        0 30px 75px -12px rgba(30, 12, 10, 0.65),
+        0 18px 40px -8px rgba(30, 12, 10, 0.48),
+        0 0 0 1px rgba(255, 240, 230, 0.5),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    }
+
+    @keyframes cardEntrance {
+      0% {
         opacity: 0;
-        animation: sceneFadeIn 1.4s ease-out 0.2s forwards;
-        max-height: 35vh;
-        -webkit-mask-image: linear-gradient(to top, black 50%, transparent 100%);
-        mask-image: linear-gradient(to top, black 50%, transparent 100%);
+        transform: translateY(22px) scale(0.96);
       }
-      .mobile-left-overlay {
-        left: 0;
-        bottom: 0;
-        width: clamp(160px, 48vw, 240px);
-      }
-      .mobile-right-overlay {
-        right: 0;
-        bottom: 0;
-        width: clamp(160px, 48vw, 240px);
-      }
-      .center-content {
-        justify-content: flex-start;
-        padding-top: max(env(safe-area-inset-top, 20px), 5vh);
-        padding-bottom: 33vh;
-        width: 100%;
-        max-width: 360px;
-        padding-left: 10px;
-        padding-right: 10px;
-      }
-      .greeting-header {
-        margin-bottom: 8px;
-      }
-      .main-title {
-        font-size: clamp(1.85rem, 8vw, 2.6rem);
-      }
-      .title-heart {
-        font-size: 0.6em;
-        margin-left: 4px;
-      }
-      .ribbon-flourish-wrap {
-        width: clamp(175px, 58vw, 240px);
-        height: 26px;
-      }
-      .subtitle {
-        font-size: clamp(0.92rem, 3.6vw, 1.15rem);
-        letter-spacing: 0.04em;
-        margin-bottom: 18px;
-        max-width: 290px;
-      }
-      .button-wrapper {
-        margin-bottom: 20px;
-        width: 100%;
-      }
-      .garden-btn {
-        padding: 11px 18px;
-        font-size: clamp(0.82rem, 3.2vw, 1.05rem);
-        gap: 6px;
-        max-width: 100%;
-        white-space: nowrap;
-      }
-      .btn-flower {
-        font-size: 1.05em;
-      }
-      .btn-arrow {
-        font-size: 1.1em;
-      }
-      .footer-text {
-        font-size: 0.88rem;
-      }
-      .music-toggle-btn {
-        width: 36px;
-        height: 36px;
-        top: max(14px, env(safe-area-inset-top, 14px));
-        right: max(14px, env(safe-area-inset-right, 14px));
-      }
-      .music-toggle-btn svg {
-        width: 16px;
-        height: 16px;
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
       }
     }
 
-    /* Discreet Background Music Toggle Button */
+    .card-art {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      display: block;
+      pointer-events: none;
+      -webkit-user-drag: none;
+    }
+
+    /* ── 4. Interactive Plaque Button ── */
+    .card-action-btn {
+      position: absolute;
+      /* Aligned seamlessly to the illustrated plaque in opening_card.jpg */
+      top: 47.8%;
+      left: 22.8%;
+      width: 54.4%;
+      height: 7.4%;
+      border-radius: 999px;
+      cursor: pointer;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 225, 230, 0.001);
+      border: 1.5px solid transparent;
+      text-decoration: none;
+      outline: none;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.25, 1);
+    }
+
+    /* Hover feedback: soft warm glow around the pill */
+    .card-action-btn:hover {
+      background: rgba(255, 230, 235, 0.16);
+      border-color: rgba(215, 145, 158, 0.55);
+      box-shadow:
+        0 0 24px rgba(230, 150, 165, 0.45),
+        inset 0 0 16px rgba(255, 255, 255, 0.35);
+      transform: scale(1.025);
+    }
+
+    .card-action-btn:active {
+      transform: scale(0.975);
+      box-shadow:
+        0 0 14px rgba(230, 150, 165, 0.3),
+        inset 0 0 10px rgba(255, 255, 255, 0.25);
+    }
+
+    .card-action-btn:focus-visible {
+      border-color: rgba(185, 105, 120, 0.8);
+      box-shadow: 0 0 0 3px rgba(235, 180, 190, 0.65);
+    }
+
+    /* Periodic gentle travelling sheen across the plaque */
+    .btn-shine {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .btn-shine::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 55%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.36), transparent);
+      transform: skewX(-22deg);
+      animation: plaqueSheen 4.2s ease-in-out infinite;
+    }
+
+    @keyframes plaqueSheen {
+      0%, 70% { left: -100%; opacity: 0; }
+      75% { opacity: 1; }
+      100% { left: 200%; opacity: 0; }
+    }
+
+    /* Delicate sparkle badge indicator */
+    .btn-sparkle-indicator {
+      position: absolute;
+      top: -9px;
+      right: 7px;
+      font-size: 14px;
+      color: #c4828b;
+      text-shadow: 0 0 6px rgba(255, 240, 245, 0.9);
+      animation: sparkleTwinkle 2.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes sparkleTwinkle {
+      0%, 100% { opacity: 0.45; transform: scale(0.88) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1.22) rotate(16deg); }
+    }
+
+    /* ── 5. Floating Music Toggle Button ── */
     .music-toggle-btn {
       position: absolute;
-      top: max(16px, env(safe-area-inset-top, 16px));
-      right: max(16px, env(safe-area-inset-right, 16px));
+      top: max(18px, env(safe-area-inset-top, 18px));
+      right: max(18px, env(safe-area-inset-right, 18px));
       z-index: 50;
       width: clamp(38px, 4.2vw, 44px);
       height: clamp(38px, 4.2vw, 44px);
       border-radius: 50%;
-      background: rgba(255, 252, 247, 0.88);
-      border: 1px solid rgba(212, 168, 168, 0.75);
-      color: #5C3D37;
+      background: var(--toggle-bg);
+      border: 1px solid var(--toggle-border);
+      color: var(--toggle-color);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      box-shadow: 0 4px 14px rgba(90, 50, 45, 0.12);
+      box-shadow: 0 4px 16px rgba(50, 20, 15, 0.25);
       transition: all 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
-      opacity: 0.85;
+      opacity: 0.9;
     }
 
     .music-toggle-btn:hover {
       opacity: 1;
       transform: scale(1.08);
       background: rgba(255, 255, 255, 0.96);
-      box-shadow: 0 6px 20px rgba(90, 50, 45, 0.18);
+      box-shadow: 0 6px 22px rgba(50, 20, 15, 0.32);
     }
 
     .music-toggle-btn:active {
@@ -758,42 +316,69 @@
       50% { transform: scale(1.12) rotate(4deg); }
     }
 
-    /* Accessibility */
+    /* ── 6. Page Leaving Transition ── */
+    body.page-leaving .card-4x5 {
+      transform: scale(0.96) translateY(-10px);
+      opacity: 0;
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.55s ease;
+    }
+
+    body.page-leaving .backdrop-image {
+      transform: scale(1.16);
+      opacity: 0.5;
+      transition: transform 0.6s ease, opacity 0.6s ease;
+    }
+
+    /* ── 7. Screen Reader Only Utility ── */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ── 8. Accessibility: Reduced Motion ── */
     @media (prefers-reduced-motion: reduce) {
       *, ::before, ::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
-        opacity: 1 !important;
-        transform: none !important;
       }
-      .petal-layer, .btn-sparkle {
+      .petal-layer, .btn-shine {
         display: none !important;
+      }
+    }
+
+    /* ── 9. Compact Mobile Screen Adjustments (9:16) ── */
+    @media (max-width: 480px) {
+      .music-toggle-btn {
+        width: 36px;
+        height: 36px;
+        top: max(14px, env(safe-area-inset-top, 14px));
+        right: max(14px, env(safe-area-inset-right, 14px));
+      }
+      .music-toggle-btn svg {
+        width: 16px;
+        height: 16px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="garden-viewport">
-    <section class="welcome-overlay" id="welcomeOverlay" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle" aria-describedby="welcomeCopy">
-      <div class="welcome-note">
-        <span class="welcome-flower top-left" aria-hidden="true">&#10047;</span>
-        <span class="welcome-flower top-right" aria-hidden="true">&#10048;</span>
-        <span class="welcome-flower bottom-left" aria-hidden="true">&#10046;</span>
-        <span class="welcome-flower bottom-right" aria-hidden="true">&#10047;</span>
-        <h1 class="welcome-title" id="welcomeTitle">Hi, Muskan.</h1>
-        <p class="welcome-copy" id="welcomeCopy">I hope it brings you a smile and reminds you how special you are to me.</p>
-        <button class="welcome-sound-btn" id="welcomeSoundBtn" type="button" aria-describedby="welcomeCopy">
-          <span class="sound-speaker" aria-hidden="true">&#128266;</span>
-          <span>Sound On</span>
-          <span class="sound-waves" aria-hidden="true">)))</span>
-        </button>
-        <button class="welcome-get-in" id="welcomeGetIn" type="button" autofocus>Get in <span aria-hidden="true">&#10047;</span></button>
-      </div>
-    </section>
+  <div class="viewport-stage">
+    <!-- Ambient Background Audio: Loops from the start until candles are blown -->
+    <audio id="bgMusic" loop preload="auto">
+      <source src="final-rfiy.mp3" type="audio/mpeg">
+      <source src="final-rfin.mp3" type="audio/mpeg">
+    </audio>
 
-    <!-- Discreet Music Toggle Button -->
-    <button class="music-toggle-btn" id="musicToggle" aria-label="Toggle Background Music" title="Background Music (M)" aria-hidden="true" tabindex="-1">
+    <!-- Floating Discreet Music Toggle Button -->
+    <button class="music-toggle-btn" id="musicToggle" aria-label="Toggle Background Music" title="Background Music (M)">
       <svg class="music-note" id="musicIconOn" viewBox="0 0 24 24">
         <path d="M9 18V5l12-2v13" />
         <circle cx="6" cy="18" r="3" />
@@ -807,103 +392,66 @@
       </svg>
     </button>
 
-    <!-- Ambient Background Audio: Loops from the start until candles are blown -->
-    <audio id="bgMusic" loop preload="auto">
-      <source src="final-rfiy.mp3" type="audio/mpeg">
-      <source src="final-rfin.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- Desktop & Landscape Scenery -->
-    <div class="garden-scenery" aria-hidden="true"></div>
-
-    <!-- Mobile Screen Responsive Corner Overlays -->
-    <div class="mobile-left-overlay" aria-hidden="true">
-      <img src="garden_left.png" alt="Sunny window with cute panda and pink tulips" />
-    </div>
-    <div class="mobile-right-overlay" aria-hidden="true">
-      <img src="garden_right.png" alt="Stack of books with blossoming pink tulips" />
+    <!-- Blurred Floral Backdrop (Second Image) -->
+    <div class="backdrop-container" aria-hidden="true">
+      <img src="opening_backdrop.jpg" alt="" class="backdrop-image" />
     </div>
 
-    <!-- Dreamy Sunlight Shimmer -->
-    <div class="sunlight-overlay" aria-hidden="true"></div>
+    <!-- Vignette & Warmth Overlay -->
+    <div class="backdrop-overlay" aria-hidden="true"></div>
 
-    <!-- Floating Petals & Twinkle Stars Layer -->
-    <div class="petal-layer" id="petalLayer" aria-hidden="true">
-      <!-- Hand-drawn Twinkle Stars placed tastefully like the concept art -->
-      <span class="twinkle-star" style="top: 18%; left: 33%; font-size: 14px; animation-delay: 0.2s;">✦</span>
-      <span class="twinkle-star" style="top: 26%; left: 29%; font-size: 10px; animation-delay: 1.5s;">✧</span>
-      <span class="twinkle-star" style="top: 28%; left: 38%; font-size: 12px; animation-delay: 2.8s;">✦</span>
-      <span class="twinkle-star" style="top: 20%; right: 33%; font-size: 13px; animation-delay: 0.9s;">✦</span>
-      <span class="twinkle-star" style="top: 25%; right: 29%; font-size: 16px; animation-delay: 2.1s;">✧</span>
-      <span class="twinkle-star" style="top: 72%; right: 30%; font-size: 12px; animation-delay: 1.8s;">✦</span>
-    </div>
+    <!-- Drifting Petals Layer -->
+    <div class="petal-layer" id="petalLayer" aria-hidden="true"></div>
 
-    <!-- Central Garden Invitation -->
-    <main class="center-content" aria-hidden="true">
-      <!-- Main Heading -->
-      <header class="greeting-header">
-        <h1 class="main-title">
-          Hey, Muskan.<span class="title-heart" aria-hidden="true">♡</span>
-        </h1>
-        <!-- Delicate Ribbon Bow Underline -->
-        <div class="ribbon-flourish-wrap" aria-hidden="true">
-          <svg class="ribbon-flourish" viewBox="0 0 360 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M 40,22 C 90,14 135,16 166,22" class="flourish-line" />
-            <path d="M 194,22 C 225,16 270,14 320,22" class="flourish-line" />
-            <path d="M 178,21 C 168,11 156,15 160,22 C 164,27 173,24 178,21 Z" class="bow-loop" />
-            <path d="M 182,21 C 192,11 204,15 200,22 C 196,27 187,24 182,21 Z" class="bow-loop" />
-            <ellipse cx="180" cy="21" rx="3.5" ry="4" class="bow-knot" />
-            <path d="M 177,24 C 173,29 168,34 164,36" class="bow-tail" />
-            <path d="M 183,24 C 187,29 192,34 196,36" class="bow-tail" />
-          </svg>
-        </div>
-      </header>
+    <!-- Central 4:5 Keepsake Card (First Image) -->
+    <main class="card-stage" id="cardStage">
+      <div class="card-4x5" id="card4x5">
+        <img
+          src="opening_card.jpg"
+          alt="A romantic card for Muskan. Hey, Muskan. There's a little something waiting for you. Just for you, always."
+          class="card-art"
+          draggable="false"
+        />
 
-      <!-- Subtitle -->
-      <p class="subtitle">
-        there's a little something waiting for you <span class="sub-heart">♡</span>
-      </p>
+        <!-- Screen-reader semantics -->
+        <h1 class="sr-only">Hey, Muskan. There's a little something waiting for you</h1>
+        <p class="sr-only">just for you, always</p>
 
-      <!-- Main Action Button -->
-      <div class="button-wrapper">
-        <a href="scrapbook.html" class="garden-btn" id="enterBtn" role="button">
-          <span class="btn-text">There's something I made for you</span>
-          <span class="btn-flower">✿</span>
-          <span class="btn-sparkle" aria-hidden="true">✧</span>
+        <!-- Interactive Plaque Action Button -->
+        <a
+          href="scrapbook.html"
+          class="card-action-btn"
+          id="enterBtn"
+          role="button"
+          aria-label="There's something I made for you"
+        >
+          <span class="btn-shine" aria-hidden="true"></span>
+          <span class="btn-sparkle-indicator" aria-hidden="true">✧</span>
         </a>
       </div>
-
-      <!-- Footer -->
-      <footer class="footer">
-        <p class="footer-text">just for you, always</p>
-        <div class="footer-divider" aria-hidden="true">
-          <span class="divider-line"></span>
-          <span class="footer-heart">♡</span>
-          <span class="divider-line"></span>
-        </div>
-      </footer>
     </main>
   </div>
 
   <script>
-    // 1. Smooth Page Transition when clicking the button
+    // ═══════════════════════════════════════════════════════════
+    // 1. PAGE TRANSITION & AUDIO UNLOCK
+    // ═══════════════════════════════════════════════════════════
     const enterBtn = document.getElementById('enterBtn');
     if (enterBtn) {
       enterBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        // Save current music state and position for seamless transition
-        if (bgMusic && !bgMusic.paused) {
-          sessionStorage.setItem('bgMusicTime', bgMusic.currentTime.toString());
-          sessionStorage.setItem('bgMusicPlaying', 'true');
-        } else if (!isMusicManuallyMuted && bgMusic) {
-          // If audio hadn't started yet due to browser autoplay policy,
-          // this click gesture satisfies user interaction!
-          bgMusic.volume = 0.65;
-          bgMusic.play().catch(() => {});
-          sessionStorage.setItem('bgMusicPlaying', 'true');
-          sessionStorage.setItem('bgMusicTime', '0');
-        }
         const targetUrl = this.getAttribute('href');
+
+        // Unmute and play music smoothly on user interaction
+        if (!isMusicManuallyMuted && bgMusic) {
+          bgMusic.volume = 0.65;
+          bgMusic.loop = true;
+          bgMusic.play().catch(() => {});
+          sessionStorage.setItem(musicPreferenceKey, 'false');
+          sessionStorage.setItem('bgMusicPlaying', 'true');
+          sessionStorage.setItem('bgMusicTime', (bgMusic.currentTime || 0).toString());
+        }
+
         document.body.classList.add('page-leaving');
         setTimeout(() => {
           window.location.href = targetUrl;
@@ -911,7 +459,19 @@
       });
     }
 
-    // 2. Slow, graceful tulip petals drifting downward
+    // Also allow tapping/clicking the card to enter for effortless mobile interaction
+    const card4x5 = document.getElementById('card4x5');
+    if (card4x5 && enterBtn) {
+      card4x5.addEventListener('click', function(e) {
+        if (e.target !== enterBtn && !enterBtn.contains(e.target)) {
+          enterBtn.click();
+        }
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // 2. SLOW, TRANQUIL DRIFTING PETALS
+    // ═══════════════════════════════════════════════════════════
     const petalLayer = document.getElementById('petalLayer');
 
     function createPetalSvg(size, petalColor) {
@@ -919,20 +479,18 @@
       svg.setAttribute('viewBox', '0 0 32 32');
       svg.setAttribute('width', size);
       svg.setAttribute('height', size);
+      const gradId = 'petalGrad-' + Math.random().toString(36).substring(2, 8);
       svg.innerHTML = `
         <defs>
-          <linearGradient id="petalGrad-${Math.random().toString(36).substr(2, 6)}" x1="20%" y1="0%" x2="80%" y2="100%">
+          <linearGradient id="${gradId}" x1="20%" y1="0%" x2="80%" y2="100%">
             <stop offset="0%" stop-color="#FFE3E7" />
             <stop offset="55%" stop-color="${petalColor}" />
             <stop offset="100%" stop-color="#DE8290" />
           </linearGradient>
         </defs>
         <path d="M16 2 C23 6 30 14 26 23 C22 30 11 31 6 24 C2 17 8 8 16 2 Z"
-              fill="url(#petalGrad-default)" />
+              fill="url(#${gradId})" />
       `;
-      const grad = svg.querySelector('linearGradient');
-      const path = svg.querySelector('path');
-      path.setAttribute('fill', `url(#${grad.id})`);
       return svg;
     }
 
@@ -940,11 +498,11 @@
 
     function spawnPetal() {
       if (document.hidden) return;
-      if (petalLayer.querySelectorAll('.drifting-petal').length >= 4) return;
+      if (petalLayer.querySelectorAll('.drifting-petal').length >= 5) return;
 
       const size = Math.floor(Math.random() * 8) + 20; // 20px - 28px
-      const startLeft = Math.random() * 80 + 10; // 10% - 90%
-      const duration = Math.random() * 6 + 11; // 11s - 17s (slow, tranquil drift)
+      const startLeft = Math.random() * 84 + 8; // 8% - 92%
+      const duration = Math.random() * 6 + 11; // 11s - 17s
       const drift = (Math.random() - 0.5) * 80;
       const rot = Math.floor(Math.random() * 120) + 60;
       const color = petalColors[Math.floor(Math.random() * petalColors.length)];
@@ -963,26 +521,20 @@
       setTimeout(() => petal.remove(), duration * 1000);
     }
 
-    // Initial petals with staggered delays
-    setTimeout(spawnPetal, 800);
-    setTimeout(spawnPetal, 3500);
-    setInterval(spawnPetal, 4500);
+    setTimeout(spawnPetal, 600);
+    setTimeout(spawnPetal, 2600);
+    setInterval(spawnPetal, 3800);
 
     // ═══════════════════════════════════════════════════════════
-    // BACKGROUND MUSIC CONTROLLER
-    // "play final-rfiy.mp3 from the start, till the 'blow candle' button hits. on a loop."
+    // 3. BACKGROUND MUSIC CONTROLLER
     // ═══════════════════════════════════════════════════════════
     const bgMusic = document.getElementById('bgMusic');
     const musicToggle = document.getElementById('musicToggle');
     const musicIconOn = document.getElementById('musicIconOn');
     const musicIconOff = document.getElementById('musicIconOff');
 
-    // Fresh start from the garden resets the candle-stopped flag
     sessionStorage.removeItem('bgMusicStopped');
-
     const musicPreferenceKey = 'muskanMusicManuallyMuted';
-    // A new visit to the opening page always starts with music enabled.
-    // The preference is still respected while moving through the scrapbook pages.
     sessionStorage.setItem(musicPreferenceKey, 'false');
     let isMusicManuallyMuted = false;
 
@@ -1016,7 +568,6 @@
             sessionStorage.setItem('bgMusicPlaying', 'true');
           })
           .catch(() => {
-            // Autoplay prevented before first user interaction
             updateMusicButtonUi(false);
           });
       }
@@ -1052,14 +603,13 @@
       }
     });
 
-    // Save currentTime before page navigation
     window.addEventListener('beforeunload', () => {
       if (bgMusic && !bgMusic.paused) {
         sessionStorage.setItem('bgMusicTime', bgMusic.currentTime.toString());
       }
     });
 
-    // One-time gesture listener to start audio as soon as user touches or clicks anywhere
+    // One-time gesture listener to unlock audio as soon as user touches or clicks
     const userGestureEvents = ['click', 'touchstart', 'pointerdown'];
     function unlockAudioOnGesture() {
       if (!isMusicManuallyMuted && bgMusic && bgMusic.paused) {
@@ -1069,49 +619,7 @@
     }
     userGestureEvents.forEach(evt => window.addEventListener(evt, unlockAudioOnGesture, { passive: true }));
 
-    // Try starting on load if browser autoplay policy permits
     startBgMusic();
-
-    const welcomeOverlay = document.getElementById('welcomeOverlay');
-    const welcomeGetIn = document.getElementById('welcomeGetIn');
-    const welcomeSoundBtn = document.getElementById('welcomeSoundBtn');
-    const centerContent = document.querySelector('.center-content');
-    if (welcomeSoundBtn) {
-      welcomeSoundBtn.addEventListener('click', () => {
-        isMusicManuallyMuted = false;
-        sessionStorage.setItem(musicPreferenceKey, 'false');
-        if (bgMusic) {
-          bgMusic.volume = 0.65;
-          bgMusic.loop = true;
-          bgMusic.play().then(() => {
-            updateMusicButtonUi(true);
-            sessionStorage.setItem('bgMusicPlaying', 'true');
-            welcomeSoundBtn.classList.add('is-on');
-            welcomeSoundBtn.setAttribute('aria-pressed', 'true');
-            welcomeSoundBtn.setAttribute('aria-label', 'Sound is on');
-          }).catch(() => {});
-        }
-      });
-    }
-    if (welcomeGetIn && welcomeOverlay) {
-      welcomeGetIn.focus();
-      welcomeGetIn.addEventListener('click', () => {
-        // The button click is a user gesture, so it also unlocks audio in browsers
-        // that block autoplay until the visitor interacts with the page.
-        if (!isMusicManuallyMuted && bgMusic && bgMusic.paused) startBgMusic();
-        welcomeOverlay.classList.add('is-closing');
-        window.setTimeout(() => {
-          welcomeOverlay.hidden = true;
-          welcomeOverlay.setAttribute('aria-hidden', 'true');
-          if (musicToggle) {
-            musicToggle.removeAttribute('aria-hidden');
-            musicToggle.removeAttribute('tabindex');
-          }
-          if (centerContent) centerContent.setAttribute('aria-hidden', 'false');
-          if (enterBtn) enterBtn.focus();
-        }, 450);
-      }, { once: true });
-    }
   </script>
 </body>
 </html>
