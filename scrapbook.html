@@ -702,18 +702,13 @@
       width: min(90vw, calc(86svh * 4 / 5), 560px);
       aspect-ratio: 4 / 5;
       z-index: 20;
+      perspective: 2600px;
+      transform-style: preserve-3d;
       container-type: inline-size;
       container-name: cakecard;
-      border-radius: clamp(12px, 2.2vw, 22px);
-      overflow: hidden;
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      box-shadow:
-        0 26px 65px -14px rgba(30, 12, 10, 0.58),
-        0 14px 32px -8px rgba(30, 12, 10, 0.42),
-        0 0 0 1px rgba(255, 235, 222, 0.38),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.28);
       transition: opacity 0.65s cubic-bezier(0.25, 1, 0.35, 1), transform 0.65s cubic-bezier(0.25, 1, 0.35, 1), visibility 0s linear 0.65s;
       will-change: transform, opacity;
     }
@@ -1141,6 +1136,150 @@
         opacity: 0;
         transform: translate3d(calc(var(--target-x) * 1.3), var(--end-y), 0) scale(0.85) rotate(var(--rot));
       }
+    }
+
+    
+    /* ═══════════════════════════════════════════════════════════
+       STAGE 4: THE PHOTO KEEPSAKE CARD ("The Most Wonderful Woman")
+       ═══════════════════════════════════════════════════════════ */
+    .photo-card-stickers-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: auto;
+      z-index: 10;
+    }
+
+    .photo-sticker-hotspot {
+      position: absolute;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.25, 1), box-shadow 0.35s ease;
+      touch-action: manipulation;
+    }
+
+    .photo-sticker-hotspot:hover {
+      transform: scale(1.045) rotate(0.8deg);
+      box-shadow: 0 10px 24px rgba(180, 85, 100, 0.25);
+    }
+
+    .photo-sticker-hotspot:active {
+      transform: scale(0.98);
+    }
+
+    /* 4 Photo Stickers on 'The Most Wonderful Woman' Card */
+    .photo-p1 { top: 17.0%; left: 22.0%; width: 25.0%; height: 20.0%; transform: rotate(-1deg); }
+    .photo-p2 { top: 15.8%; left: 56.0%; width: 24.5%; height: 21.2%; transform: rotate(1deg); }
+    .photo-p3 { top: 53.0%; left: 23.0%; width: 23.2%; height: 20.0%; transform: rotate(-1.5deg); }
+    .photo-p4 { top: 52.0%; left: 55.0%; width: 24.2%; height: 24.0%; transform: rotate(1.2deg); }
+
+    /* Shimmer glint across photo sticker on hover */
+    .photo-glint {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.45) 50%, rgba(255, 255, 255, 0) 70%);
+      opacity: 0;
+      transform: translateX(-100%);
+      transition: opacity 0.3s ease, transform 0.6s ease;
+      pointer-events: none;
+    }
+
+    .photo-sticker-hotspot:hover .photo-glint {
+      opacity: 1;
+      transform: translateX(100%);
+    }
+
+    /* Floating hearts when photo stickers are tapped */
+    .photo-hearts-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
+      overflow: hidden;
+    }
+
+    .photo-floating-heart {
+      position: absolute;
+      font-size: clamp(14px, 3.5cqi, 22px);
+      user-select: none;
+      pointer-events: none;
+      animation: photoHeartFloat 1.25s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+    }
+
+    @keyframes photoHeartFloat {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, 0) scale(0.5) rotate(0deg);
+      }
+      20% {
+        opacity: 1;
+        transform: translate(-50%, -15px) scale(1.18) rotate(-6deg);
+      }
+      80% {
+        opacity: 0.9;
+        transform: translate(calc(-50% + var(--hx, 0px)), -55px) scale(1) rotate(8deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--hx, 0px)), -85px) scale(0.85) rotate(15deg);
+      }
+    }
+
+    /* Photo Card: Next Page Action Button */
+    .photo-next-btn {
+      position: absolute !important;
+      bottom: 7.2% !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      z-index: 25;
+      padding: clamp(10px, 2.2cqi, 15px) clamp(22px, 5cqi, 34px);
+      border-radius: 9999px;
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      background: linear-gradient(145deg, #DE8795 0%, #D47987 50%, #C46776 100%);
+      color: #FFFDF9;
+      font-family: inherit;
+      font-size: clamp(0.88rem, 2.8cqi, 1.12rem);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      box-shadow:
+        0 0 24px rgba(222, 135, 149, 0.75),
+        0 8px 24px rgba(138, 55, 70, 0.38),
+        inset 0 1px 2px rgba(255, 255, 255, 0.65);
+      transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.25, 1), box-shadow 0.28s ease, background 0.28s ease;
+      white-space: nowrap;
+      pointer-events: auto !important;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .photo-next-btn:hover {
+      transform: translateX(-50%) translateY(-2px) scale(1.035) !important;
+      background: linear-gradient(145deg, #E58F9D 0%, #D87F8D 50%, #C96D7C 100%);
+      border-color: rgba(255, 255, 255, 0.95);
+      box-shadow:
+        0 0 32px rgba(235, 115, 138, 0.9),
+        0 10px 28px rgba(138, 55, 70, 0.45),
+        inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    }
+
+    .photo-next-btn:active,
+    .photo-next-btn.btn-pressed {
+      transform: translateX(-50%) translateY(1px) scale(0.965) !important;
+      box-shadow:
+        0 0 16px rgba(216, 100, 120, 0.5),
+        inset 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    .photo-next-btn .btn-arrow {
+      font-size: 1.15em;
+      transition: transform 0.25s ease;
+      display: inline-block;
+    }
+
+    .photo-next-btn:hover .btn-arrow {
+      transform: translateX(3px);
     }
 
     /* ═══════════════════════════════════════════════════════════
@@ -3098,110 +3237,152 @@
       <!-- ═══════════════════════════════════════════════════════════
            STAGE 2: THE CAKE KEEPSAKE CARD (PAGE 3)
            ═══════════════════════════════════════════════════════════ -->
-      <section class="cake-card-stage" id="cakeCardStage" aria-label="Birthday Cake Keepsake Card" aria-hidden="true">
-        <!-- 4:5 Cake Card Artwork -->
-        <img 
-          src="scrapbook_cake_card.jpg" 
-          alt="Happy Birthday Muskan two-tier birthday cake with lit candles and sweet wish cards" 
-          class="cake-card-art" 
-          draggable="false" 
-        />
+      <section class="cake-card-stage" id="cakeCardStage" aria-label="Birthday Cake & Photo Keepsake Cards" aria-hidden="true">
+        <div class="card-flip-flipper" id="cakeCardFlipper">
 
-        <!-- 4 Candle Flames & Smoke Wisps -->
-        <div class="card-candles-layer" id="cardCandlesLayer" aria-hidden="true">
-          <!-- Candle 1 -->
-          <div class="card-flame-wrapper" id="cardFlame1" style="left: 38.6%; top: 48.6%;">
-            <div class="card-flame">
-              <div class="card-flame-glow"></div>
-              <div class="card-flame-body"></div>
-            </div>
-            <div class="card-smoke" id="cardSmoke1">
-              <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q6,42 12,28 T8,10 T10,0" class="smoke-trail"/></svg>
-            </div>
-          </div>
-          <!-- Candle 2 -->
-          <div class="card-flame-wrapper" id="cardFlame2" style="left: 42.2%; top: 48.3%;">
-            <div class="card-flame">
-              <div class="card-flame-glow"></div>
-              <div class="card-flame-body"></div>
-            </div>
-            <div class="card-smoke" id="cardSmoke2">
-              <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q14,40 8,26 T12,12 T9,0" class="smoke-trail"/></svg>
-            </div>
-          </div>
-          <!-- Candle 3 -->
-          <div class="card-flame-wrapper" id="cardFlame3" style="left: 45.7%; top: 48.3%;">
-            <div class="card-flame">
-              <div class="card-flame-glow"></div>
-              <div class="card-flame-body"></div>
-            </div>
-            <div class="card-smoke" id="cardSmoke3">
-              <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q7,38 13,24 T8,8 T11,0" class="smoke-trail"/></svg>
-            </div>
-          </div>
-          <!-- Candle 4 -->
-          <div class="card-flame-wrapper" id="cardFlame4" style="left: 50.2%; top: 48.5%;">
-            <div class="card-flame">
-              <div class="card-flame-glow"></div>
-              <div class="card-flame-body"></div>
-            </div>
-            <div class="card-smoke" id="cardSmoke4">
-              <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q13,42 7,28 T12,10 T8,0" class="smoke-trail"/></svg>
-            </div>
-          </div>
-        </div>
+          <!-- FRONT FACE: PAGE 3 (THE CAKE CARD) -->
+          <div class="card-face card-front" id="cakeCardFrontFace">
+            <img 
+              src="scrapbook_cake_card.jpg" 
+              alt="Happy Birthday Muskan two-tier birthday cake with lit candles and sweet wish cards" 
+              class="cake-card-art" 
+              draggable="false" 
+            />
 
-        <!-- Interactive Wish Cards (Properly Positioned & Scaled on Card) -->
-        <div class="card-wishcards-layer" id="cardWishcardsLayer">
-          <!-- 1. Polaroid Tulip Photo -->
-          <div class="card-wish-item card-wish-polaroid" id="wishPolaroid" title="A little garden photo for Muskan ♡">
-            <div class="wish-item-inner">
-              <div class="wish-item-face wish-item-front">
-                <span class="wish-card-glint" aria-hidden="true"></span>
+            <!-- 4 Candle Flames & Smoke Wisps -->
+            <div class="card-candles-layer" id="cardCandlesLayer" aria-hidden="true">
+              <!-- Candle 1 -->
+              <div class="card-flame-wrapper" id="cardFlame1" style="left: 38.6%; top: 48.6%;">
+                <div class="card-flame">
+                  <div class="card-flame-glow"></div>
+                  <div class="card-flame-body"></div>
+                </div>
+                <div class="card-smoke" id="cardSmoke1">
+                  <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q6,42 12,28 T8,10 T10,0" class="smoke-trail"/></svg>
+                </div>
               </div>
-            </div>
-          </div>
-
-          <!-- 2. Pink Wish Note: 'a little birthday love' -->
-          <div class="card-wish-item card-wish-pink" id="wishPink" title="Tap to flip wish note">
-            <div class="wish-item-inner" id="wishPinkInner">
-              <div class="wish-item-face wish-item-front" aria-hidden="true">
-                <span class="wish-card-glint" aria-hidden="true"></span>
+              <!-- Candle 2 -->
+              <div class="card-flame-wrapper" id="cardFlame2" style="left: 42.2%; top: 48.3%;">
+                <div class="card-flame">
+                  <div class="card-flame-glow"></div>
+                  <div class="card-flame-body"></div>
+                </div>
+                <div class="card-smoke" id="cardSmoke2">
+                  <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q14,40 8,26 T12,12 T9,0" class="smoke-trail"/></svg>
+                </div>
               </div>
-              <div class="wish-item-face wish-item-back">
-                <div class="wish-note-paper pink-note-paper">
-                  <span class="wish-note-pin">📌</span>
-                  <p class="wish-note-msg">May your days be brighter, your smiles wider, and this year full of surprises! ♡</p>
+              <!-- Candle 3 -->
+              <div class="card-flame-wrapper" id="cardFlame3" style="left: 45.7%; top: 48.3%;">
+                <div class="card-flame">
+                  <div class="card-flame-glow"></div>
+                  <div class="card-flame-body"></div>
+                </div>
+                <div class="card-smoke" id="cardSmoke3">
+                  <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q7,38 13,24 T8,8 T11,0" class="smoke-trail"/></svg>
+                </div>
+              </div>
+              <!-- Candle 4 -->
+              <div class="card-flame-wrapper" id="cardFlame4" style="left: 50.2%; top: 48.5%;">
+                <div class="card-flame">
+                  <div class="card-flame-glow"></div>
+                  <div class="card-flame-body"></div>
+                </div>
+                <div class="card-smoke" id="cardSmoke4">
+                  <svg viewBox="0 0 20 60" class="smoke-wisp-svg"><path d="M10,55 Q13,42 7,28 T12,10 T8,0" class="smoke-trail"/></svg>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- 3. Cream Wish Note: 'flowers for you' -->
-          <div class="card-wish-item card-wish-cream" id="wishCream" title="Tap to flip wish note">
-            <div class="wish-item-inner" id="wishCreamInner">
-              <div class="wish-item-face wish-item-front" aria-hidden="true">
-                <span class="wish-card-glint" aria-hidden="true"></span>
+            <!-- Interactive Wish Cards (Properly Positioned & Scaled on Card) -->
+            <div class="card-wishcards-layer" id="cardWishcardsLayer">
+              <!-- 1. Polaroid Tulip Photo -->
+              <div class="card-wish-item card-wish-polaroid" id="wishPolaroid" title="A little garden photo for Muskan ♡">
+                <div class="wish-item-inner">
+                  <div class="wish-item-face wish-item-front">
+                    <span class="wish-card-glint" aria-hidden="true"></span>
+                  </div>
+                </div>
               </div>
-              <div class="wish-item-face wish-item-back">
-                <div class="wish-note-paper cream-note-paper">
-                  <span class="wish-note-pin">✿</span>
-                  <p class="wish-note-msg">Here's to more laughter, adventures, and happy memories together! ✿</p>
+
+              <!-- 2. Pink Wish Note: 'a little birthday love' -->
+              <div class="card-wish-item card-wish-pink" id="wishPink" title="Tap to flip wish note">
+                <div class="wish-item-inner" id="wishPinkInner">
+                  <div class="wish-item-face wish-item-front" aria-hidden="true">
+                    <span class="wish-card-glint" aria-hidden="true"></span>
+                  </div>
+                  <div class="wish-item-face wish-item-back">
+                    <div class="wish-note-paper pink-note-paper">
+                      <span class="wish-note-pin">📌</span>
+                      <p class="wish-note-msg">May your days be brighter, your smiles wider, and this year full of surprises! ♡</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Cream Wish Note: 'flowers for you' -->
+              <div class="card-wish-item card-wish-cream" id="wishCream" title="Tap to flip wish note">
+                <div class="wish-item-inner" id="wishCreamInner">
+                  <div class="wish-item-face wish-item-front" aria-hidden="true">
+                    <span class="wish-card-glint" aria-hidden="true"></span>
+                  </div>
+                  <div class="wish-item-face wish-item-back">
+                    <div class="wish-note-paper cream-note-paper">
+                      <span class="wish-note-pin">✿</span>
+                      <p class="wish-note-msg">Here's to more laughter, adventures, and happy memories together! ✿</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+
+            <!-- Confetti & Celebration Burst Layer -->
+            <div class="card-confetti-layer" id="cardConfettiLayer" aria-hidden="true"></div>
+
+            <!-- Interactive Plaque Button ('Blow the candles ✿' -> 'Next page ✿ →') -->
+            <button class="cake-action-btn" id="cakeCardBlowBtn" aria-label="Blow the candles">
+              <span class="sr-only" id="blowBtnSrText">Blow the candles</span>
+              <span class="cake-btn-shine" aria-hidden="true"></span>
+              <span class="cake-btn-label" id="cakeBtnLabel"></span>
+            </button>
           </div>
+
+          <!-- BACK FACE: PAGE 4 (THE PHOTO KEEPSAKE CARD: "THE MOST WONDERFUL WOMAN") -->
+          <div class="card-face card-back" id="photoCardBackFace" aria-hidden="true">
+            <img 
+              src="scrapbook_photo_card.jpg" 
+              alt="The Most Wonderful Woman keepsake card with photo stickers of Muskan" 
+              class="cake-card-art" 
+              draggable="false" 
+            />
+
+            <!-- Interactive Photo Stickers Layer -->
+            <div class="photo-card-stickers-layer" id="photoCardStickersLayer">
+              <div class="photo-sticker-hotspot photo-p1" id="photoSticker1" title="Radiant smile that lights up every room ♡">
+                <span class="photo-glint" aria-hidden="true"></span>
+              </div>
+              <div class="photo-sticker-hotspot photo-p2" id="photoSticker2" title="The queen of our hearts ✿">
+                <span class="photo-glint" aria-hidden="true"></span>
+              </div>
+              <div class="photo-sticker-hotspot photo-p3" id="photoSticker3" title="Sweet, goofy & full of life ♡">
+                <span class="photo-glint" aria-hidden="true"></span>
+              </div>
+              <div class="photo-sticker-hotspot photo-p4" id="photoSticker4" title="Pure grace and elegance ✿">
+                <span class="photo-glint" aria-hidden="true"></span>
+              </div>
+            </div>
+
+            <!-- Floating Hearts Container for Photo Clicks -->
+            <div class="photo-hearts-layer" id="photoHeartsLayer" aria-hidden="true"></div>
+
+            <!-- Next Page Action Button on Photo Card -->
+            <button class="book-action-btn photo-next-btn" id="photoCardNextBtn" aria-label="Next page">
+              <span>Next page</span>
+              <span class="btn-sparkle" aria-hidden="true">✿</span>
+              <span class="btn-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+
         </div>
-
-        <!-- Confetti & Celebration Burst Layer -->
-        <div class="card-confetti-layer" id="cardConfettiLayer" aria-hidden="true"></div>
-
-        <!-- Interactive Plaque Button ('Blow the candles ✿' -> 'Next page ✿ →') -->
-        <button class="cake-action-btn" id="cakeCardBlowBtn" aria-label="Blow the candles">
-          <span class="sr-only" id="blowBtnSrText">Blow the candles</span>
-          <span class="cake-btn-shine" aria-hidden="true"></span>
-          <span class="cake-btn-label" id="cakeBtnLabel"></span>
-        </button>
       </section>
 
       <!-- ═══════════════════════════════════════════════════════════
@@ -3522,6 +3703,10 @@
     });
 
     const cakeCardStage = document.getElementById('cakeCardStage');
+    const cakeCardFlipper = document.getElementById('cakeCardFlipper');
+    const cakeCardFrontFace = document.getElementById('cakeCardFrontFace');
+    const photoCardBackFace = document.getElementById('photoCardBackFace');
+    const photoCardNextBtn = document.getElementById('photoCardNextBtn');
     const cakeCardBlowBtn = document.getElementById('cakeCardBlowBtn');
     const cakeBtnLabel = document.getElementById('cakeBtnLabel');
     const blowBtnSrText = document.getElementById('blowBtnSrText');
@@ -3667,27 +3852,16 @@
           }, 350);
 
         } else {
-          // SECOND CLICK: "Next page" clicked -> transition to Photo & Letter spread
+          // SECOND CLICK: "Next page" clicked -> 3D Flip into The Photo Card ("The Most Wonderful Woman")!
           cakeCardBlowBtn.classList.add('btn-pressed');
 
           setTimeout(() => {
-            if (cakeCardStage) {
-              cakeCardStage.classList.remove('is-active');
-              cakeCardStage.classList.add('is-leaving');
-              cakeCardStage.setAttribute('aria-hidden', 'true');
+            cakeCardBlowBtn.classList.remove('btn-pressed');
+            if (cakeCardFlipper) {
+              cakeCardFlipper.classList.add('is-flipped');
             }
-
-            // Open directly to the next spread (Letter & Photo spread)
-            sceneStage.classList.add('opening');
-            ambientBackdrop.classList.add('open-mode');
-            bookSpreadStage.removeAttribute('aria-hidden');
-
-            setTimeout(() => {
-              sceneStage.classList.add('opened');
-              sceneStage.classList.remove('opening');
-              turnToNextPage();
-              startFriendshipMusic();
-            }, 600);
+            if (cakeCardFrontFace) cakeCardFrontFace.setAttribute('aria-hidden', 'true');
+            if (photoCardBackFace) photoCardBackFace.removeAttribute('aria-hidden');
           }, 160);
         }
       });
@@ -3696,6 +3870,64 @@
     // ═══════════════════════════════════════════════════════════
     // INTERACTION 2: "Blow the candles ✿" -> "turn page ✿ →" -> FLAWLESS FLIP
     // ═══════════════════════════════════════════════════════════
+    
+    // ── Photo Card ("The Most Wonderful Woman") Interactions ──
+    function spawnPhotoHearts(sourceEl) {
+      const heartsContainer = document.getElementById('photoHeartsLayer');
+      if (!heartsContainer || !sourceEl) return;
+      const rect = sourceEl.getBoundingClientRect();
+      const parentRect = heartsContainer.getBoundingClientRect();
+      const originX = rect.left + rect.width / 2 - parentRect.left;
+      const originY = rect.top + rect.height * 0.4 - parentRect.top;
+      
+      const icons = ['💕', '💖', '✨', '🌸', '♡', '🌷'];
+      for (let i = 0; i < 5; i++) {
+        const heart = document.createElement('span');
+        heart.className = 'photo-floating-heart';
+        heart.textContent = icons[Math.floor(Math.random() * icons.length)];
+        heart.style.left = `${originX}px`;
+        heart.style.top = `${originY}px`;
+        heart.style.setProperty('--hx', `${(Math.random() - 0.5) * 50}px`);
+        heart.style.animationDelay = `${i * 0.07}s`;
+        heartsContainer.appendChild(heart);
+        setTimeout(() => heart.remove(), 1400);
+      }
+    }
+
+    document.querySelectorAll('.photo-sticker-hotspot').forEach(sticker => {
+      sticker.addEventListener('click', () => {
+        spawnPhotoHearts(sticker);
+      });
+    });
+
+    // Clicking "Next page" on Photo Card -> Transitions to Keepsake Letter & Virtual Hug Spread
+    if (photoCardNextBtn) {
+      photoCardNextBtn.addEventListener('click', () => {
+        photoCardNextBtn.classList.add('btn-pressed');
+
+        setTimeout(() => {
+          // Hide Cake & Photo Card Stage
+          if (cakeCardStage) {
+            cakeCardStage.classList.remove('is-active');
+            cakeCardStage.classList.add('is-leaving');
+            cakeCardStage.setAttribute('aria-hidden', 'true');
+          }
+
+          // Open the open book spread (Letter & Photo collage)
+          sceneStage.classList.add('opening');
+          ambientBackdrop.classList.add('open-mode');
+          bookSpreadStage.removeAttribute('aria-hidden');
+
+          setTimeout(() => {
+            sceneStage.classList.add('opened');
+            sceneStage.classList.remove('opening');
+            turnToNextPage();
+            startFriendshipMusic();
+          }, 600);
+        }, 160);
+      });
+    }
+
     const spreadContainer = document.getElementById('spreadContainer');
     const pageLeaf = document.getElementById('pageLeaf');
     const pageLeafBack = pageLeaf.querySelector('.page-leaf-back');
